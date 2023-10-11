@@ -1,17 +1,20 @@
 import express, { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import authRouter from './routes/auth.routes';
+import cors from 'cors';
 
-const prisma = new PrismaClient();
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+// app.use(cors);
 app.use(express.json());
 
-app.use(`/api/v1/login`, authRouter);
+app.use('/auth', authRouter);
+// set port to 30000
 
-
-function cors(): any {
-    throw new Error('Function not implemented.');
-}
-
+app.get('/', (req: Request, res: Response) => {
+    res.send('Hello World!');
+});
+app.listen(port, () => {
+    console.log(`[server]: Server is running at http://localhost:${port}`);
+});
+console.log(`Server listening on port ${port}`);
