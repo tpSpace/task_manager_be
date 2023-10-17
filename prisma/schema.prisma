@@ -13,8 +13,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  email     String    @unique  
-  password  String
+model User {
+  user_id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  email        String    @unique  
+  password     String
+  name         String
+  avatar_image String 
+}
+
+model Ticket {
+  ticket_id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  description     String
+  status          String
+  comment         String
+  // assigned_user   User       @relation("assignedTo", fields: [assigned_user], references: [user_id])
+  // creator_user    User       @relation("createdBy", fields: [creator_user], references: [user_id])
+  // parent_ticket   Ticket?    @relation("parentTicket", fields: [parent_ticket], references: [ticket_id])
+  // child_tickets   Ticket[]   @relation("childTickets")
+  created_at      DateTime   @default(now())
 }

@@ -31,5 +31,8 @@
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
+  },
+  "devDependencies": {
+    "prettier": "3.0.3"
   }
 }

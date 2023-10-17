@@ -11,3 +11,7 @@ yarn
 ```bash
 yarn run dev
 ```
+### format the code
+```bash
+yarn prettier --write "src/**/*.ts"
+```
