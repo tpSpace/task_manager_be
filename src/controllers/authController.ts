@@ -5,11 +5,15 @@ import { generateJwtToken } from "../middleware/jwt";
 export const loginUserHandler = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
+    
     const user = await findUniqueUser(email, password);
+
+    const token = generateJwtToken();
+
     if (user) {
       return res.status(200).json({
         status: 'success',
-        data: user,
+        token: token,
       });
     } 
   } catch (error) {
@@ -34,7 +38,8 @@ export const registerUserHandler = async (req: Request, res: Response) => {
   await createUser(name, email, password);
   const token = generateJwtToken();
 
-  return res.status(201).json({
+  return res.status(200).json({
+    status: 'success',
     token: token,
   });
 };
