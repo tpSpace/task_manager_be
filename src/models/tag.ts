@@ -1,4 +1,4 @@
-export interface Tag{
+export interface Tag {
   title: string;
   level: number;
 }
