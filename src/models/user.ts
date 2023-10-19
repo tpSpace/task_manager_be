@@ -1,6 +1,9 @@
 export interface User {
+  userId: string;
   name: string;
   email: string;
-  password: string;
   avatar: string;
+  password: string;
+  projectId: string[];
+  dateCreated: Date;
 }

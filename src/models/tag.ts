@@ -1,4 +1,7 @@
 export interface Tag {
+  id: string;
   title: string;
-  level: number;
+  priority: number;
+  colour: string;
+  ticketId: string[];
 }
