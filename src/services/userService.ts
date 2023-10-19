@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -22,6 +22,8 @@ export const createUser = async (
       name: name,
       email: email,
       password: password,
+      avatar: '',
+      dateCreated: new Date(),
     },
-  });
+  });    
 };
