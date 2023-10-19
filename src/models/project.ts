@@ -1,8 +1,12 @@
 import { User } from "./index";
 
 export interface Project {
-  id: number;
+  id: string;
+  adminId: string;
+  userId: string;
   title: string;
-  members: User[];
-  creator: User;
+  tagId: string[];
+  stageId: string[];
+  ticketId: string[];
+  dateCreated: Date;
 }
