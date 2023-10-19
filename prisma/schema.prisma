@@ -13,9 +13,57 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  email     String    @unique
-  name      String
-  password  String
+model User {
+  userId          String          @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  email           String          @unique
+  avatar          String
+  password        String
+  projectId       String[]
+  dateCreated     DateTime
+}
+
+model Project {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  adminId         String[]
+  userId          String[]
+  title           String
+  tagId           String[]
+  stageId         String[]
+  ticketId        String[]
+  dateCreated     DateTime
+}
+
+model Ticket {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  description     String 
+  creatorId       String
+  assignedUserId  String?
+  commentId       String[]
+  dateCreated     DateTime
+  childTicketId   String[]
+  isDeleted       Boolean
+}
+
+model Tag {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  title           String          @unique
+  priotity        Int
+  colour          String
+  ticketId        String[] 
+}
+
+model Stage {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  title           String          @unique
+  description     String
+  ticketId        String[]
+}
+
+model Comment {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String
+  dateCreated     DateTime
+  isDeleted       Boolean
 }

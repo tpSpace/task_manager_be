@@ -33,5 +33,9 @@
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.4",
+    "prettier": "3.0.3"
   }
 }
