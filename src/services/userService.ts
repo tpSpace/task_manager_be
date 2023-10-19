@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { CreateUserInput } from '../schemas/userSchema';
 
 const prisma = new PrismaClient();
 
@@ -18,6 +19,6 @@ export const createUser = async (name: string, email: string, password: string) 
       name: name,
       email: email,
       password: password,
-    },
+    } as CreateUserInput,
   });    
 };
