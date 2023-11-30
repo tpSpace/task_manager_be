@@ -1,7 +1,13 @@
-import { User } from "./index";
+import { User, Ticket } from "./index";
 export interface Comment {
-  id: string;
-  userId: string;
-  dateCreated: Date;
-  isDeleted: boolean;
+  commentId: string;
+  author: User;
+  authorId: string;
+  ticket: Ticket;
+  ticketId: string;
+  content: string;
+  timestamp: Date;
+  versions: Comment[];
+  basedOn?: Comment;
+  basedOnId?: string | null;
 }

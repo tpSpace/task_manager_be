@@ -1,6 +1,10 @@
+import { Ticket, Project } from "./index";
+
 export interface Stage {
-  id: string;
+  stageId: string;
   title: string;
-  description: string;
-  ticketId: string[];
+  ticketIds: string[];
+  tickets: Ticket[];
+  projectIds: string[];
+  projects: Project[];
 }

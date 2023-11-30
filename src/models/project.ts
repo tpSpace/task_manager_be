@@ -1,12 +1,14 @@
-import { User } from "./index";
+import { User, Tag, Stage } from "./index";
 
 export interface Project {
-  id: string;
+  projectId: string;
   adminId: string;
-  userId: string;
   title: string;
-  tagId: string[];
-  stageId: string[];
-  ticketId: string[];
-  dateCreated: Date;
+  history: string[];
+  userIds: string[];
+  users: User[];
+  tagIds: string[];
+  tags: Tag[];
+  stageIds: string[];
+  stages: Stage[];
 }

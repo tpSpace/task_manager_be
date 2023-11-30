@@ -1,12 +1,15 @@
-import { User } from "./index";
+import { Stage } from "./index";
 export interface Ticket {
-  id: string;
+  ticketId: string;
   title: string;
   description: string;
   creatorId: string;
-  assignedUserId: string | null;
-  commentId: string[];
-  dateCreated: Date;
-  childTicketId: string[];
-  isDeleted: boolean;
+  parentTicketId?: string | null;
+  childTickets: string[];
+  assignedUserIds: string[];
+  timestamp: Date;
+  due?: Date | null;
+  stageId: string[];
+  stage: Stage[];
+  comment: Comment[];
 }
