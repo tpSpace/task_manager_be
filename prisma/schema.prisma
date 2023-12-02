@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model user {
   userId          String          @id @default(auto()) @map("_id") @db.ObjectId
   name            String
   email           String          @unique
@@ -23,7 +23,7 @@ model User {
   dateCreated     DateTime
 }
 
-model Project {
+model project {
   id              String          @id @default(auto()) @map("_id") @db.ObjectId
   adminId         String[]
   userId          String[]
@@ -34,7 +34,7 @@ model Project {
   dateCreated     DateTime
 }
 
-model Ticket {
+model ticket {
   id              String          @id @default(auto()) @map("_id") @db.ObjectId
   title           String
   description     String 
@@ -46,7 +46,7 @@ model Ticket {
   isDeleted       Boolean
 }
 
-model Tag {
+model tag {
   id              String          @id @default(auto()) @map("_id") @db.ObjectId
   title           String          @unique
   priotity        Int
@@ -54,14 +54,14 @@ model Tag {
   ticketId        String[] 
 }
 
-model Stage {
+model stage {
   id              String          @id @default(auto()) @map("_id") @db.ObjectId
   title           String          @unique
   description     String
   ticketId        String[]
 }
 
-model Comment {
+model comment {
   id              String          @id @default(auto()) @map("_id") @db.ObjectId
   userId          String
   dateCreated     DateTime
