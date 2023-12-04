@@ -1,10 +1,6 @@
-import { Project } from "./index";
-
 export interface Tag {
-  tagId: string;
+  id: string;
   title: string;
   priority: number;
-  color?: string | null;
-  projectIds: string[];
-  projects: Project[];
+  colour: string;
 }

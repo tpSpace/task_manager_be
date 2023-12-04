@@ -1,11 +1,8 @@
-import { Project, Comment } from "./index";
 export interface User {
-  userId: string;
+  id: string;
   name: string;
   email: string;
-  avatar?: string | null;
+  avatar: string;
   password: string;
-  projectIds: string[];
-  projects: Project[];
-  comments: Comment[];
+  projectId: string[];
 }
