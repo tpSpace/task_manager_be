@@ -25,4 +25,15 @@ export const createProject = async (project: Project) => {
       history: project.history,
     },
   });    
+};
+
+export const findAllProjectOfUser = async (userId: string) => {
+  const projects = await prisma.project.findMany({
+    where: {
+      userId: {
+        has: userId,
+      },
+    },
+  });
+  return projects;
 }
