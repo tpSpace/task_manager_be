@@ -40,3 +40,11 @@ export const validateAndAuthorizeToken = (
     res.status(401).json({ error: "Unauthorized 3" });
   }
 };
+
+export const returnUserIdFromToken = (req: Request): string => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader!.split(" ")[1];
+  const decodedToken = jwt.verify(token, secretKey!) as { userId?: string };
+  const userId = decodedToken.userId as string;
+  return userId;
+}

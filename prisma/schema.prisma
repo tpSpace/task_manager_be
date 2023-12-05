@@ -25,13 +25,13 @@ model user {
 
 model project {
   id              String          @id @default(auto()) @map("_id") @db.ObjectId
-  adminId         String[]
+  adminId         String
   userId          String[]
   title           String
   tagId           String[]
   stageId         String[]
   ticketId        String[]
-  dateCreated     DateTime
+  history         String[]
 }
 
 model ticket {
