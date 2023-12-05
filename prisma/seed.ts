@@ -6,6 +6,9 @@ const userData: Prisma.userCreateInput[] = [
   {
     email: "admin1@gmail.com",
     password: "MyP@ssw0rd!",
+    name: "Admin 1",
+    avatar: "https://i.pravatar.cc/150?img=1",
+    dateCreated: new Date(),
   },
 ];
 
