@@ -8,9 +8,8 @@ export const loginUserHandler = async (req: Request, res: Response) => {
 
     const user = await findUniqueUser(email, password);
 
-    const token = generateJwtToken();
-
     if (user) {
+      const token = generateJwtToken(user.userId);
       return res.status(200).json({
         status: "success",
         token: token,
@@ -36,7 +35,9 @@ export const registerUserHandler = async (req: Request, res: Response) => {
   }
 
   await createUser(name, email, password);
-  const token = generateJwtToken();
+  const newUser = await findUniqueUser(email, password);
+  
+  const token = generateJwtToken(newUser!.userId);
 
   return res.status(200).json({
     status: "success",

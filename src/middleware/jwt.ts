@@ -5,10 +5,10 @@ dotenv.config();
 
 const secretKey = process.env.SECRET_KEY;
 
-export const generateJwtToken = (): string => {
-  const issuer = "tuesday";
+export const generateJwtToken = (userId: string): string => {
+  const issuer = "tasKing";
   const expiresIn = "100d";
-  const payload = {};
+  const payload = { userId };
   const token = jwt.sign(payload, secretKey!, {
     issuer,
     expiresIn,
@@ -28,7 +28,7 @@ export const validateAndAuthorizeToken = (
 
     try {
       const decodedToken = jwt.verify(token, secretKey!) as { iss?: string };
-      if (decodedToken.iss === "tuesday") {
+      if (decodedToken.iss === "tasKing") {
         next();
       } else {
         res.status(401).json({ error: "Unauthorized 1" });
