@@ -17,21 +17,20 @@ model user {
   userId          String          @id @default(auto()) @map("_id") @db.ObjectId
   name            String
   email           String          @unique
-  avatar          String
+  avatar          String?
   password        String
   projectId       String[]
-  dateCreated     DateTime
 }
 
 model project {
   id              String          @id @default(auto()) @map("_id") @db.ObjectId
-  adminId         String[]
+  adminId         String
   userId          String[]
   title           String
   tagId           String[]
   stageId         String[]
   ticketId        String[]
-  dateCreated     DateTime
+  history         String[]
 }
 
 model ticket {
@@ -39,7 +38,7 @@ model ticket {
   title           String
   description     String 
   creatorId       String
-  assignedUserId  String?
+  assignedUserId  String[]
   commentId       String[]
   dateCreated     DateTime
   childTicketId   String[]
