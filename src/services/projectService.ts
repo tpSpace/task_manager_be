@@ -3,7 +3,7 @@ import { Project } from '../models/project';
 
 const prisma = new PrismaClient();
 
-export const findUniqueProject = async (id: string) => {
+export const findProjectById = async (id: string) => {
   const project = await prisma.project.findUnique({
     where: {
       id: id,
