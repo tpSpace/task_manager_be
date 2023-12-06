@@ -4,6 +4,7 @@ import {
   createProject,
   findAllProjectOfUser,
   findUniqueProject } from '../services/projectService';
+import { addProjectToUser } from '../services/userService';
 import { returnUserIdFromToken } from "../middleware/jwt";
 
 export const createProjectHandler = async (req: Request, res: Response) => {
@@ -16,6 +17,7 @@ export const createProjectHandler = async (req: Request, res: Response) => {
     project.userId.push(project.adminId);
     
     const newProjectId = await createProject(project);
+    await addProjectToUser(userId, newProjectId);
 
     return res.status(201).json({ 
       message: "Project created successfully",

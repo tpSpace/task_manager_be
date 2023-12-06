@@ -33,3 +33,25 @@ export const findUniqueUserById = async (id: string) => {
   });
   return user;
 };
+
+export const addProjectToUser = async (userId: string, inputProjectId: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      userId: userId
+    },
+  });
+
+  if (user) {
+    user.projectId.push(inputProjectId);
+
+    await prisma.user.update({
+      where: {
+        userId: userId
+      },
+      data: {
+        projectId: user.projectId
+      },
+    });
+  }
+  console.log(user);
+}
