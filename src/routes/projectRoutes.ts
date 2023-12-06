@@ -23,7 +23,7 @@ router.get(
 )
 
 router.get(
-  '/get:id',
+  '/get/:id',
   validateAndAuthorizeToken,
   getSingleProjectHandler
 )

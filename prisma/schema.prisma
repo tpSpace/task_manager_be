@@ -38,7 +38,7 @@ model ticket {
   title           String
   description     String 
   creatorId       String
-  assignedUserId  String?
+  assignedUserId  String[]
   commentId       String[]
   dateCreated     DateTime
   childTicketId   String[]

@@ -13,18 +13,13 @@ export const findUniqueProject = async (id: string) => {
 };
 
 export const createProject = async (project: Project) => {
-  await prisma.project.create({
+  const createdProject = await prisma.project.create({
     data: {
-      id: project.id,
-      title: project.title,
-      adminId: project.adminId,
-      userId: project.userId,
-      tagId: project.tagId,
-      stageId: project.stageId,
-      ticketId: project.ticketId,
-      history: project.history,
+      ...project,
     },
-  });    
+  });
+
+  return createdProject.id;
 };
 
 export const findAllProjectOfUser = async (userId: string) => {
