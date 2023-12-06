@@ -1,4 +1,4 @@
-import { findUniqueUserByEmail, createUser, findAllUser, findUniqueUserById } from "../services/userService";
+import { findUserByEmail, createUser, findAllUser, findUserById } from "../services/userService";
 import { Request, Response } from "express";
 import { generateJwtToken } from "../middleware/jwt";
 import { User } from "../models/user";
@@ -8,7 +8,7 @@ export const loginUserHandler = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    const user = await findUniqueUserByEmail(email);
+    const user = await findUserByEmail(email);
 
     if (user) {
       const token = generateJwtToken(user.userId);
@@ -27,7 +27,7 @@ export const loginUserHandler = async (req: Request, res: Response) => {
 
 export const registerUserHandler = async (req: Request, res: Response) => {
   const user: User = req.body;
-  const existingUser = await findUniqueUserByEmail(user.email);
+  const existingUser = await findUserByEmail(user.email);
 
   if (existingUser) {
     return res.status(409).json({
@@ -37,7 +37,7 @@ export const registerUserHandler = async (req: Request, res: Response) => {
   }
 
   await createUser(user);
-  const newUser = await findUniqueUserByEmail(user.email);
+  const newUser = await findUserByEmail(user.email);
   const token = generateJwtToken(newUser!.userId);
 
   return res.status(200).json({
@@ -60,7 +60,7 @@ export const getAllUserHandler = async (req: Request, res: Response) => {
 export const getSingleUserHandler = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const user = await findUniqueUserById(id);
+    const user = await findUserById(id);
     console.log(user);
     return res.status(200).json({ user });
     
