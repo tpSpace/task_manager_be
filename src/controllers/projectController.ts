@@ -18,6 +18,7 @@ export const createProjectHandler = async (req: Request, res: Response) => {
     await createProject(project);
 
     return res.status(201).json({ message: "Project created successfully" });
+
   } catch (error) {
     console.error("Error creating project:", error);
     return res.status(500).json({ error: "Failed to create project" });
@@ -30,6 +31,7 @@ export const getAllProjectHandler = async (req: Request, res: Response) => {
     const projects = await findAllProjectOfUser(userId as string);
 
     return res.status(200).json({ projects });
+    
   } catch (error) {
     console.error("Error getting projects:", error);
     return res.status(500).json({ error: "Failed to get projects" });

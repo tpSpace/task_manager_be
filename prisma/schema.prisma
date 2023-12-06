@@ -17,10 +17,9 @@ model user {
   userId          String          @id @default(auto()) @map("_id") @db.ObjectId
   name            String
   email           String          @unique
-  avatar          String
+  avatar          String?
   password        String
   projectId       String[]
-  dateCreated     DateTime
 }
 
 model project {

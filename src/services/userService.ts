@@ -1,29 +1,35 @@
 import { PrismaClient } from '@prisma/client';
+import { User } from '../models/user';
 
 const prisma = new PrismaClient();
 
-export const findUniqueUser = async (email: string, password: string) => {
+export const findUniqueUserByEmail = async (email: string) => {
   const user = await prisma.user.findUnique({
     where: {
-      email: email,
-      password: password,
+      email: email
     },
   });
   return user;
 };
 
-export const createUser = async (
-  name: string,
-  email: string,
-  password: string,
-) => {
+export const createUser = async (user: User) => {
   await prisma.user.create({
     data: {
-      name: name,
-      email: email,
-      password: password,
-      avatar: '',
-      dateCreated: new Date(),
+      ...user,
     },
   });    
+};
+
+export const findAllUser = async () => {
+  const users = await prisma.user.findMany();
+  return users;
+};
+
+export const findUniqueUserById = async (id: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      userId: id
+    },
+  });
+  return user;
 };
