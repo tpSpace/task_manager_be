@@ -3,7 +3,7 @@ import { Project } from '../models/project';
 import { 
   createProject,
   findAllProjectOfUser,
-  findUniqueProject } from '../services/projectService';
+  findProjectById } from '../services/projectService';
 import { addProjectToUser } from '../services/userService';
 import { returnUserIdFromToken } from "../middleware/jwt";
 
@@ -49,7 +49,7 @@ export const getSingleProjectHandler = async (req: Request, res: Response) => {
   try {
     const userId: string = returnUserIdFromToken(req);
     const projectId = req.params.id;
-    const project = await findUniqueProject(projectId);
+    const project = await findProjectById(projectId);
 
     if (!project) {
       return res.status(404).json({ 
