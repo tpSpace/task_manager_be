@@ -2,8 +2,8 @@ import { findUserByEmail, createUser, findAllUser, findUserById } from "../servi
 import { Request, Response } from "express";
 import { generateJwtToken } from "../middleware/jwt";
 import { User } from "../models/user";
+const bcrypt = import("bcrypt-ts");
 
-//TO DO: add actual password hashing
 export const loginUserHandler = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -11,12 +11,20 @@ export const loginUserHandler = async (req: Request, res: Response) => {
     const user = await findUserByEmail(email);
 
     if (user) {
-      const token = generateJwtToken(user.userId);
-      return res.status(200).json({
-        status: "success",
-        token: token,
-      });
-    }
+      const isPasswordMatch = (await bcrypt).compareSync(password, user.password);
+      if (isPasswordMatch) {
+        const token = generateJwtToken(user.userId);
+        return res.status(200).json({
+          status: "success",
+          token: token,
+        });
+      } else { 
+        return res.status(401).json({
+          status: "Unauthorized",
+          message: "Wrong password",
+        })
+      }
+    } 
   } catch (error) {
     return res.status(404).json({
       status: "error",
@@ -35,6 +43,9 @@ export const registerUserHandler = async (req: Request, res: Response) => {
       message: "User already exists",
     });
   }
+
+  const hashedPassword = await (await bcrypt).hashSync(user.password, 10); // 10 is the number of salt rounds
+  user.password = hashedPassword;
 
   await createUser(user);
   const newUser = await findUserByEmail(user.email);
