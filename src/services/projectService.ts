@@ -22,7 +22,7 @@ export const createProject = async (project: Project) => {
   return createdProject.id;
 };
 
-export const findAllProjectOfUser = async (userId: string) => {
+export const findAllProjectOfUserWithId = async (userId: string) => {
   const projects = await prisma.project.findMany({
     where: {
       userId: {

@@ -5,7 +5,9 @@ import { validateAndAuthorizeToken } from '../middleware/jwt';
 import { 
   createProjectHandler, 
   getAllProjectHandler,
-  getSingleProjectHandler } from '../controllers/projectController';
+  getSingleProjectHandler,
+  getAllProjectWithIdHandler
+} from '../controllers/projectController';
 
 const router = express.Router();
 
@@ -22,10 +24,17 @@ router.get(
   getAllProjectHandler
 )
 
+// Will use in the future
+// router.get(
+//   '/get/:id',
+//   validateAndAuthorizeToken,
+//   getSingleProjectHandler
+// )
+
+// To be removed
 router.get(
-  '/get/:id',
-  validateAndAuthorizeToken,
-  getSingleProjectHandler
+  '/get/:userId',
+  getAllProjectWithIdHandler
 )
 
 export default router;
