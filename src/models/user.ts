@@ -5,5 +5,4 @@ export interface User {
   avatar: string;
   password: string;
   projectId: string[];
-  dateCreated: Date;
 }

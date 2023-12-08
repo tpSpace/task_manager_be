@@ -96,3 +96,4 @@ export const getAllProjectWithIdHandler = async (req: Request, res: Response) =>
     });
   }
 };
+

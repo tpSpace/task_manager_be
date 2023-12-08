@@ -1,7 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-
 // In this project we will use prisma as an ORM for ease of use as well as security
 // BTW please setup redis for caching and rate limiting
 generator client {
@@ -14,55 +13,53 @@ datasource db {
 }
 
 model user {
-  userId          String          @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  email           String          @unique
-  avatar          String?
-  password        String
-  projectId       String[]
+  userId    String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String   @unique
+  avatar    String?
+  password  String
+  projectId String[]
 }
 
 model project {
-  id              String          @id @default(auto()) @map("_id") @db.ObjectId
-  adminId         String
-  userId          String[]
-  title           String
-  tagId           String[]
-  stageId         String[]
-  ticketId        String[]
-  history         String[]
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  adminId  String
+  userId   String[]
+  title    String
+  tagId    String[]
+  stageId  String[]
+  ticketId String[]
+  history  String[]
 }
 
 model ticket {
-  id              String          @id @default(auto()) @map("_id") @db.ObjectId
-  title           String
-  description     String 
-  creatorId       String
-  assignedUserId  String[]
-  commentId       String[]
-  dateCreated     DateTime
-  childTicketId   String[]
-  isDeleted       Boolean
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  description    String
+  creatorId      String
+  assignedUserId String[]
+  commentId      String[]
+  parentTicketId String[]
+  childTicketId  String[]
+  deadline       DateTime
 }
 
 model tag {
-  id              String          @id @default(auto()) @map("_id") @db.ObjectId
-  title           String          @unique
-  priotity        Int
-  colour          String
-  ticketId        String[] 
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  title    String @unique
+  priority Int
+  colour   String
 }
 
 model stage {
-  id              String          @id @default(auto()) @map("_id") @db.ObjectId
-  title           String          @unique
-  description     String
-  ticketId        String[]
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String   @unique
+  description String
+  ticketId    String[]
 }
 
 model comment {
-  id              String          @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String
-  dateCreated     DateTime
-  isDeleted       Boolean
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  userId  String
+  content String
 }
