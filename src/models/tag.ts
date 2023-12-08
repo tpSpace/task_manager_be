@@ -4,7 +4,8 @@ export interface Tag {
   tagId: string;
   title: string;
   priority: number;
-  color?: string | null;
+  colour?: string | null;
+
   projectIds: string[];
   projects: Project[];
 }

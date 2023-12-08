@@ -6,6 +6,8 @@ const userData: Prisma.userCreateInput[] = [
   {
     email: "admin1@gmail.com",
     password: "MyP@ssw0rd!",
+    name: "Admin 1",
+    avatar: "https://i.pravatar.cc/150?img=1"
   },
 ];
 
@@ -15,7 +17,7 @@ async function main() {
     const user = await prisma.user.create({
       data: u,
     });
-    console.log(`Created user with id: ${user.id}`);
+    console.log(`Created user with id: ${user.userId}`);
   }
   console.log(`Seeding finished.`);
 }

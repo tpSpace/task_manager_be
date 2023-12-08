@@ -1,7 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-
 // In this project we will use prisma as an ORM for ease of use as well as security
 // BTW please setup redis for caching and rate limiting
 generator client {
@@ -20,11 +19,10 @@ model User {
   avatar   String?
   password String
 
-  projectIds String[] @db.ObjectId
-  projects Project[] @relation(fields: [projectIds], references: [projectId])
+  projectIds String[] @db.ObjectId //prisma
+  projects Project[] @relation(fields: [projectIds], references: [projectId]) //prisma
 
-  comments Comment[]
-
+  comments Comment[] //prisma
 }
 
 model Project {
@@ -46,33 +44,33 @@ model Project {
 model Ticket {
   ticketId String @id @default(auto()) @map("_id") @db.ObjectId   
   title    String
-  description String    
+  description String?    
   creatorId    String
   parentTicketId String? @map("parentTicket")
   childTickets  String[] @map("childTickets")  
   assignedUserIds String[] @map("assignedTo")
-  timestamp DateTime @default(now())
-  due DateTime?  
+  deadline DateTime?  
 
   stageId String[] @db.ObjectId
   stage Stage[] @relation(fields: [stageId], references: [stageId])
 
-  comment Comment[]
+  comment Comment[] //prisma
 }
 
 model Tag {
   tagId    String @id @default(auto()) @map("_id") @db.ObjectId
   title    String  
   priority Int   
-  color    String? 
+  colour    String? 
 
-  projectIds String[] @db.ObjectId
-  projects Project[] @relation(fields: [projectIds], references: [projectId])
+  projectIds String[] @db.ObjectId //prisma
+  projects Project[] @relation(fields: [projectIds], references: [projectId]) //prisma
 }
 
 model Stage {
   stageId String   @id @default(auto()) @map("_id") @db.ObjectId
   title   String
+
   ticketIds String[] @db.ObjectId
   tickets Ticket[]  @relation(fields: [ticketIds], references: [ticketId])
 
@@ -82,14 +80,13 @@ model Stage {
 
 model Comment {
   commentId String   @id @default(auto()) @map("_id") @db.ObjectId
+  content  String
+
   author   User     @relation(fields: [authorId], references: [userId])
   authorId String   @db.ObjectId
+
   ticket   Ticket   @relation(fields: [ticketId], references: [ticketId])
   ticketId String   @db.ObjectId
-  content  String
-  timestamp  DateTime @default(now())
 
-  versions Comment[] @relation("PastComments")
-  basedOn Comment? @relation("PastComments", fields: [basedOnId], references: [commentId], onDelete: NoAction, onUpdate: NoAction)
-  basedOnId String? @db.ObjectId
+  
 }

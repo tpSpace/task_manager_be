@@ -1,12 +1,12 @@
-GET  http://localhost:3000/
+GET  http://localhost:3001/
 ###
 
 
 ###
-POST http://localhost:3000/auth/login 
+POST http://localhost:3001/auth/login 
 Content-Type: application/json
 
 {
     "email": "admin1@gmail.com",
-    "password": "MyP@s!"
+    "password": "MyP@sswor1d!"
 }

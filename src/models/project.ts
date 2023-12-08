@@ -5,10 +5,13 @@ export interface Project {
   adminId: string;
   title: string;
   history: string[];
+
   userIds: string[];
   users: User[];
+
   tagIds: string[];
   tags: Tag[];
+
   stageIds: string[];
   stages: Stage[];
 }

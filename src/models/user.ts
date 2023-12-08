@@ -5,7 +5,9 @@ export interface User {
   email: string;
   avatar?: string | null;
   password: string;
+
   projectIds: string[];
   projects: Project[];
+
   comments: Comment[];
 }
