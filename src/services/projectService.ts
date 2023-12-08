@@ -30,5 +30,10 @@ export const findAllProjectOfUserWithId = async (userId: string) => {
       },
     },
   });
-  return projects;
+  return projects.map((project: Project) => {
+    return {
+      id: project.id,
+      title: project.title,
+    };
+  });
 }

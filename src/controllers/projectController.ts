@@ -19,14 +19,17 @@ export const createProjectHandler = async (req: Request, res: Response) => {
     const newProjectId = await createProject(project);
     await addProjectToUser(userId, newProjectId);
 
-    return res.status(201).json({ 
-      message: "Project created successfully",
+    return res.status(200).json({ 
+      status: "success",
       projectId: newProjectId
     });
 
   } catch (error) {
     console.error("Error creating project:", error);
-    return res.status(500).json({ error: "Failed to create project" });
+    return res.status(500).json({ 
+      status: "server error",
+      error: "Failed to create project" 
+    });
   }
 };
 
@@ -35,13 +38,17 @@ export const getAllProjectHandler = async (req: Request, res: Response) => {
     const userId: string = returnUserIdFromToken(req);    
     const projects = await findAllProjectOfUserWithId(userId);
 
-    return res.status(200).json({ 
+    return res.status(200).json({
+      status: "success", 
       projects 
     });
 
   } catch (error) {
     console.error("Error getting projects:", error);
-    return res.status(500).json({ error: "Failed to get projects" });
+    return res.status(500).json({
+      status: "server error", 
+      error: "Failed to get projects" 
+    });
   }
 };
 
@@ -76,12 +83,16 @@ export const getAllProjectWithIdHandler = async (req: Request, res: Response) =>
     const userId = req.params.userId;
     const projects = await findAllProjectOfUserWithId(userId);
 
-    return res.status(200).json({ 
-      projects 
+    return res.status(200).json({
+      status: "success",  
+      projects,
     });
 
   } catch (error) {
     console.error("Error getting projects:", error);
-    return res.status(500).json({ error: "Failed to get projects" });
+    return res.status(500).json({
+      status: "server error",  
+      error: "Failed to get projects" 
+    });
   }
 };
