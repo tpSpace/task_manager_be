@@ -18,7 +18,7 @@ export const loginUserHandler = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({
         status: "not found",
-        message: "User not found",
+        message: "user not found",
       });
     } else {
       const isPasswordMatch = (await bcrypt).compareSync(
@@ -34,7 +34,7 @@ export const loginUserHandler = async (req: Request, res: Response) => {
       } else {
         return res.status(401).json({
           status: "unauthorized",
-          message: "Wrong password",
+          message: "wrong password",
         });
       }
     }
@@ -42,7 +42,7 @@ export const loginUserHandler = async (req: Request, res: Response) => {
     console.error("Error logging in user:", error);
     return res.status(500).json({
       status: "server error",
-      message: "Failed to login user",
+      message: "failed to login user",
     });
   }
 };
@@ -55,7 +55,7 @@ export const registerUserHandler = async (req: Request, res: Response) => {
     if (existingUser) {
       return res.status(409).json({
         status: "error",
-        message: "User already existed",
+        message: "user already existed",
       });
     }
 
@@ -74,39 +74,40 @@ export const registerUserHandler = async (req: Request, res: Response) => {
     console.error("Error getting user:", error);
     return res.status(500).json({
       status: "server error",
-      error: "Failed to register user",
+      error: "failed to register user",
     });
   }
 };
 
-export const getAllUserHandler = async (req: Request, res: Response) => {
-  try {
-    const users = await findAllUser();
-    return res.status(200).json({
-      status: "success",
-      users,
-    });
-  } catch (error) {
-    console.error("Error getting users:", error);
-    return res.status(500).json({
-      status: "server error",
-      message: "Failed to get users",
-    });
-  }
-};
+// Not needed for now
+// export const getAllUserHandler = async (req: Request, res: Response) => {
+//   try {
+//     const users = await findAllUser();
+//     return res.status(200).json({
+//       status: "success",
+//       users,
+//     });
+//   } catch (error) {
+//     console.error("Error getting users:", error);
+//     return res.status(500).json({
+//       status: "server error",
+//       message: "failed to get users",
+//     });
+//   }
+// };
 
-export const getSingleUserHandler = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const user = await findUserById(id);
-    return res.status(200).json({
-      user,
-    });
-  } catch (error) {
-    console.error("Error getting user:", error);
-    return res.status(500).json({
-      status: "server error",
-      error: "Failed to get user",
-    });
-  }
-};
+// export const getSingleUserHandler = async (req: Request, res: Response) => {
+//   try {
+//     const { id } = req.params;
+//     const user = await findUserById(id);
+//     return res.status(200).json({
+//       user,
+//     });
+//   } catch (error) {
+//     console.error("Error getting user:", error);
+//     return res.status(500).json({
+//       status: "server error",
+//       error: "failed to get user",
+//     });
+//   }
+// };

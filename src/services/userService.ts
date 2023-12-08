@@ -15,7 +15,9 @@ export const findUserByEmail = async (email: string) => {
 export const createUser = async (user: User) => {
   await prisma.user.create({
     data: {
-      ...user,
+      name: user.name,
+      email: user.email,
+      password: user.password
     },
   });    
 };
@@ -34,24 +36,24 @@ export const findUserById = async (id: string) => {
   return user;
 };
 
-export const addProjectToUser = async (userId: string, inputProjectId: string) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      userId: userId
-    },
-  });
+// export const addProjectToUser = async (userId: string, inputProjectId: string) => {
+//   const user = await prisma.user.findUnique({
+//     where: {
+//       userId: userId
+//     },
+//   });
 
-  if (user) {
-    user.projectId.push(inputProjectId);
+//   if (user) {
+//     user.projectId.push(inputProjectId);
 
-    await prisma.user.update({
-      where: {
-        userId: userId
-      },
-      data: {
-        projectId: user.projectId
-      },
-    });
-  }
-  console.log(user);
-}
+//     await prisma.user.update({
+//       where: {
+//         userId: userId
+//       },
+//       data: {
+//         projectId: user.projectId
+//       },
+//     });
+//   }
+//   console.log(user);
+// }

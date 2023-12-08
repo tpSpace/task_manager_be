@@ -3,60 +3,42 @@ import { Project } from '../models/project';
 
 const prisma = new PrismaClient();
 
-export const findProjectById = async (id: string) => {
+export const findProjectById = async (projectId: string) => {
   const project = await prisma.project.findUnique({
     where: {
-      id: id,
+      projectId: projectId,
     },
   });
   return project;
 };
 
 export const createProject = async (project: Project) => {
+  let userIds = [];
+  userIds.push(project.adminId);
+
   const createdProject = await prisma.project.create({
     data: {
-      ...project,
+      title: project.title,
+      adminId: project.adminId,
+      userIds: userIds,
     },
   });
-
-  return createdProject.id;
+  return createdProject.projectId;
 };
 
-export const findAllProjectOfUserWithId = async (userId: string) => {
+export const findAllProjectOfUserWithId = async (inputUserId: string) => {
   const projects = await prisma.project.findMany({
     where: {
-      userId: {
-        has: userId,
-      },
+      userIds: {
+        has: inputUserId
+      }
     },
   });
-  return projects.map((project: Project) => {
+
+  return projects.map((project) => {
     return {
-      id: project.id,
+      projectId: project.projectId,
       title: project.title,
     };
   });
-}
-
-export const addTagToProject = async (projectId: string, inputTagId: string) => {
-  const project = await prisma.project.findUnique({
-    where: {
-      id: projectId
-    },
-  });
-
-  if (project) {
-    project.tagId.push(inputTagId);
-
-    await prisma.project.update({
-      where: {
-        id: projectId
-      },
-      data: {
-        tagId: project.tagId
-      },
-    });
-  }
-
-
 }
