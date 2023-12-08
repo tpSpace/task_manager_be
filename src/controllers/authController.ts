@@ -5,32 +5,32 @@ import { User } from "../models/user";
 const bcrypt = import("bcrypt-ts");
 
 export const loginUserHandler = async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    const user = await findUserByEmail(email);
+  const user = await findUserByEmail(email);
 
-    if (user) {
-      const isPasswordMatch = (await bcrypt).compareSync(password, user.password);
-      if (isPasswordMatch) {
-        const token = generateJwtToken(user.userId);
-        return res.status(200).json({
-          status: "success",
-          token: token,
-        });
-      } else { 
-        return res.status(401).json({
-          status: "Unauthorized",
-          message: "Wrong password",
-        })
-      }
-    } 
-  } catch (error) {
+  if (!user) {
     return res.status(404).json({
       status: "error",
       message: "User not found so sorry",
     });
-  }
+  } 
+  else {
+    const isPasswordMatch = (await bcrypt).compareSync(password, user.password);
+    if (isPasswordMatch) {
+      const token = generateJwtToken(user.userId);
+      return res.status(200).json({
+        status: "success",
+          token: token,
+        });
+    } 
+    else { 
+      return res.status(401).json({
+        status: "Unauthorized",
+        message: "Wrong password",
+      });
+    }
+  } 
 };
 
 export const registerUserHandler = async (req: Request, res: Response) => {
