@@ -9,7 +9,7 @@ import {
   getSingleProjectHandler,
   getAllProjectWithIdHandler
 } from '../controllers/projectController';
-import {createTagHandler, getTagFromProjectHandler} from "../controllers/tagController";
+import {createTagHandler} from "../controllers/tagController";
 
 const router = express.Router();
 
@@ -44,9 +44,9 @@ router.post(
     validate(TagSchema),
     createTagHandler
 );
-router.get(
-    '/getTag',
-    getTagFromProjectHandler
-)
+// router.get(
+//     '/getTag',
+//     getTagFromProjectHandler
+// )
 
 export default router;

@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 export const createTag = async (tag: Tag) => {
      await prisma.tag.create({
-        data: {
+         data: {
             ...tag,
         },
     });
