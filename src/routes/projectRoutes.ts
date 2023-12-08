@@ -40,12 +40,12 @@ router.get(
 )
 //Tag
 router.post(
-    '/createTag',
+    '/createTag/:id',
     validate(TagSchema),
-    createTagHandler
+    createTagHandler,
 );
 router.get(
-    '/getTag',
+    '/getTag/:id',
     getTagFromProjectHandler
 )
 

@@ -4,12 +4,12 @@ import { Tag } from '../models/tag';
 const prisma = new PrismaClient();
 
 export const createTag = async (tag: Tag) => {
-     await prisma.tag.create({
+     const newTag = await prisma.tag.create({
          data: {
             ...tag,
         },
     });
-
+    return newTag.id;
 };
 export const getAllTagOfProjectId = async (projectId: string) => {
     const project = await prisma.project.findUnique({
@@ -25,6 +25,9 @@ export const getAllTagOfProjectId = async (projectId: string) => {
                 }
             },
         });
+        if (!tag){
+            throw new Error("Tag not found");
+        }
         return tag;
     }
 }

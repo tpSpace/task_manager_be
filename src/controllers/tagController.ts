@@ -1,19 +1,21 @@
 import { Request, Response } from "express";
-import { Tag } from '../models/tag';
+
+import { Tag } from '../models';
+
 import {
     createTag, getAllTagOfProjectId,
 } from '../services/tagService';
-import {Project} from "../models";
+import {addTagToProject} from "../services/projectService";
 
 
 
 export const createTagHandler = async (req: Request, res: Response) => {
     try {
         const tag: Tag = req.body;
-        const project: Project = req.body;
+        const projectId: string = req.params.id;
 
         const newTagId = await createTag(tag);
-        project.tagId.push(tag.id);
+        await addTagToProject(projectId, newTagId);
 
         return res.status(205).json({
             message: "Tag created successfully",
@@ -30,9 +32,11 @@ export const createTagHandler = async (req: Request, res: Response) => {
 
 export const getTagFromProjectHandler = async (req: Request, res: Response) => {
     try {
-        const projectId = req.params.projectId;
+        const projectId = req.params.id;
         const tag = await getAllTagOfProjectId(projectId);
-        return res.status(200).json(tag);
+        return res.status(200).json({
+            tag
+        });
     } catch (error) {
         console.error("Error getting tag:", error);
         return res.status(500).json({ error: "Failed to get tag" });
