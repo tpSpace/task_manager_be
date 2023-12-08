@@ -9,7 +9,7 @@ export const TagSchema = z.object({
             required_error: "Priority is required",
         }).min(0, "Syntax error"),
         colour: string({
-            required_error: "Password is required",
+            required_error: "Colour is required",
         }).max(8, "Colour hex-code must be at least 8 characters").regex(/^(?=.*#)/, "Colour hex-code must contain #"),
     }),
 });

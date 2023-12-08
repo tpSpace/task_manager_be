@@ -4,8 +4,8 @@ import { projectSchema } from "../schemas/projectSchema";
 import { validateAndAuthorizeToken } from '../middleware/jwt';
 import { 
   createProjectHandler, 
-  getAllProjectHandler,
-  getSingleProjectHandler,
+  // getAllProjectHandler,
+  // getSingleProjectHandler,
   getAllProjectWithIdHandler
 } from '../controllers/projectController';
 
@@ -18,13 +18,14 @@ router.post(
   createProjectHandler
 );
 
-router.get(
-  '/get',
-  validateAndAuthorizeToken,
-  getAllProjectHandler
-)
+// Will be used when front end is ready with jwt implementation
+// router.get(
+//   '/get',
+//   validateAndAuthorizeToken,
+//   getAllProjectHandler
+// )
 
-// Will use in the future
+// Will be used when front end is ready with jwt implementation
 // router.get(
 //   '/get/:id',
 //   validateAndAuthorizeToken,
