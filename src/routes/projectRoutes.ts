@@ -33,6 +33,9 @@ router.post(
 // )
 
 // To be removed
-router.get("/get/:userId", getAllProjectWithIdHandler);
+router.get(
+  "/get/:userId", 
+  getAllProjectWithIdHandler
+);
 
 export default router;

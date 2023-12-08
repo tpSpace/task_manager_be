@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { Tag } from "../models";
-import { createTag, getAllTagOfProjectId } from "../services/tagService";
-import { addTagToProject } from "../services/projectService";
+import { createTag, 
+  getAllTagOfProjectId
+ } from "../services/tagService";
 import { findProjectById } from "../services/projectService";
 
 export const createTagHandler = async (req: Request, res: Response) => {
@@ -9,16 +10,16 @@ export const createTagHandler = async (req: Request, res: Response) => {
     const tag: Tag = req.body;
     const projectId: string = req.params.id;
     const project = await findProjectById(projectId);
+
     if (!project) {
       return res.status(404).json({
         status: "not found",
-        error: "Project not found",
+        error: "project not found",
       });
     }
 
-    const newTagId = await createTag(tag);
-    await addTagToProject(projectId, newTagId);
-
+    const newTagId = await createTag(tag, projectId);
+    
     return res.status(200).json({
       status: "success",
       tagId: newTagId,
@@ -27,7 +28,7 @@ export const createTagHandler = async (req: Request, res: Response) => {
     console.error("Error creating tag:", error);
     return res.status(500).json({
       status: "server error",
-      error: "Failed to create tag",
+      error: "failed to create tag",
     });
   }
 };
@@ -39,7 +40,7 @@ export const getTagFromProjectHandler = async (req: Request, res: Response) => {
     if (!project) {
       return res.status(404).json({
         status: "not found",
-        error: "Project not found",
+        error: "project not found",
       });
     }
     const tag = await getAllTagOfProjectId(projectId);
@@ -52,7 +53,7 @@ export const getTagFromProjectHandler = async (req: Request, res: Response) => {
     console.error("Error getting tag:", error);
     return res.status(500).json({
       status: "server error",
-      error: "Failed to get tag",
+      error: "failed to get tag",
     });
   }
 };
