@@ -4,7 +4,7 @@ import { User } from '../models/user';
 const prisma = new PrismaClient();
 
 export const findUserByEmail = async (email: string) => {
-  const user = await prisma.user.findUniqueOrThrow({
+  const user = await prisma.user.findUnique({
     where: {
       email: email
     },
