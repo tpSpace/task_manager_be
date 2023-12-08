@@ -8,9 +8,14 @@
   "license": "gnu",
   "private": true,
   "scripts": {
-    "dev": "node -r ts-node/register src/index.ts",
+    "dev": "nodemon -r ts-node/register src/index.ts",
     "start": "ts-node-dev --inspect --respawn --transpile-only --exit-child src/index.ts",
     "build": "tsc . -p"
+  },
+  "nodemonConfig": {
+    "watch": ["src"],
+    "ext": "ts",
+    "exec": "ts-node ./src/index.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.4.2",
