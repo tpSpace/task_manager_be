@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { Project } from '../models/project';
 import { 
   createProject,
-  findAllProjectOfUser,
-  findUniqueProject } from '../services/projectService';
+  findAllProjectOfUserWithId,
+  findProjectById } from '../services/projectService';
 import { addProjectToUser } from '../services/userService';
 import { returnUserIdFromToken } from "../middleware/jwt";
 
@@ -33,7 +33,7 @@ export const createProjectHandler = async (req: Request, res: Response) => {
 export const getAllProjectHandler = async (req: Request, res: Response) => {
   try {
     const userId: string = returnUserIdFromToken(req);    
-    const projects = await findAllProjectOfUser(userId);
+    const projects = await findAllProjectOfUserWithId(userId);
 
     return res.status(200).json({ 
       projects 
@@ -49,7 +49,7 @@ export const getSingleProjectHandler = async (req: Request, res: Response) => {
   try {
     const userId: string = returnUserIdFromToken(req);
     const projectId = req.params.id;
-    const project = await findUniqueProject(projectId);
+    const project = await findProjectById(projectId);
 
     if (!project) {
       return res.status(404).json({ 
@@ -68,5 +68,20 @@ export const getSingleProjectHandler = async (req: Request, res: Response) => {
     return res.status(500).json({ 
       error: "Failed to get project" 
     });
+  }
+};
+
+export const getAllProjectWithIdHandler = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId;
+    const projects = await findAllProjectOfUserWithId(userId);
+
+    return res.status(200).json({ 
+      projects 
+    });
+
+  } catch (error) {
+    console.error("Error getting projects:", error);
+    return res.status(500).json({ error: "Failed to get projects" });
   }
 };
