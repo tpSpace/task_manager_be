@@ -85,7 +85,7 @@ export const getAllProjectWithIdHandler = async (req: Request, res: Response) =>
 
     return res.status(200).json({
       status: "success",  
-      projects 
+      projects,
     });
 
   } catch (error) {
