@@ -1,32 +1,31 @@
-import express from 'express';
+import express from "express";
 import { validate } from "../middleware/validate";
 import { projectSchema } from "../schemas/projectSchema";
-import { TagSchema } from "../schemas/tagSchema";
-import { validateAndAuthorizeToken } from '../middleware/jwt';
-import { 
-  createProjectHandler, 
-  getAllProjectHandler,
-  getSingleProjectHandler,
-  getAllProjectWithIdHandler
-} from '../controllers/projectController';
-import {createTagHandler, getTagFromProjectHandler} from "../controllers/tagController";
+import { validateAndAuthorizeToken } from "../middleware/jwt";
+import {
+  createProjectHandler,
+  // getAllProjectHandler,
+  // getSingleProjectHandler,
+  getAllProjectWithIdHandler,
+} from "../controllers/projectController";
 
 const router = express.Router();
 
 router.post(
-  '/create', 
+  "/create",
   validate(projectSchema),
   validateAndAuthorizeToken,
   createProjectHandler
 );
 
-router.get(
-  '/get',
-  validateAndAuthorizeToken,
-  getAllProjectHandler
-)
+// Will be used when front end is ready with jwt implementation
+// router.get(
+//   '/get',
+//   validateAndAuthorizeToken,
+//   getAllProjectHandler
+// )
 
-// Will use in the future
+// Will be used when front end is ready with jwt implementation
 // router.get(
 //   '/get/:id',
 //   validateAndAuthorizeToken,
@@ -34,19 +33,6 @@ router.get(
 // )
 
 // To be removed
-router.get(
-  '/get/:userId',
-  getAllProjectWithIdHandler
-)
-//Tag
-router.post(
-    '/createTag/:id',
-    validate(TagSchema),
-    createTagHandler,
-);
-router.get(
-    '/getTag/:id',
-    getTagFromProjectHandler
-)
+router.get("/get/:userId", getAllProjectWithIdHandler);
 
 export default router;
