@@ -30,7 +30,12 @@ export const findAllProjectOfUserWithId = async (userId: string) => {
       },
     },
   });
-  return projects;
+  return projects.map((project: Project) => {
+    return {
+      id: project.id,
+      title: project.title,
+    };
+  });
 }
 
 export const addTagToProject = async (projectId: string, inputTagId: string) => {
@@ -52,4 +57,6 @@ export const addTagToProject = async (projectId: string, inputTagId: string) => 
       },
     });
   }
+
+
 }
