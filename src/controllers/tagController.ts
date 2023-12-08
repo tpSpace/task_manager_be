@@ -3,7 +3,7 @@ import { Tag } from '../models/tag';
 import {
     createTag,
     } from '../services/tagService';
-import {addTagToProject, findUniqueProject} from "../services/projectService";
+import {addTagToProject} from "../services/projectService";
 import {getSingleProjectHandler} from "./projectController";
 
 

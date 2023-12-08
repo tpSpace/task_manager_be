@@ -1,6 +1,7 @@
 import express from 'express';
 import { validate } from "../middleware/validate";
 import { projectSchema } from "../schemas/projectSchema";
+import { TagSchema } from "../schemas/tagSchema";
 import { validateAndAuthorizeToken } from '../middleware/jwt';
 import { 
   createProjectHandler, 
@@ -8,6 +9,7 @@ import {
   getSingleProjectHandler,
   getAllProjectWithIdHandler
 } from '../controllers/projectController';
+import {createTagHandler, getTagFromProjectHandler} from "../controllers/tagController";
 
 const router = express.Router();
 
@@ -35,6 +37,16 @@ router.get(
 router.get(
   '/get/:userId',
   getAllProjectWithIdHandler
+)
+//Tag
+router.post(
+    '/createTag',
+    validate(TagSchema),
+    createTagHandler
+);
+router.get(
+    '/getTag',
+    getTagFromProjectHandler
 )
 
 export default router;
