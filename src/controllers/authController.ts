@@ -12,7 +12,7 @@ export const loginUserHandler = async (req: Request, res: Response) => {
   
     if (!user) {
       return res.status(404).json({
-        status: "error",
+        status: "not found",
         message: "User not found",
       });
     } 

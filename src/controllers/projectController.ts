@@ -33,24 +33,25 @@ export const createProjectHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllProjectHandler = async (req: Request, res: Response) => {
-  try {
-    const userId: string = returnUserIdFromToken(req);    
-    const projects = await findAllProjectOfUserWithId(userId);
+// Will be used when front end is ready with jwt implementation
+// export const getAllProjectHandler = async (req: Request, res: Response) => {
+//   try {
+//     const userId: string = returnUserIdFromToken(req);    
+//     const projects = await findAllProjectOfUserWithId(userId);
 
-    return res.status(200).json({
-      status: "success", 
-      projects 
-    });
+//     return res.status(200).json({
+//       status: "success", 
+//       projects 
+//     });
 
-  } catch (error) {
-    console.error("Error getting projects:", error);
-    return res.status(500).json({
-      status: "server error", 
-      error: "Failed to get projects" 
-    });
-  }
-};
+//   } catch (error) {
+//     console.error("Error getting projects:", error);
+//     return res.status(500).json({
+//       status: "server error", 
+//       error: "Failed to get projects" 
+//     });
+//   }
+// };
 
 export const getSingleProjectHandler = async (req: Request, res: Response) => {
   try {
@@ -60,6 +61,7 @@ export const getSingleProjectHandler = async (req: Request, res: Response) => {
 
     if (!project) {
       return res.status(404).json({ 
+        status: "not found",
         error: "Project not found" 
       });
     }
