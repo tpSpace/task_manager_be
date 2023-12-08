@@ -85,3 +85,4 @@ export const getAllProjectWithIdHandler = async (req: Request, res: Response) =>
     return res.status(500).json({ error: "Failed to get projects" });
   }
 };
+

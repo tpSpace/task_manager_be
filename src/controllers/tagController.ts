@@ -4,7 +4,8 @@ import {
     createTag,
     } from '../services/tagService';
 import {addTagToProject, findUniqueProject} from "../services/projectService";
-//import { addProjectToUser } from '../services/userService';
+import {getSingleProjectHandler} from "./projectController";
+
 
 
 export const createTagHandler = async (req: Request, res: Response) => {
@@ -30,9 +31,9 @@ export const createTagHandler = async (req: Request, res: Response) => {
 
 
 
-export const getTagHandler = async (req: Request, res: Response) => {
+export const getTagFromProjectHandler = async (req: Request, res: Response) => {
     try {
-        const projectId: string = returnUserIdFromToken(req);
+        const projectId: string = getSingleProjectHandler(req);
         const tagId = req.params.id;
         const project = await findUniqueProject(projectId);
 
