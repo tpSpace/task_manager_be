@@ -1,7 +1,7 @@
 import { User } from "./index";
 
 export interface Project {
-  id: string;
+  projectId: string;
   title: string;
   adminId: string;
   userId: string[];

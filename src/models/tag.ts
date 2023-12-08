@@ -3,5 +3,4 @@ export interface Tag {
   title: string;
   priority: number;
   colour: string;
-  ticketId: string[];
 }

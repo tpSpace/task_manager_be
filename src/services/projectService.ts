@@ -32,3 +32,23 @@ export const findAllProjectOfUser = async (userId: string) => {
   });
   return projects;
 }
+export const addTagToProject = async (projectId: string, inputTagId: string) => {
+  const project = await prisma.project.findUnique({
+    where: {
+      id: projectId
+    },
+  });
+
+  if (project) {
+    project.tagId.push(inputTagId);
+
+    await prisma.project.update({
+      where: {
+        id: projectId
+      },
+      data: {
+        tagId: project.tagId
+      },
+    });
+  }
+}
