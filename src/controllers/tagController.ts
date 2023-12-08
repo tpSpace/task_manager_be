@@ -19,13 +19,13 @@ export const createTagHandler = async (req: Request, res: Response) => {
         await addTagToProject(projectId, newTagId);
 
         return res.status(205).json({
-            message: "Project created successfully",
+            message: "Tag created successfully",
             tagId: newTagId
         });
 
     } catch (error) {
-        console.error("Error creating project:", error);
-        return res.status(500).json({ error: "Failed to create project" });
+        console.error("Error creating tag:", error);
+        return res.status(500).json({ error: "Failed to create tag" });
     }
 };
 
@@ -39,7 +39,7 @@ export const getTagFromProjectHandler = async (req: Request, res: Response) => {
 
         if (!tag) {
             return res.status(404).json({
-                error: "Project not found"
+                error: "TAG not found"
             });
         }
 
@@ -50,9 +50,9 @@ export const getTagFromProjectHandler = async (req: Request, res: Response) => {
         }
 
     } catch (error) {
-        console.error("Error getting project:", error);
+        console.error("Error getting tag:", error);
         return res.status(500).json({
-            error: "Failed to get project"
+            error: "Failed to get tag"
         });
     }
 };
