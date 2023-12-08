@@ -12,54 +12,81 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
-  userId    String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  email     String   @unique
-  avatar    String?
-  password  String
-  projectId String[]
+model User {
+  userId   String @id @default(auto()) @map("_id") @db.ObjectId 
+  name     String
+  email    String  @unique
+  avatar   String?
+  password String
+
+  projectIds String[] @db.ObjectId //prisma
+  projects Project[] @relation(fields: [projectIds], references: [projectId]) //prisma
+
+  comments Comment[] //prisma
 }
 
-model project {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  adminId  String
-  userId   String[]
+model Project {
+  projectId    String  @id @default(auto()) @map("_id") @db.ObjectId
+  adminId      String
+  title        String
+  history      String[]
+
+  userIds      String[] @db.ObjectId
+  users        User[] @relation(fields: [userIds], references: [userId])
+
+  tagIds       String[] @db.ObjectId
+  tags         Tag[] @relation(fields: [tagIds], references: [tagId])
+
+  stageIds     String[] @db.ObjectId
+  stages       Stage[] @relation(fields: [stageIds], references: [stageId])
+}
+
+model Ticket {
+  ticketId String @id @default(auto()) @map("_id") @db.ObjectId   
   title    String
-  tagId    String[]
-  stageId  String[]
-  ticketId String[]
-  history  String[]
+  description String?    
+  creatorId    String
+  parentTicketId String? @map("parentTicket")
+  childTickets  String[] @map("childTickets")  
+  assignedUserIds String[] @map("assignedTo")
+  deadline DateTime?  
+
+  stageId String[] @db.ObjectId
+  stage Stage[] @relation(fields: [stageId], references: [stageId])
+
+  comment Comment[] //prisma
 }
 
-model ticket {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  title          String
-  description    String
-  creatorId      String
-  assignedUserId String[]
-  commentId      String[]
-  parentTicketId String[]
-  childTicketId  String[]
-  deadline       DateTime
+model Tag {
+  tagId    String @id @default(auto()) @map("_id") @db.ObjectId
+  title    String  
+  priority Int   
+  colour    String? 
+
+  projectIds String[] @db.ObjectId //prisma
+  projects Project[] @relation(fields: [projectIds], references: [projectId]) //prisma
 }
 
-model tag {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  title    String @unique
-  priority Int
-  colour   String
+model Stage {
+  stageId String   @id @default(auto()) @map("_id") @db.ObjectId
+  title   String
+
+  ticketIds String[] @db.ObjectId
+  tickets Ticket[]  @relation(fields: [ticketIds], references: [ticketId])
+
+  projectIds String[] @db.ObjectId
+  projects Project[] @relation(fields: [projectIds], references: [projectId])
 }
 
-model stage {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  title       String   @unique
-  description String
-  ticketId    String[]
-}
+model Comment {
+  commentId String   @id @default(auto()) @map("_id") @db.ObjectId
+  content  String
 
-model comment {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  userId  String
-  content String
+  author   User     @relation(fields: [authorId], references: [userId])
+  authorId String   @db.ObjectId
+
+  ticket   Ticket   @relation(fields: [ticketId], references: [ticketId])
+  ticketId String   @db.ObjectId
+
+  
 }

@@ -1,13 +1,17 @@
-import { User } from "./index";
+import { Stage } from "./index";
 export interface Ticket {
-  id: string;
-  commentId: string[];
-  tagId: string[];
+  ticketId: string;
   title: string;
-  description: string;
-  assignedUserId: string[] | null;
+  description?: string | null;
   creatorId: string;
-  deadline: Date;
-  parentTickerId: string;
-  childTicketId: string[];
+  parentTicketId?: string | null;
+  childTickets: string[];
+
+  assignedUserIds: string[];
+  deadline?: Date | null;
+
+  stageId: string[];
+  stage: Stage[];
+
+  comment: Comment[];
 }

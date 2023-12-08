@@ -1,18 +1,18 @@
-import express from 'express';
+import express from "express";
 import { validate } from "../middleware/validate";
 import { projectSchema } from "../schemas/projectSchema";
-import { validateAndAuthorizeToken } from '../middleware/jwt';
-import { 
-  createProjectHandler, 
+import { validateAndAuthorizeToken } from "../middleware/jwt";
+import {
+  createProjectHandler,
   // getAllProjectHandler,
   // getSingleProjectHandler,
-  getAllProjectWithIdHandler
-} from '../controllers/projectController';
+  getAllProjectWithIdHandler,
+} from "../controllers/projectController";
 
 const router = express.Router();
 
 router.post(
-  '/create', 
+  "/create",
   validate(projectSchema),
   validateAndAuthorizeToken,
   createProjectHandler
@@ -33,9 +33,6 @@ router.post(
 // )
 
 // To be removed
-router.get(
-  '/get/:userId',
-  getAllProjectWithIdHandler
-)
+router.get("/get/:userId", getAllProjectWithIdHandler);
 
 export default router;

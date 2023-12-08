@@ -1,6 +1,11 @@
-import { User } from "./index";
+import { User, Ticket } from "./index";
 export interface Comment {
-  id: string;
-  userId: string;
+  commentId: string;
   content: string;
+
+  author: User;
+  authorId: string;
+
+  ticket: Ticket;
+  ticketId: string;
 }
