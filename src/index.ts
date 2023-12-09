@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import authRouter from "./routes/authRoute";
+import authRouter from "./routes/authRoutes";
 import projectRouter from "./routes/projectRoutes";
 import tagRouter from "./routes/tagRoutes";
 import cors from "cors";
@@ -18,6 +18,6 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });

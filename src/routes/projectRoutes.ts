@@ -1,13 +1,13 @@
 import express from "express";
 import { validate } from "../middleware/validate";
-import { projectSchema } from "../schemas/projectSchema";
+import { projectSchema } from "../schemas";
 import { validateAndAuthorizeToken } from "../middleware/jwt";
 import {
   createProjectHandler,
   getAllProjectHandler,
   getSingleProjectHandler,
   getAllProjectWithIdHandler,
-} from "../controllers/projectController";
+} from "../controllers";
 
 const router = express.Router();
 
@@ -19,23 +19,12 @@ router.post(
 );
 
 // Will be used when front end is ready with jwt implementation
-router.get(
-  '/get',
-  validateAndAuthorizeToken,
-  getAllProjectHandler
-)
+router.get("/get", validateAndAuthorizeToken, getAllProjectHandler);
 
 // Will be used when front end is ready with jwt implementation
-router.get(
-  '/get/:id',
-  validateAndAuthorizeToken,
-  getSingleProjectHandler
-)
+router.get("/get/:id", validateAndAuthorizeToken, getSingleProjectHandler);
 
 // To be removed
-router.get(
-  "/get/:userId", 
-  getAllProjectWithIdHandler
-);
+router.get("/get/:userId", getAllProjectWithIdHandler);
 
 export default router;

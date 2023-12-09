@@ -1,22 +1,19 @@
-import { TagSchema } from "../schemas/tagSchema";
+import { TagSchema } from "../schemas";
 import { validate } from "../middleware/validate";
-import {createTagHandler, 
-  getTagFromProjectHandler
+import {
+  createTagHandler,
+  getTagFromProjectHandler,
 } from "../controllers/tagController";
-import express from 'express';
+import express from "express";
 
 const router = express.Router();
 
 router.post(
-  '/create/:id',
+  "/create/:id",
   // validate(TagSchema),
-  createTagHandler,
+  createTagHandler
 );
 
-router.get(
-  '/get/:id',
-  getTagFromProjectHandler
-);
+router.get("/get/:id", getTagFromProjectHandler);
 
 export default router;
-
