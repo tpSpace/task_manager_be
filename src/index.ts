@@ -5,7 +5,7 @@ import tagRouter from "./routes/tagRoutes";
 import cors from "cors";
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port: any = process.env.PORT || 3001;
 
 app.use(express.json());
 
@@ -18,6 +18,6 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });

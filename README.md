@@ -1,17 +1,24 @@
-# ???
-![image](https://github.com/tpSpace/task_manager_be/assets/96167875/64ada068-bf61-480b-9222-6e94a9b8bb55)
-<br />
-file structure.
-
-### run yarn to install dependencies
+## Without Docker
+### Run yarn to install dependencies
 ```bash
 yarn
 ```
-### start the server
+### Start the server
 ```bash
 yarn run dev
 ```
-### format the code
+### Format the code
 ```bash
 yarn prettier --write "src/**/*.ts"
 ```
+
+## With Docker
+### Build Container
+```bash
+docker build -t tasking .
+```
+### Build Container
+```bash
+docker run -p 3001:3000 -d tasking
+```
+
