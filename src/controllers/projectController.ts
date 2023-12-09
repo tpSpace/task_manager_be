@@ -40,7 +40,7 @@ export const getAllProjectHandler = async (req: Request, res: Response) => {
     console.error("Error getting projects:", error);
     return res.status(500).json({
       status: "server error",
-      error: "Failed to get projects"
+      error: "failed to get projects"
     });
   }
 };
@@ -54,19 +54,21 @@ export const getSingleProjectHandler = async (req: Request, res: Response) => {
     if (!project) {
       return res.status(404).json({
         status: "not found",
-        error: "Project not found",
+        error: "project not found",
       });
     }
 
     if (project.userIds.includes(userId)) {
       return res.status(200).json({
+        status: "success",
         project,
       });
     }
   } catch (error) {
     console.error("Error getting project:", error);
     return res.status(500).json({
-      error: "Failed to get project",
+      status: "server error",
+      error: "failed to get project",
     });
   }
 };
