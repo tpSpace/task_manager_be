@@ -6,7 +6,6 @@ import {
   createProjectHandler,
   getAllProjectHandler,
   getSingleProjectHandler,
-  getAllProjectWithIdHandler,
 } from "../controllers";
 
 const projectRouter = express.Router();
@@ -18,7 +17,6 @@ projectRouter.post(
   createProjectHandler
 );
 
-// Will be used when front end is ready with jwt implementation
 projectRouter.get("/get", validateAndAuthorizeToken, getAllProjectHandler);
 
 // Will be used when front end is ready with jwt implementation
@@ -27,8 +25,4 @@ projectRouter.get(
   validateAndAuthorizeToken,
   getSingleProjectHandler
 );
-
-// To be removed
-projectRouter.get("/get/:userId", getAllProjectWithIdHandler);
-
 export default projectRouter;
