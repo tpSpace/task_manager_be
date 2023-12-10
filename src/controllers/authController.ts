@@ -96,18 +96,27 @@ export const registerUserHandler = async (req: Request, res: Response) => {
 //   }
 // };
 
-// export const getSingleUserHandler = async (req: Request, res: Response) => {
-//   try {
-//     const { id } = req.params;
-//     const user = await findUserById(id);
-//     return res.status(200).json({
-//       user,
-//     });
-//   } catch (error) {
-//     console.error("Error getting user:", error);
-//     return res.status(500).json({
-//       status: "server error",
-//       error: "failed to get user",
-//     });
-//   }
-// };
+export const getSingleUserHandler = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const user = await findUserById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        status: "not found",
+        message: "user not found",
+      });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      user,
+    });
+  } catch (error) {
+    console.error("Error getting user:", error);
+    return res.status(500).json({
+      status: "server error",
+      error: "failed to get user",
+    });
+  }
+};
