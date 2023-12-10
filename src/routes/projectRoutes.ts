@@ -6,6 +6,8 @@ import {
   createProjectHandler,
   getAllProjectHandler,
   getSingleProjectHandler,
+  deleteProjectHandler,
+  updateProjectHandler
 } from "../controllers/projectController";
 
 const router = express.Router();
@@ -27,6 +29,19 @@ router.get(
   '/get/:projectId',
   validateAndAuthorizeToken,
   getSingleProjectHandler
+)
+
+router.put(
+    '/update/:projectId',
+    validateAndAuthorizeToken,
+    updateProjectHandler
+
+)
+
+router.delete(
+    '/delete/:projectId',
+    validateAndAuthorizeToken,
+    deleteProjectHandler
 )
 
 export default router;
