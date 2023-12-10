@@ -6,7 +6,7 @@ import {
   getAllStageFromProjectHandler,
   updateStageHandler,
   deleteStageHandler,
-} from "../controllers/stageController";
+} from "../controllers";
 
 import express from "express";
 

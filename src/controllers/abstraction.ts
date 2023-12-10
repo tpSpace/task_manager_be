@@ -8,7 +8,7 @@ export enum HttpStatusCode {
 interface ApiResponse<T> {
   status: string;
   statusCode?: HttpStatusCode;
-  data?: T;
+  data?: T | T[];
   error?: string;
 }
 

@@ -1,7 +1,4 @@
-import {
-  createTagHandler,
-  getTagFromProjectHandler,
-} from "../controllers/tagController";
+import { createTagHandler, getTagFromProjectHandler } from "../controllers";
 import express from "express";
 import { validateAndAuthorizeToken } from "../middleware/jwt";
 

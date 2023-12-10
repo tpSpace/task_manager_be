@@ -1,13 +1,13 @@
 import express from "express";
 import { validate } from "../middleware/validate";
 import { validateAndAuthorizeToken } from "../middleware/jwt";
-import { loginUserSchema } from "../schemas/userSchema";
+import { loginUserSchema } from "../schemas";
 import {
   loginUserHandler,
   registerUserHandler,
   // getAllUserHandler,
   // getSingleUserHandler
-} from "../controllers/authController";
+} from "../controllers";
 
 const authRouter = express.Router();
 
