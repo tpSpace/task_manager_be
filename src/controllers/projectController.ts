@@ -3,9 +3,7 @@ import { Project } from "../models/project";
 import {
   createProject,
   findAllProjectOfUserWithId, findProjectById,
-  // findProjectById,
 } from "../services/projectService";
-// import { addProjectToUser } from "../services/userService";
 import { returnUserIdFromToken } from "../middleware/jwt";
 
 export const createProjectHandler = async (req: Request, res: Response) => {
@@ -14,7 +12,6 @@ export const createProjectHandler = async (req: Request, res: Response) => {
     project.adminId = returnUserIdFromToken(req);
 
     const newProjectId = await createProject(project);
-    // await addProjectToUser(userId, newProjectId);
 
     return res.status(200).json({
       status: "success",
@@ -24,12 +21,11 @@ export const createProjectHandler = async (req: Request, res: Response) => {
     console.error("Error creating project:", error);
     return res.status(500).json({
       status: "server error",
-      error: "Failed to create project",
+      error: "failed to create project",
     });
   }
 };
 
-// Will be used when front end is ready with jwt implementation
 export const getAllProjectHandler = async (req: Request, res: Response) => {
   try {
     const userId: string = returnUserIdFromToken(req);
@@ -44,7 +40,7 @@ export const getAllProjectHandler = async (req: Request, res: Response) => {
     console.error("Error getting projects:", error);
     return res.status(500).json({
       status: "server error",
-      error: "Failed to get projects"
+      error: "failed to get projects"
     });
   }
 };
@@ -52,46 +48,27 @@ export const getAllProjectHandler = async (req: Request, res: Response) => {
 export const getSingleProjectHandler = async (req: Request, res: Response) => {
   try {
     const userId: string = returnUserIdFromToken(req);
-    const projectId = req.params.id;
+    const projectId = req.params.projectId;
     const project = await findProjectById(projectId);
 
     if (!project) {
       return res.status(404).json({
         status: "not found",
-        error: "Project not found",
+        error: "project not found",
       });
     }
 
     if (project.userIds.includes(userId)) {
       return res.status(200).json({
+        status: "success",
         project,
       });
     }
   } catch (error) {
     console.error("Error getting project:", error);
     return res.status(500).json({
-      error: "Failed to get project",
-    });
-  }
-};
-
-export const getAllProjectWithIdHandler = async (
-  req: Request,
-  res: Response
-) => {
-  try {
-    const userId = req.params.userId;
-    const projects = await findAllProjectOfUserWithId(userId);
-
-    return res.status(200).json({
-      status: "success",
-      projects,
-    });
-  } catch (error) {
-    console.error("Error getting projects:", error);
-    return res.status(500).json({
       status: "server error",
-      error: "failed to get projects",
+      error: "failed to get project",
     });
   }
 };
