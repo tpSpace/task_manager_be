@@ -1,5 +1,5 @@
 import { object, string, z } from "zod";
-export const StageSchema = z.object({
+export const stageSchema = z.object({
   body: object({
     title: string({
       required_error: "Title is required",

@@ -9,27 +9,27 @@ import {
   // getSingleUserHandler
 } from "../controllers/authController";
 
-const router = express.Router();
+const authRouter = express.Router();
 
-router.post("/login", validate(loginUserSchema), loginUserHandler);
+authRouter.post("/login", validate(loginUserSchema), loginUserHandler);
 
-router.post("/register", validate(loginUserSchema), registerUserHandler);
+authRouter.post("/register", validate(loginUserSchema), registerUserHandler);
 
-// router.get(
+// authRouter.get(
 //   "/users",
 //   validateAndAuthorizeToken,
 //   getAllUserHandler
 // );
 
-// router.get(
+// authRouter.get(
 //   "/user/:id",
 //   validateAndAuthorizeToken,
 //   getSingleUserHandler
 // );
 
 // Test authrourization end point, to be removed
-router.get("/test", validateAndAuthorizeToken, (req, res) =>
+authRouter.get("/test", validateAndAuthorizeToken, (req, res) =>
   res.send("Hello from secured endpoint!")
 );
 
-export default router;
+export default authRouter;

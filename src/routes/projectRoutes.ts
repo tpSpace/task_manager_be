@@ -9,9 +9,9 @@ import {
   getAllProjectWithIdHandler,
 } from "../controllers";
 
-const router = express.Router();
+const projectRouter = express.Router();
 
-router.post(
+projectRouter.post(
   "/create",
   validate(projectSchema),
   validateAndAuthorizeToken,
@@ -19,12 +19,16 @@ router.post(
 );
 
 // Will be used when front end is ready with jwt implementation
-router.get("/get", validateAndAuthorizeToken, getAllProjectHandler);
+projectRouter.get("/get", validateAndAuthorizeToken, getAllProjectHandler);
 
 // Will be used when front end is ready with jwt implementation
-router.get("/get/:id", validateAndAuthorizeToken, getSingleProjectHandler);
+projectRouter.get(
+  "/get/:id",
+  validateAndAuthorizeToken,
+  getSingleProjectHandler
+);
 
 // To be removed
-router.get("/get/:userId", getAllProjectWithIdHandler);
+projectRouter.get("/get/:userId", getAllProjectWithIdHandler);
 
-export default router;
+export default projectRouter;

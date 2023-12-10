@@ -6,14 +6,14 @@ import {
 } from "../controllers/tagController";
 import express from "express";
 
-const router = express.Router();
+const tagRouter = express.Router();
 
-router.post(
+tagRouter.post(
   "/create/:id",
   // validate(TagSchema),
   createTagHandler
 );
 
-router.get("/get/:id", getTagFromProjectHandler);
+tagRouter.get("/get/:id", getTagFromProjectHandler);
 
-export default router;
+export default tagRouter;

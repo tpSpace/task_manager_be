@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import authRouter from "./routes/authRoutes";
 import projectRouter from "./routes/projectRoutes";
 import tagRouter from "./routes/tagRoutes";
+import stageRouter from "./routes/stageRoutes";
 import cors from "cors";
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(cors());
 app.use("/auth", authRouter);
 app.use("/projects", projectRouter);
 app.use("/tags", tagRouter);
+app.use("/stages", stageRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");

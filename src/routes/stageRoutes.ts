@@ -1,21 +1,32 @@
-import { StageSchema } from "../schemas";
+import { stageSchema } from "../schemas";
 import { validate } from "../middleware/validate";
+import { validateAndAuthorizeToken } from "../middleware/jwt";
 import {
   createStageHandler,
   getAllStageFromProjectHandler,
   updateStageHandler,
   deleteStageHandler,
 } from "../controllers/stageController";
+
 import express from "express";
 
-const router = express.Router();
+const stageRouter = express.Router();
 
-router.post("/create/:id", validate(StageSchema), createStageHandler);
+stageRouter.post(
+  "/create",
+  // validate(stageSchema),
+  validateAndAuthorizeToken,
+  createStageHandler
+);
 
-router.get("/get/:id", getAllStageFromProjectHandler);
+stageRouter.get("/get/:id", getAllStageFromProjectHandler);
 
-router.put("/update/:stageId", validate(StageSchema), updateStageHandler);
+stageRouter.put(
+  "/update/:stageId",
+  // validate(stageSchema),
+  updateStageHandler
+);
 
-router.delete("/delete/:stageId", deleteStageHandler);
+stageRouter.delete("/delete/:stageId", deleteStageHandler);
 
-export default router;
+export default stageRouter;
