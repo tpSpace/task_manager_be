@@ -87,6 +87,12 @@ export const updateProjectHandler = async (req: Request, res: Response) => {
             updatedProject,
         });
        }
+       else{
+       return res.status(500).json({
+            status: "server error",
+            error: "failed to get project",
+          });
+       }
 
     } catch (error) {
         console.error("Error updating project:", error);
