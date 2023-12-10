@@ -19,6 +19,7 @@ export default class ApiResponseBuilder {
     [HttpStatusCode.NOTFOUND]: "not found",
     [HttpStatusCode.SERVERERROR]: "server error",
   };
+
   /**
    * Builds a success response for API calls.
    *
