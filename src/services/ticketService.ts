@@ -27,10 +27,7 @@ export const deleteChildTicket = async (parentId: string, childId: string) =>{
     }
     )
 }
-export const createTicket = async (ticket: Ticket) => {
-  let stageIds = []; 
-  stageIds.push(ticket.stageId); 
-
+export const createTicket = async (ticket: Ticket, stageId: string) => {
   const createdTicket = await prisma.ticket.create({
       data: {
         creatorId: ticket.creatorId,
@@ -40,7 +37,17 @@ export const createTicket = async (ticket: Ticket) => {
         deadline: ticket.deadline,
         parentTicketId: ticket.parentTicketId,
       },
-    });   
+    });
+  await prisma.stage.update({
+      where: {
+        stageId: stageId
+      },
+      data: {
+        ticketIds: {
+          push: createdTicket.ticketId
+        }
+      }
+    })
   if (ticket.parentTicketId)
     addChildTicket(ticket.parentTicketId, createdTicket.ticketId)
   return createdTicket
