@@ -6,7 +6,7 @@ import {
   findProjectById,
 } from "../services/projectService";
 import { returnUserIdFromToken } from "../middleware/jwt";
-import FastResponse, { HttpStatusCode } from "./abstraction";
+import { FastResponse, HttpStatusCode, Action } from "./abstraction";
 
 export const createProjectHandler = async (req: Request, res: Response) => {
   const fr = new FastResponse(res, "Project");
@@ -19,7 +19,7 @@ export const createProjectHandler = async (req: Request, res: Response) => {
     return fr.buildSuccess({ projectId: newProjectId });
   } catch (error) {
     console.error("Error creating project:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR);
+    return fr.buildError(HttpStatusCode.SERVERERROR, Action.CREATE);
   }
 };
 
@@ -28,11 +28,10 @@ export const getAllProjectHandler = async (req: Request, res: Response) => {
   try {
     const userId: string = returnUserIdFromToken(req);
     const projects = await findAllProjectOfUserWithId(userId);
-
     return fr.buildSuccess({ projects });
   } catch (error) {
     console.error("Error getting projects:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR);
+    return fr.buildError(HttpStatusCode.SERVERERROR, Action.GET);
   }
 };
 
@@ -52,6 +51,6 @@ export const getSingleProjectHandler = async (req: Request, res: Response) => {
     }
   } catch (error) {
     console.error("Error getting project:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR);
+    return fr.buildError(HttpStatusCode.SERVERERROR, Action.GET);
   }
 };

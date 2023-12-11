@@ -7,7 +7,7 @@ import {
 import { Request, Response } from "express";
 import { generateJwtToken } from "../middleware/jwt";
 import { User } from "../models/user";
-import FastResponse, { HttpStatusCode } from "./abstraction";
+import { FastResponse, HttpStatusCode, Action } from "./abstraction";
 const bcrypt = import("bcrypt-ts");
 
 export const loginUserHandler = async (req: Request, res: Response) => {
@@ -18,22 +18,35 @@ export const loginUserHandler = async (req: Request, res: Response) => {
     const user = await findUserByEmail(email);
 
     if (!user) {
-      return fr.buildError(HttpStatusCode.NOTFOUND, "user not found");
+      return fr.buildError(
+        HttpStatusCode.NOTFOUND,
+        Action.FIND,
+        "user not found"
+      );
     } else {
       const isPasswordMatch = (await bcrypt).compareSync(
         password,
         user.password
       );
+
       if (isPasswordMatch) {
         const token = generateJwtToken(user.userId);
         return fr.buildSuccess({ token });
       } else {
-        return fr.buildError(HttpStatusCode.UNAUTHORIZED, "wrong password");
+        return fr.buildError(
+          HttpStatusCode.UNAUTHORIZED,
+          Action.VALIDATE,
+          "wrong password"
+        );
       }
     }
   } catch (error) {
     console.error("Error logging in user:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, "failed to login user");
+    return fr.buildError(
+      HttpStatusCode.SERVERERROR,
+      Action.VALIDATE,
+      "failed to login user"
+    );
   }
 };
 
@@ -44,10 +57,14 @@ export const registerUserHandler = async (req: Request, res: Response) => {
     const existingUser = await findUserByEmail(user.email);
 
     if (existingUser) {
-      return fr.buildError(HttpStatusCode.CONFLICT, "user already existed");
+      return fr.buildError(
+        HttpStatusCode.CONFLICT,
+        Action.CREATE,
+        "user already existed"
+      );
     }
 
-    const hashedPassword = await (await bcrypt).hashSync(user.password, 10); // 10 is the number of salt rounds
+    const hashedPassword = (await bcrypt).hashSync(user.password, 10); // 10 is the number of salt rounds
     user.password = hashedPassword;
 
     await createUser(user);
@@ -57,7 +74,11 @@ export const registerUserHandler = async (req: Request, res: Response) => {
     return fr.buildSuccess({ token });
   } catch (error) {
     console.error("Error getting user:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, "failed to register user");
+    return fr.buildError(
+      HttpStatusCode.SERVERERROR,
+      Action.CREATE,
+      "failed to register user"
+    );
   }
 };
 
@@ -69,6 +90,10 @@ export const getSingleUserHandler = async (req: Request, res: Response) => {
     return fr.buildSuccess({ user });
   } catch (error) {
     console.error("Error getting user:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, "failed to get user");
+    return fr.buildError(
+      HttpStatusCode.SERVERERROR,
+      Action.READ,
+      "failed to get user"
+    );
   }
 };
