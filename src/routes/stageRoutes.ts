@@ -19,14 +19,22 @@ stageRouter.post(
   createStageHandler
 );
 
-stageRouter.get("/get/:id", getAllStageFromProjectHandler);
+stageRouter.get(
+  "/get/:projectId",
+  validateAndAuthorizeToken,
+  getAllStageFromProjectHandler
+);
 
 stageRouter.put(
   "/update/:stageId",
-  // validate(stageSchema),
+  validateAndAuthorizeToken,
   updateStageHandler
 );
 
-stageRouter.delete("/delete/:stageId", deleteStageHandler);
+stageRouter.delete(
+  "/delete/:stageId",
+  validateAndAuthorizeToken,
+  deleteStageHandler
+);
 
 export default stageRouter;

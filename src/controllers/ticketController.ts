@@ -15,10 +15,11 @@ export const createTicketHandler = async (req: Request, res: Response) => {
   const fr = new FastResponse(res, "Ticket");
   try {
     const ticket: Ticket = req.body;
+    const stageId = req.params.stageId;
     ticket.creatorId = returnUserIdFromToken(req);
-    const newTicketId = await createTicket(ticket);
+    const newTicketId = await createTicket(ticket, stageId);
 
-    return fr.buildSuccess({ ticketId: newTicketId });
+    return fr.buildSuccess(newTicketId);
   } catch (error) {
     console.error("Error creating ticket:", error);
     return fr.buildError(HttpStatusCode.SERVERERROR, Action.CREATE);

@@ -11,7 +11,7 @@ export const createTagHandler = async (req: Request, res: Response) => {
   const fr = new FastResponse(res, "Tag");
   try {
     const tag: Tag = req.body;
-    const projectId: string = req.params.id;
+    const projectId: string = req.params.projectId;
     const project = await findProjectById(projectId);
 
     if (!project) {
@@ -30,7 +30,7 @@ export const createTagHandler = async (req: Request, res: Response) => {
 export const getTagFromProjectHandler = async (req: Request, res: Response) => {
   const fr = new FastResponse(res, "Tag");
   try {
-    const projectId = req.params.id;
+    const projectId = req.params.projectId;
     const project = await findProjectById(projectId);
 
     if (!project) {

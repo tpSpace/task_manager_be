@@ -14,6 +14,18 @@ export const createTag = async (tag: Tag, projectId: string) => {
       projectIds: projectIds,
     },
   });
+
+  // Add tagId to project entity
+  await prisma.project.update({
+    where: {
+      projectId: projectId,
+    },
+    data: {
+      tagIds: {
+        push: newTag.tagId,
+      },
+    },
+  });
   return newTag.tagId;
 };
 
@@ -33,4 +45,4 @@ export const getAllTagFromProjectId = async (projectId: string) => {
       colour: tag.colour,
     };
   });
-};
+}

@@ -83,9 +83,9 @@ export const deleteStageHandler = async (req: Request, res: Response) => {
       return fr.buildError(HttpStatusCode.NOTFOUND);
     }
 
-    const deletedStage = await deleteStage(stageId);
+    await deleteStage(stageId);
 
-    return fr.buildSuccess({ deletedStage });
+    return fr.buildSuccess(stageId);
   } catch (error) {
     console.error("Error deleting stage:", error);
     return fr.buildError(HttpStatusCode.SERVERERROR, Action.DELETE);

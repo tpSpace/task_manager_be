@@ -11,31 +11,31 @@ updatedTicketHandler, deleteTicketHandler
 const router = express.Router();
 
 router.post(
-    "/create/:id",
-    validate(ticketSchema),
-    validateAndAuthorizeToken,
-    createTicketHandler
+  "/create/:stageId",
+  validate(ticketSchema),
+  validateAndAuthorizeToken,
+  createTicketHandler
 )
 
 router.get(
-    "/get/project/:id",
-    getAllTicketbyProjectIdHandler
+  "/get/project/:id",
+  getAllTicketbyProjectIdHandler
 )
 
 router.get(
-    "/get/project/stage/:id",
-    getAllTicketbyStageIdHandler
+  "/get/project/stage/:id",
+  getAllTicketbyStageIdHandler
 )
 
 router.put(
-    "/update/:id",
-    validate(ticketSchema),
-    updatedTicketHandler
+  "/update/:id",
+  validate(ticketSchema),
+  updatedTicketHandler
 )
 
 router.delete(
-    "/ticket/delete/:ticketId",
-    deleteTicketHandler
+  "/ticket/delete/:ticketId",
+  deleteTicketHandler
 )
 
 export default router;

@@ -6,6 +6,8 @@ import {
   createProjectHandler,
   getAllProjectHandler,
   getSingleProjectHandler,
+  updateTitleProjectHandler,
+  deleteProjectHandler
 } from "../controllers";
 
 const projectRouter = express.Router();
@@ -17,12 +19,28 @@ projectRouter.post(
   createProjectHandler
 );
 
-projectRouter.get("/get", validateAndAuthorizeToken, getAllProjectHandler);
-
-// Will be used when front end is ready with jwt implementation
 projectRouter.get(
-  "/get/:id",
+  "/get", 
+  validateAndAuthorizeToken, 
+  getAllProjectHandler
+);
+
+projectRouter.get(
+  "/get/:projectId",
   validateAndAuthorizeToken,
   getSingleProjectHandler
-);
+)
+
+projectRouter.put(
+  "/updateTitle/:projectId",
+  validateAndAuthorizeToken,
+  updateTitleProjectHandler
+)
+
+projectRouter.delete(
+  "/delete/:projectId",
+  validateAndAuthorizeToken,
+  deleteProjectHandler
+)
+
 export default projectRouter;
