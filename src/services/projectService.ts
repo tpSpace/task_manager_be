@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Project } from "../models";
 
-
 const prisma = new PrismaClient();
 
 export const findProjectById = async (projectId: string) => {
@@ -27,23 +26,6 @@ export const createProject = async (project: Project) => {
   return createdProject.projectId;
 };
 
-export const updateProject = async (project: Partial<Project>) => {
-  const updatedProject = await prisma.project.update({
-    where: {
-      projectId: project.projectId,
-    },
-    data: {
-      ...(project.adminId && { adminId: project.adminId }),
-      ...(project.title && { title: project.title }),
-      ...(project.history && { history: project.history }),
-      ...(project.userIds && { userIds: project.userIds }),
-      ...(project.tagIds && { tagIds: project.tagIds }),
-      ...(project.stageIds && { stageIds: project.stageIds }),
-    },
-  });
-  return updatedProject;
-};
-
 export const findAllProjectOfUserWithId = async (inputUserId: string) => {
   const projects = await prisma.project.findMany({
     where: {
@@ -59,23 +41,23 @@ export const findAllProjectOfUserWithId = async (inputUserId: string) => {
       title: project.title,
     };
   });
-}
+};
 
 export const updateProject = async (projectId: string, project: Project) => {
   const updatedProject = await prisma.project.update({
     where: {
       projectId: projectId,
     },
-    data:{
+    data: {
       title: project.title,
     },
   });
   return updatedProject.title;
-}
+};
 export const deleteProject = async (projectId: string) => {
   await prisma.project.delete({
     where: {
       projectId: projectId,
     },
   });
-}
+};

@@ -72,7 +72,7 @@ export const updateTitleProjectHandler = async (
     }
 
     if (project.userIds.includes(userId)) {
-      const updatedProject = await updateProject(req.body);
+      const updatedProject = await updateProject(projectId, req.body);
       return fr.buildSuccess({ updatedProject });
     } else {
       return fr.buildError(HttpStatusCode.UNAUTHORIZED, Action.UPDATE);
