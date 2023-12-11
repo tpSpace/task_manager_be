@@ -1,4 +1,4 @@
-import { User, Ticket } from "./index";
+import { User, Ticket } from ".";
 export interface Comment {
   commentId: string;
   content: string;

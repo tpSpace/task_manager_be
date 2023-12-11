@@ -9,16 +9,19 @@
   "private": true,
   "scripts": {
     "dev": "nodemon -r ts-node/register src/index.ts",
-    "start": "ts-node-dev --inspect --respawn --transpile-only --exit-child src/index.ts",
-    "build": "tsc . -p"
+    "start": "npm run generate && ts-node-dev --inspect --respawn --transpile-only --exit-child src/index.ts",
+    "build": "generate tsc . -p",
+    "generate": "npx prisma generate"
   },
   "nodemonConfig": {
-    "watch": ["src"],
+    "watch": [
+      "src"
+    ],
     "ext": "ts",
     "exec": "ts-node ./src/index.ts"
   },
   "dependencies": {
-    "@prisma/client": "^5.4.2",
+    "@prisma/client": "^5.7.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.4",
@@ -31,7 +34,6 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.1.0",
     "nodemon": "^3.0.1",
-    "prisma": "^5.4.2",
     "redis": "^4.6.10",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
@@ -43,6 +45,7 @@
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.4",
-    "prettier": "3.0.3"
+    "prettier": "3.0.3",
+    "prisma": "^5.7.0"
   }
 }

@@ -2,12 +2,12 @@ import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const userData: Prisma.userCreateInput[] = [
+const userData: Prisma.UserCreateInput[] = [
   {
     email: "admin1@gmail.com",
     password: "MyP@ssw0rd!",
     name: "Admin 1",
-    avatar: "https://i.pravatar.cc/150?img=1"
+    avatar: "https://i.pravatar.cc/150?img=1",
   },
 ];
 
