@@ -1,4 +1,4 @@
-import { Ticket, Project } from "./index";
+import { Ticket, Project } from ".";
 
 export interface Stage {
   stageId: string;

@@ -1,29 +1,41 @@
-import { PrismaClient } from '@prisma/client';
-import { Tag } from '../models/tag';
+import { PrismaClient } from "@prisma/client";
+import { Tag } from "../models";
 
 const prisma = new PrismaClient();
 
 export const createTag = async (tag: Tag, projectId: string) => {
-  let projectIds = []; 
-  projectIds.push(projectId);  
+  let projectIds = [];
+  projectIds.push(projectId);
   const newTag = await prisma.tag.create({
-         data: {
-            title: tag.title,
-            priority: tag.priority,
-            colour: tag.colour,
-            projectIds: projectIds
-        },
-    });
-    return newTag.tagId;
+    data: {
+      title: tag.title,
+      priority: tag.priority,
+      colour: tag.colour,
+      projectIds: projectIds,
+    },
+  });
+
+  // Add tagId to project entity
+  await prisma.project.update({
+    where: {
+      projectId: projectId,
+    },
+    data: {
+      tagIds: {
+        push: newTag.tagId,
+      },
+    },
+  });
+  return newTag.tagId;
 };
 
-export const getAllTagOfProjectId = async (projectId: string) => {
+export const getAllTagFromProjectId = async (projectId: string) => {
   const tag = await prisma.tag.findMany({
     where: {
       projectIds: {
-        has: projectId
-      }
-    }
+        has: projectId,
+      },
+    },
   });
   return tag.map((tag) => {
     return {
@@ -35,3 +47,4 @@ export const getAllTagOfProjectId = async (projectId: string) => {
   });
 }
 
+};
