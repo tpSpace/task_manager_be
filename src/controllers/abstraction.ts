@@ -90,7 +90,7 @@ export class FastResponse {
       status: getStatusMessage(statusCode) || "unknown",
       error:
         custom ??
-        `${action ? "Cannot" + action : getAction(statusCode)} ${this.name}.`,
+        `${action ? "Cannot " + action : getAction(statusCode)} ${this.name}.`,
     });
   }
 }
