@@ -21,7 +21,7 @@ projectRouter.get("/get", validateAndAuthorizeToken, getAllProjectHandler);
 
 // Will be used when front end is ready with jwt implementation
 projectRouter.get(
-  "/get/:id",
+  "/get/:projectId",
   validateAndAuthorizeToken,
   getSingleProjectHandler
 );
