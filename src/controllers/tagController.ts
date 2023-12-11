@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { Tag } from "../models";
-import { createTag, 
-  getAllTagOfProjectId
- } from "../services/tagService";
-import { findProjectById } from "../services/projectService";
-
+import {
+  createTag,
+  getAllTagFromProjectId,
+  findProjectById,
+} from "../services";
+import ApiResponseBuilder, { HttpStatusCode } from "./abstraction";
 export const createTagHandler = async (req: Request, res: Response) => {
   try {
     const tag: Tag = req.body;
@@ -12,24 +13,23 @@ export const createTagHandler = async (req: Request, res: Response) => {
     const project = await findProjectById(projectId);
 
     if (!project) {
-      return res.status(404).json({
-        status: "not found",
-        error: "project not found",
-      });
+      const response = ApiResponseBuilder.buildErrorResponse<Tag>(
+        HttpStatusCode.NOTFOUND,
+        "project not found"
+      );
+      return res.status(response.statusCode!).json(response);
     }
 
     const newTagId = await createTag(tag, projectId);
-    
-    return res.status(200).json({
-      status: "success",
-      tagId: newTagId,
-    });
+    const response = ApiResponseBuilder.buildSuccessResponse<string>(newTagId);
+    return res.status(HttpStatusCode.SUCCESS).json(response);
   } catch (error) {
     console.error("Error creating tag:", error);
-    return res.status(500).json({
-      status: "server error",
-      error: "failed to create tag",
-    });
+    const response = ApiResponseBuilder.buildErrorResponse<string>(
+      HttpStatusCode.SERVERERROR,
+      "failed to create tag"
+    );
+    return res.status(HttpStatusCode.SERVERERROR).json(response);
   }
 };
 
@@ -38,12 +38,13 @@ export const getTagFromProjectHandler = async (req: Request, res: Response) => {
     const projectId = req.params.id;
     const project = await findProjectById(projectId);
     if (!project) {
-      return res.status(404).json({
-        status: "not found",
-        error: "project not found",
-      });
+      const response = ApiResponseBuilder.buildErrorResponse<Tag>(
+        HttpStatusCode.NOTFOUND,
+        "project not found"
+      );
+      return res.status(response.statusCode!).json(response);
     }
-    const tag = await getAllTagOfProjectId(projectId);
+    const tag = await getAllTagFromProjectId(projectId);
 
     return res.status(200).json({
       status: "success",
@@ -51,9 +52,10 @@ export const getTagFromProjectHandler = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error getting tag:", error);
-    return res.status(500).json({
-      status: "server error",
-      error: "failed to get tag",
-    });
+    const response = ApiResponseBuilder.buildErrorResponse<Tag>(
+      HttpStatusCode.SERVERERROR,
+      "failed to get tag"
+    );
+    return res.status(response.statusCode!).json(response);
   }
 };
