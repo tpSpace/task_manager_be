@@ -45,4 +45,4 @@ export const getAllTagFromProjectId = async (projectId: string) => {
       colour: tag.colour,
     };
   });
-};
+}

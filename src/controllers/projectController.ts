@@ -3,6 +3,7 @@ import { Project } from "../models/project";
 import {
   createProject,
   findAllProjectOfUserWithId, findProjectById,
+    deleteProject, updateProject,
 } from "../services/projectService";
 import { returnUserIdFromToken } from "../middleware/jwt";
 
@@ -72,3 +73,74 @@ export const getSingleProjectHandler = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const updateTitleProjectHandler = async (req: Request, res: Response) => {
+  try {
+    const userId: string = returnUserIdFromToken(req);
+    const projectId = req.params.projectId;
+    const project = await findProjectById(projectId);
+
+    if (!project) {
+      return res.status(404).json({
+        status: "not found",
+        error: "project not found",
+      });
+    }
+
+    if (project.userIds.includes(userId)) {
+      const updatedProject = await updateProject(projectId, req.body);
+      return res.status(200).json({
+          status: "success",
+          updatedProject,
+      });
+    }
+    else {
+      return res.status(500).json({
+        status: "server error",
+        error: "failed to get project",
+      });
+    }
+
+  } catch (error) {
+      console.error("Error updating project:", error);
+      return res.status(500).json({
+      status: "server error",
+      error: "failed to update project",
+    });
+  }
+}
+
+export const deleteProjectHandler = async (req: Request, res: Response) => {
+  try {
+    const userId: string = returnUserIdFromToken(req);
+    const projectId = req.params.projectId;
+
+    const project = await findProjectById(projectId);
+
+    if (!project) {
+      return res.status(404).json({
+        status: "not found",
+        error: "project not found",
+      });
+    }
+
+    if (project.adminId === userId) {
+      await deleteProject(projectId);
+      return res.status(200).json({
+          status: "success",
+      });
+    }
+    else if(project.adminId !== userId) {
+      return res.status(401).json({
+        status: "unauthorized",
+        error: "user is not authorized to delete project",
+      });
+    }
+  } catch (error) {
+    console.error("Error deleting project:", error);
+    return res.status(500).json({
+      status: "server error",
+      error: "failed to delete project",
+    });
+  }
+}
