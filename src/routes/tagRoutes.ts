@@ -1,20 +1,20 @@
-import { TagSchema } from "../schemas/tagSchema";
-import { validate } from "../middleware/validate";
 import {createTagHandler, 
   getTagFromProjectHandler
 } from "../controllers/tagController";
 import express from 'express';
+import { validateAndAuthorizeToken } from "../middleware/jwt";
 
 const router = express.Router();
 
 router.post(
   '/create/:id',
-  // validate(TagSchema),
+  validateAndAuthorizeToken,
   createTagHandler,
 );
 
 router.get(
   '/get/:id',
+  validateAndAuthorizeToken,
   getTagFromProjectHandler
 );
 

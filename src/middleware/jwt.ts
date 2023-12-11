@@ -31,13 +31,13 @@ export const validateAndAuthorizeToken = (
       if (decodedToken.iss === "tasKing") {
         next();
       } else {
-        res.status(401).json({ error: "Unauthorized 1" });
+        res.status(401).json({ status: "unauthorized" });
       }
     } catch (error) {
-      res.status(401).json({ error: "Unauthorized 2" });
+      res.status(401).json({ status: "unauthorized" });
     }
   } else {
-    res.status(401).json({ error: "Unauthorized 3" });
+    res.status(401).json({ status: "unauthorized" });
   }
 };
 

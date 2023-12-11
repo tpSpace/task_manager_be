@@ -6,7 +6,7 @@ import {
   loginUserHandler,
   registerUserHandler,
   // getAllUserHandler,
-  // getSingleUserHandler
+  getSingleUserHandler
 } from "../controllers/authController";
 
 const router = express.Router();
@@ -29,11 +29,11 @@ router.post(
 //   getAllUserHandler
 // );
 
-// router.get(
-//   "/user/:id", 
-//   validateAndAuthorizeToken, 
-//   getSingleUserHandler
-// );
+router.get(
+  "/user/:userId", 
+  validateAndAuthorizeToken, 
+  getSingleUserHandler
+);
 
 
 // Test authrourization end point, to be removed

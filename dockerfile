@@ -19,9 +19,6 @@ RUN yarn tsc -p .
 # Generate Prisma schema
 RUN npx prisma generate
 
-# Expose the port on which your app will run
-EXPOSE 3001
-
 # Set environment variables
 ENV NODE_ENV=production
 ENV MONGODB_URL=mongodb+srv://admin:1234@cluster0.xsgodaj.mongodb.net/
