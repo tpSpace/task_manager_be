@@ -8,35 +8,22 @@ import {
   deleteStage,
   findProjectById,
 } from "../services";
-import ApiResponseBuilder, { HttpStatusCode } from "./abstraction";
+import FastResponse, { HttpStatusCode } from "./abstraction";
 
 export const createStageHandler = async (req: Request, res: Response) => {
+  const fr = new FastResponse(res, "Stage");
   try {
     const stage: Stage = req.body;
     const projectId: string = req.params.id;
-
-    // Assuming findProjectById function is available in your code
     const project = await findProjectById(projectId);
-
     if (!project) {
-      const response = ApiResponseBuilder.buildErrorResponse<Stage>(
-        HttpStatusCode.NOTFOUND,
-        "project not found"
-      );
-      return res.status(response.statusCode!).json(response);
+      return fr.buildError(HttpStatusCode.NOTFOUND);
     }
-
     const newStageId = await createStage(stage, projectId);
-    const response =
-      ApiResponseBuilder.buildSuccessResponse<string>(newStageId);
-    return res.status(HttpStatusCode.SUCCESS).json(response);
+    return fr.buildSuccess(newStageId);
   } catch (error) {
     console.error("Error creating stage:", error);
-    const response = ApiResponseBuilder.buildErrorResponse<string>(
-      HttpStatusCode.SERVERERROR,
-      "failed to create stage"
-    );
-    return res.status(HttpStatusCode.SERVERERROR).json(response);
+    return fr.buildError(HttpStatusCode.SERVERERROR);
   }
 };
 
@@ -44,6 +31,7 @@ export const getAllStageFromProjectHandler = async (
   req: Request,
   res: Response
 ) => {
+  const fr = new FastResponse(res, "Stage");
   try {
     const projectId = req.params.id;
 
@@ -51,30 +39,18 @@ export const getAllStageFromProjectHandler = async (
     const project = await findProjectById(projectId);
 
     if (!project) {
-      const response = ApiResponseBuilder.buildErrorResponse<Stage>(
-        HttpStatusCode.NOTFOUND,
-        "project not found"
-      );
-      return res.status(response.statusCode!).json(response);
+      return fr.buildError(HttpStatusCode.NOTFOUND);
     }
-
     const stages = await findAllStageFromProjectId(projectId);
-
-    return res.status(HttpStatusCode.SUCCESS).json({
-      status: "success",
-      stages,
-    });
+    return fr.buildSuccess(stages);
   } catch (error) {
     console.error("Error getting stages:", error);
-    const response = ApiResponseBuilder.buildErrorResponse<Stage[]>(
-      HttpStatusCode.SERVERERROR,
-      "failed to get stages"
-    );
-    return res.status(response.statusCode!).json(response);
+    return fr.buildError(HttpStatusCode.SERVERERROR);
   }
 };
 
 export const updateStageHandler = async (req: Request, res: Response) => {
+  const fr = new FastResponse(res, "Stage");
   try {
     const stageId = req.params.stageId;
     const updatedStage: Stage = req.body;
@@ -82,55 +58,30 @@ export const updateStageHandler = async (req: Request, res: Response) => {
     const existingStage = await findStageById(stageId);
 
     if (!existingStage) {
-      const response = ApiResponseBuilder.buildErrorResponse<Stage>(
-        HttpStatusCode.NOTFOUND,
-        "stage not found"
-      );
-      return res.status(response.statusCode!).json(response);
+      return fr.buildError(HttpStatusCode.NOTFOUND);
     }
 
     const updated = await updateStage(stageId, updatedStage);
 
-    return res.status(HttpStatusCode.SUCCESS).json({
-      status: "success",
-      updated,
-    });
+    return fr.buildSuccess(updated);
   } catch (error) {
     console.error("Error updating stage:", error);
-    const response = ApiResponseBuilder.buildErrorResponse<Stage>(
-      HttpStatusCode.SERVERERROR,
-      "failed to update stage"
-    );
-    return res.status(response.statusCode!).json(response);
+    return fr.buildError(HttpStatusCode.SERVERERROR);
   }
 };
 
 export const deleteStageHandler = async (req: Request, res: Response) => {
+  const fr = new FastResponse(res, "Stage");
   try {
     const stageId = req.params.stageId;
-
     const existingStage = await findStageById(stageId);
-
     if (!existingStage) {
-      const response = ApiResponseBuilder.buildErrorResponse<Stage>(
-        HttpStatusCode.NOTFOUND,
-        "stage not found"
-      );
-      return res.status(response.statusCode!).json(response);
+      return fr.buildError(HttpStatusCode.NOTFOUND);
     }
-
     const deletedStage = await deleteStage(stageId);
-
-    return res.status(HttpStatusCode.SUCCESS).json({
-      status: "success",
-      deletedStage,
-    });
+    return fr.buildSuccess(deletedStage);
   } catch (error) {
     console.error("Error deleting stage:", error);
-    const response = ApiResponseBuilder.buildErrorResponse<Stage>(
-      HttpStatusCode.SERVERERROR,
-      "failed to delete stage"
-    );
-    return res.status(response.statusCode!).json(response);
+    return fr.buildError(HttpStatusCode.SERVERERROR);
   }
 };

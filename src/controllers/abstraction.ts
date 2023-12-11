@@ -1,7 +1,10 @@
+import { Response } from "express";
+
 export enum HttpStatusCode {
   SUCCESS = 200,
   UNAUTHORIZED = 401,
   NOTFOUND = 404,
+  CONFLICT = 409,
   SERVERERROR = 500,
 }
 
@@ -12,43 +15,46 @@ interface ApiResponse<T> {
   error?: string;
 }
 
-export default class ApiResponseBuilder {
-  private static statusMessage: Record<HttpStatusCode, string> = {
+export default class FastResponse {
+  private response: Response;
+  private name: string;
+
+  private statusMessage: Record<HttpStatusCode, string> = {
     [HttpStatusCode.SUCCESS]: "success",
     [HttpStatusCode.UNAUTHORIZED]: "unauthorized",
     [HttpStatusCode.NOTFOUND]: "not found",
+    [HttpStatusCode.CONFLICT]: "conflict",
     [HttpStatusCode.SERVERERROR]: "server error",
   };
-
   /**
-   * Builds a success response for API calls.
-   *
-   * @template T - The type of data to be included in the response.
-   * @param {T} data - The data to be included in the response body.
-   * @returns {ApiResponse<T>} - The constructed API response with a success status.
+   * Create a new instance of CustomResponse.
+   * @param {Response} response - The Express response object.
    */
-  public static buildSuccessResponse<T>(data: T): ApiResponse<T> {
-    return {
-      status: this.statusMessage[HttpStatusCode.SUCCESS],
-      data,
-    };
+  constructor(response: Response, entity: string) {
+    this.response = response;
+    this.name = entity;
   }
   /**
-   * Builds an error response for API calls.
-   *
-   * @template T - The type of data to be included in the response.
-   * @param {HttpStatusCode} statusCode - The HTTP status code representing the error.
-   * @param {string} error - The error message describing the nature of the failure.
-   * @param {T | undefined} [data] - Optional additional data to be included in the response body.
-   * @returns {ApiResponse<T>} - The constructed API response with an error status.
+   * Build a success response with the provided data.
+   * @param {any} data - The data to include in the success response.
+   * @returns {Response} The Express response object.
    */
-  public static buildErrorResponse<T>(
-    statusCode: HttpStatusCode,
-    error: string
-  ): ApiResponse<T> {
-    return {
+  buildSuccess(data: any): Response {
+    return this.response.status(HttpStatusCode.SUCCESS).json({
+      status: "success",
+      data: data,
+    });
+  }
+  /**
+   * Build an error response with the specified status code and optional custom message.
+   * @param {HttpStatusCode} statusCode - The HTTP status code for the error response.
+   * @param {string} [custom] - Optional custom error message.
+   * @returns {Response} The Express response object.
+   */
+  buildError(statusCode: HttpStatusCode, custom?: string): Response {
+    return this.response.status(statusCode).json({
       status: this.statusMessage[statusCode] || "unknown",
-      error: error,
-    };
+      error: custom ?? `Failed to get ${this.name}.`,
+    });
   }
 }

@@ -26,6 +26,23 @@ export const createProject = async (project: Project) => {
   return createdProject.projectId;
 };
 
+export const updateProject = async (project: Partial<Project>) => {
+  const updatedProject = await prisma.project.update({
+    where: {
+      projectId: project.projectId,
+    },
+    data: {
+      ...(project.adminId && { adminId: project.adminId }),
+      ...(project.title && { title: project.title }),
+      ...(project.history && { history: project.history }),
+      ...(project.userIds && { userIds: project.userIds }),
+      ...(project.tagIds && { tagIds: project.tagIds }),
+      ...(project.stageIds && { stageIds: project.stageIds }),
+    },
+  });
+  return updatedProject;
+};
+
 export const findAllProjectOfUserWithId = async (inputUserId: string) => {
   const projects = await prisma.project.findMany({
     where: {

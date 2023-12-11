@@ -15,7 +15,7 @@ const stageRouter = express.Router();
 stageRouter.post(
   "/create",
   // validate(stageSchema),
-  validateAndAuthorizeToken,
+  // validateAndAuthorizeToken,
   createStageHandler
 );
 
