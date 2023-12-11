@@ -12,12 +12,25 @@ export const findStageById = async (stageId: string) => {
   return stage;
 };
 
-export const createStage = async (stage: Stage, projectId: String) => {
+export const createStage = async (stage: Stage, projectId: string) => {
   let projectIds = [];
   projectIds.push(projectId);
   const newStage = await prisma.stage.create({
     data: {
       title: stage.title,
+      projectIds: projectIds,
+    },
+  });
+
+  // Add stageId to project entity
+  await prisma.project.update({
+    where: {
+      projectId: projectId,
+    },
+    data: {
+      stageIds: {
+        push: newStage.stageId,
+      },
     },
   });
   return newStage.stageId;
@@ -48,7 +61,7 @@ export const updateStage = async (stageId: string, updatedStage: Stage) => {
       title: updatedStage.title,
     },
   });
-  return updated;
+  return updated.title;
 };
 
 export const deleteStage = async (stageId: string) => {

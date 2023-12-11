@@ -13,20 +13,28 @@ import express from "express";
 const stageRouter = express.Router();
 
 stageRouter.post(
-  "/create",
-  // validate(stageSchema),
+  "/create/:projectId",
+  validate(stageSchema),
   validateAndAuthorizeToken,
   createStageHandler
 );
 
-stageRouter.get("/get/:id", getAllStageFromProjectHandler);
+stageRouter.get(
+  "/get/:projectId",
+  validateAndAuthorizeToken, 
+  getAllStageFromProjectHandler
+);
 
 stageRouter.put(
   "/update/:stageId",
-  // validate(stageSchema),
+  validateAndAuthorizeToken,
   updateStageHandler
 );
 
-stageRouter.delete("/delete/:stageId", deleteStageHandler);
+stageRouter.delete(
+  "/delete/:stageId",
+  validateAndAuthorizeToken, 
+  deleteStageHandler
+);
 
 export default stageRouter;
