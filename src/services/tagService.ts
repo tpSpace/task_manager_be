@@ -46,5 +46,3 @@ export const getAllTagFromProjectId = async (projectId: string) => {
     };
   });
 }
-
-};
