@@ -1,32 +1,28 @@
 import express from "express";
 import { validate } from "../middleware/validate";
-import { projectSchema } from "../schemas/projectSchema";
+import { projectSchema } from "../schemas";
 import { validateAndAuthorizeToken } from "../middleware/jwt";
 import {
   createProjectHandler,
   getAllProjectHandler,
   getSingleProjectHandler,
-} from "../controllers/projectController";
+} from "../controllers";
 
-const router = express.Router();
+const projectRouter = express.Router();
 
-router.post(
+projectRouter.post(
   "/create",
   validate(projectSchema),
   validateAndAuthorizeToken,
   createProjectHandler
 );
 
-router.get(
-  '/get',
-  validateAndAuthorizeToken,
-  getAllProjectHandler
-)
+projectRouter.get("/get", validateAndAuthorizeToken, getAllProjectHandler);
 
-router.get(
-  '/get/:projectId',
+// Will be used when front end is ready with jwt implementation
+projectRouter.get(
+  "/get/:id",
   validateAndAuthorizeToken,
   getSingleProjectHandler
-)
-
-export default router;
+);
+export default projectRouter;

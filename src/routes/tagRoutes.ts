@@ -1,22 +1,11 @@
-import {createTagHandler, 
-  getTagFromProjectHandler
-} from "../controllers/tagController";
-import express from 'express';
+import { createTagHandler, getTagFromProjectHandler } from "../controllers";
+import express from "express";
 import { validateAndAuthorizeToken } from "../middleware/jwt";
 
-const router = express.Router();
+const tagRouter = express.Router();
 
-router.post(
-  '/create/:id',
-  validateAndAuthorizeToken,
-  createTagHandler,
-);
+tagRouter.post("/create/:id", validateAndAuthorizeToken, createTagHandler);
 
-router.get(
-  '/get/:id',
-  validateAndAuthorizeToken,
-  getTagFromProjectHandler
-);
+tagRouter.get("/get/:id", validateAndAuthorizeToken, getTagFromProjectHandler);
 
-export default router;
-
+export default tagRouter;

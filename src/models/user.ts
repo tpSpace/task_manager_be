@@ -1,4 +1,4 @@
-import { Project, Comment } from "./index";
+import { Project, Comment } from ".";
 export interface User {
   userId: string;
   name: string;

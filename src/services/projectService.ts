@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import { Project } from '../models/project';
+import { PrismaClient } from "@prisma/client";
+import { Project } from "../models";
 
 const prisma = new PrismaClient();
 
@@ -30,8 +30,8 @@ export const findAllProjectOfUserWithId = async (inputUserId: string) => {
   const projects = await prisma.project.findMany({
     where: {
       userIds: {
-        has: inputUserId
-      }
+        has: inputUserId,
+      },
     },
   });
 
@@ -41,4 +41,4 @@ export const findAllProjectOfUserWithId = async (inputUserId: string) => {
       title: project.title,
     };
   });
-}
+};
