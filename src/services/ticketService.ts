@@ -4,6 +4,29 @@ import { Ticket } from '../models/ticket';
 
 const prisma = new PrismaClient();
 
+export const addChildTicket = async (parentId: string, childId: string) =>{
+    const parentTicket = await prisma.ticket.findUnique({
+        where:{
+            ticketId: parentId
+        }
+    })
+    parentTicket?.childTickets.push(childId)
+}
+
+export const deleteChildTicket = async (parentId: string, childId: string) =>{
+    const parentTicket = await prisma.ticket.findUnique({
+        where:{
+            ticketId: parentId
+        }
+    })
+    parentTicket?.childTickets.forEach( c => {
+        if (c === childId){
+            parentTicket.childTickets.splice(parentTicket.childTickets.indexOf(c))
+            return
+        }
+    }
+    )
+}
 export const createTicket = async (ticket: Ticket) => {
     let stageIds = []; 
     stageIds.push(ticket.stageId); 
@@ -18,6 +41,8 @@ export const createTicket = async (ticket: Ticket) => {
             parentTicketId: ticket.parentTicketId,
         },
       });   
+    if(ticket.parentTicketId)
+        addChildTicket(ticket.parentTicketId,createdTicket.ticketId)
 
     return createdTicket
 }
@@ -90,6 +115,12 @@ export const findAllTicketbyProjectId = async (inputProjectId: string) => {
     }
 
     export const updateTicket = async (ticketId: string, updateTicket: Ticket) =>{
+        const oldTicket = await prisma.ticket.findUnique({
+            where:{
+                ticketId: ticketId
+            }
+        })
+
         const updatedTicket = await prisma.ticket.update({
             where: {
               ticketId: ticketId
@@ -101,8 +132,19 @@ export const findAllTicketbyProjectId = async (inputProjectId: string) => {
               deadline: updateTicket.deadline,
               parentTicketId: updateTicket.parentTicketId,
             },
-          });
-          return updatedTicket;
+          });        
+
+        if(updatedTicket.parentTicketId != oldTicket?.parentTicketId 
+            && updatedTicket.parentTicketId){
+            if(!oldTicket?.parentTicketId)
+                addChildTicket(updatedTicket.parentTicketId,ticketId)
+            else if(oldTicket?.parentTicketId){
+                deleteChildTicket(oldTicket.parentTicketId, ticketId)
+                addChildTicket(updatedTicket.parentTicketId,ticketId)
+            }
+        }
+
+        return updatedTicket;
     }
 
     export const deleteTicket = async (ticketId: string) =>{

@@ -15,7 +15,7 @@ app.use(cors());
 app.use("/auth", authRouter);
 app.use("/projects", projectRouter);
 app.use("/tags", tagRouter);
-app.use("/ticket", ticketRouter);
+app.use("/tickets", ticketRouter);
 app.use("/stages", stageRouter);
 
 app.get("/", (req: Request, res: Response) => {
