@@ -88,7 +88,9 @@ export class FastResponse {
   ): Response {
     return this.response.status(statusCode).json({
       status: getStatusMessage(statusCode) || "unknown",
-      error: custom ?? `${action ?? getAction(statusCode)} ${this.name}.`,
+      error:
+        custom ??
+        `${action ? "Cannot" + action : getAction(statusCode)} ${this.name}.`,
     });
   }
 }
