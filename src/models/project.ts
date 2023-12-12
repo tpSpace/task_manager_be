@@ -1,4 +1,4 @@
-import { User, Tag, Stage } from ".";
+import { User, Tag, Stage } from '.';
 
 export interface Project {
   projectId: string;

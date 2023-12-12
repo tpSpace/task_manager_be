@@ -1,4 +1,4 @@
-import { Project } from ".";
+import { Project } from '.';
 
 export interface Tag {
   tagId: string;

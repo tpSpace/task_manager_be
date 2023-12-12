@@ -1,41 +1,48 @@
-import express from "express";
-import { validate } from "../middleware/validate";
-import { ticketSchema } from "../schemas/ticketSchema";
-import { validateAndAuthorizeToken } from "../middleware/jwt";
+import express from 'express';
+import { validate } from '../middleware/validate';
+import { ticketSchema } from '../schemas/ticketSchema';
+import { validateAndAuthorizeToken } from '../middleware/jwt';
 import {
-createTicketHandler, getAllTicketbyProjectIdHandler,
-getAllTicketbyStageIdHandler, getSingleTicketHandler, 
-updatedTicketHandler, deleteTicketHandler
-} from "../controllers/ticketController";
+  createTicketHandler,
+  getAllTicketbyProjectIdHandler,
+  getAllTicketbyStageIdHandler,
+  getSingleTicketHandler,
+  updatedTicketHandler,
+  deleteTicketHandler,
+} from '../controllers/ticketController';
 
 const router = express.Router();
 
 router.post(
-  "/create/:stageId",
+  '/create/:stageId',
   validate(ticketSchema),
   validateAndAuthorizeToken,
-  createTicketHandler
-)
+  createTicketHandler,
+);
 
 router.get(
-  "/get/project/:id",
+  '/get/project/:id',
+  validateAndAuthorizeToken, 
   getAllTicketbyProjectIdHandler
-)
+);
 
 router.get(
-  "/get/project/stage/:id",
+  '/get/project/stage/:id',
+  validateAndAuthorizeToken, 
   getAllTicketbyStageIdHandler
-)
+);
 
 router.put(
-  "/update/:id",
+  '/update/:id', 
   validate(ticketSchema),
+  validateAndAuthorizeToken, 
   updatedTicketHandler
-)
+);
 
 router.delete(
-  "/ticket/delete/:ticketId",
+  '/ticket/delete/:ticketId',
+  validateAndAuthorizeToken, 
   deleteTicketHandler
-)
+);
 
 export default router;

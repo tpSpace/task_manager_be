@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
-import { Tag } from "../models";
+import { Request, Response } from 'express';
+import { Tag } from '../models';
 import {
   createTag,
   getAllTagFromProjectId,
   findProjectById,
-} from "../services";
-import { StatusCode } from "./abstraction";
+} from '../services';
+import { StatusCode } from './abstraction';
 
 export const createTagHandler = async (req: Request, res: Response) => {
   try {
@@ -15,23 +15,22 @@ export const createTagHandler = async (req: Request, res: Response) => {
 
     if (!project) {
       return res.status(StatusCode.NOTFOUND).json({
-        status: "not found",
-        error: "project not found",
+        status: 'not found',
+        error: 'project not found',
       });
     }
 
     const newTagId = await createTag(tag, projectId);
-    
+
     return res.status(StatusCode.SUCCESS).json({
-      status: "success",
+      status: 'success',
       tagId: newTagId,
     });
-
   } catch (error) {
-    console.error("Error creating tag:", error);
+    console.error('Error creating tag:', error);
     return res.status(StatusCode.SERVERERROR).json({
-      status: "server error",
-      error: "failed to create tag",
+      status: 'server error',
+      error: 'failed to create tag',
     });
   }
 };
@@ -43,22 +42,22 @@ export const getTagFromProjectHandler = async (req: Request, res: Response) => {
 
     if (!project) {
       return res.status(StatusCode.NOTFOUND).json({
-        status: "not found",
-        error: "project not found",
+        status: 'not found',
+        error: 'project not found',
       });
     }
 
     const tag = await getAllTagFromProjectId(projectId);
 
     return res.status(StatusCode.SUCCESS).json({
-      status: "success",
+      status: 'success',
       tag,
     });
   } catch (error) {
-    console.error("Error getting tag:", error);
+    console.error('Error getting tag:', error);
     return res.status(StatusCode.SERVERERROR).json({
-      status: "server error",
-      error: "failed to get tag",
+      status: 'server error',
+      error: 'failed to get tag',
     });
   }
 };
