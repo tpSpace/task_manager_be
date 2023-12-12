@@ -4,3 +4,4 @@ src/requests.rest
 .vscode
 .idea
 .idea/
+dist

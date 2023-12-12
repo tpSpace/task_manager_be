@@ -1,40 +1,40 @@
-import { stageSchema } from "../schemas";
-import { validate } from "../middleware/validate";
-import { validateAndAuthorizeToken } from "../middleware/jwt";
+import { stageSchema } from '../schemas';
+import { validate } from '../middleware/validate';
+import { validateAndAuthorizeToken } from '../middleware/jwt';
 import {
   createStageHandler,
   getAllStageFromProjectHandler,
   updateStageHandler,
   deleteStageHandler,
-} from "../controllers";
+} from '../controllers';
 
-import express from "express";
+import express from 'express';
 
 const stageRouter = express.Router();
 
 stageRouter.post(
-  "/create/:projectId",
+  '/create/:projectId',
   validate(stageSchema),
   validateAndAuthorizeToken,
-  createStageHandler
+  createStageHandler,
 );
 
 stageRouter.get(
-  "/get/:projectId",
-  validateAndAuthorizeToken, 
-  getAllStageFromProjectHandler
+  '/get/:projectId',
+  validateAndAuthorizeToken,
+  getAllStageFromProjectHandler,
 );
 
 stageRouter.put(
-  "/update/:stageId",
+  '/update/:stageId',
   validateAndAuthorizeToken,
-  updateStageHandler
+  updateStageHandler,
 );
 
 stageRouter.delete(
-  "/delete/:stageId",
-  validateAndAuthorizeToken, 
-  deleteStageHandler
+  '/delete/:stageId',
+  validateAndAuthorizeToken,
+  deleteStageHandler,
 );
 
 export default stageRouter;

@@ -3,11 +3,11 @@ import {
   createUser,
   findAllUser,
   findUserById,
-} from "../services/userService";
-import { Request, Response } from "express";
-import { generateJwtToken } from "../middleware/jwt";
-import { User } from "../models/user";
-const bcrypt = import("bcrypt-ts");
+} from '../services/userService';
+import { Request, Response } from 'express';
+import { generateJwtToken } from '../middleware/jwt';
+import { User } from '../models/user';
+const bcrypt = import('bcrypt-ts');
 
 export const loginUserHandler = async (req: Request, res: Response) => {
   try {
@@ -17,32 +17,32 @@ export const loginUserHandler = async (req: Request, res: Response) => {
 
     if (!user) {
       return res.status(404).json({
-        status: "not found",
-        message: "user not found",
+        status: 'not found',
+        message: 'user not found',
       });
     } else {
       const isPasswordMatch = (await bcrypt).compareSync(
         password,
-        user.password
+        user.password,
       );
       if (isPasswordMatch) {
         const token = generateJwtToken(user.userId);
         return res.status(200).json({
-          status: "success",
+          status: 'success',
           token: token,
         });
       } else {
         return res.status(401).json({
-          status: "unauthorized",
-          message: "wrong password",
+          status: 'unauthorized',
+          message: 'wrong password',
         });
       }
     }
   } catch (error) {
-    console.error("Error logging in user:", error);
+    console.error('Error logging in user:', error);
     return res.status(500).json({
-      status: "server error",
-      message: "failed to login user",
+      status: 'server error',
+      message: 'failed to login user',
     });
   }
 };
@@ -54,8 +54,8 @@ export const registerUserHandler = async (req: Request, res: Response) => {
 
     if (existingUser) {
       return res.status(409).json({
-        status: "error",
-        error: "user already existed",
+        status: 'error',
+        error: 'user already existed',
       });
     }
 
@@ -67,14 +67,14 @@ export const registerUserHandler = async (req: Request, res: Response) => {
     const token = generateJwtToken(newUser!.userId);
 
     return res.status(200).json({
-      status: "success",
+      status: 'success',
       token: token,
     });
   } catch (error) {
-    console.error("Error getting user:", error);
+    console.error('Error getting user:', error);
     return res.status(500).json({
-      status: "server error",
-      error: "failed to register user",
+      status: 'server error',
+      error: 'failed to register user',
     });
   }
 };
@@ -84,14 +84,14 @@ export const getSingleUserHandler = async (req: Request, res: Response) => {
     const { id } = req.params;
     const user = await findUserById(id);
     return res.status(200).json({
-      status: "success",
+      status: 'success',
       user,
     });
   } catch (error) {
-    console.error("Error getting user:", error);
+    console.error('Error getting user:', error);
     return res.status(500).json({
-      status: "server error",
-      error: "failed to get user",
+      status: 'server error',
+      error: 'failed to get user',
     });
   }
 };
