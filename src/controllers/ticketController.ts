@@ -21,6 +21,7 @@ export const createTicketHandler = async (req: Request, res: Response) => {
       status: 'success',
       ticketId: newTicketId,
     });
+    
   } catch (error) {
     console.log('error creating ticket: ', error);
     return res.status(500).json({

@@ -20,12 +20,29 @@ router.post(
   createTicketHandler,
 );
 
-router.get('/get/project/:id', getAllTicketbyProjectIdHandler);
+router.get(
+  '/get/project/:id',
+  validateAndAuthorizeToken, 
+  getAllTicketbyProjectIdHandler
+);
 
-router.get('/get/project/stage/:id', getAllTicketbyStageIdHandler);
+router.get(
+  '/get/project/stage/:id',
+  validateAndAuthorizeToken, 
+  getAllTicketbyStageIdHandler
+);
 
-router.put('/update/:id', validate(ticketSchema), updatedTicketHandler);
+router.put(
+  '/update/:id', 
+  validate(ticketSchema),
+  validateAndAuthorizeToken, 
+  updatedTicketHandler
+);
 
-router.delete('/ticket/delete/:ticketId', deleteTicketHandler);
+router.delete(
+  '/ticket/delete/:ticketId',
+  validateAndAuthorizeToken, 
+  deleteTicketHandler
+);
 
 export default router;

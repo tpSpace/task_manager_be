@@ -20,13 +20,13 @@ stageRouter.post(
 );
 
 stageRouter.get(
-  '/get/:projectId',
+  '/getProjet/:projectId',
   validateAndAuthorizeToken,
   getAllStageFromProjectHandler,
 );
 
 stageRouter.put(
-  '/update/:stageId',
+  '/updateTitle/:stageId',
   validateAndAuthorizeToken,
   updateStageHandler,
 );

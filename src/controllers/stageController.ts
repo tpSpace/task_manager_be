@@ -71,7 +71,7 @@ export const getAllStageFromProjectHandler = async (
 export const updateStageHandler = async (req: Request, res: Response) => {
   try {
     const stageId = req.params.stageId;
-    const updatedStage: Stage = req.body;
+    const updatedTitle: Stage = req.body;
 
     const existingStage = await findStageById(stageId);
 
@@ -82,11 +82,11 @@ export const updateStageHandler = async (req: Request, res: Response) => {
       });
     }
 
-    const updated = await updateStage(stageId, updatedStage);
+    const updatedStage = await updateStage(stageId, updatedTitle);
 
     return res.status(StatusCode.SUCCESS).json({
       status: 'success',
-      updated,
+      updatedStage,
     });
   } catch (error) {
     console.error('Error updating stage:', error);

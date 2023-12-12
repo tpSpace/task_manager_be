@@ -25,6 +25,7 @@ export const deleteChildTicket = async (parentId: string, childId: string) => {
     }
   });
 };
+
 export const createTicket = async (ticket: Ticket, stageId: string) => {
   const createdTicket = await prisma.ticket.create({
     data: {
