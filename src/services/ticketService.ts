@@ -21,10 +21,11 @@ export const deleteChildTicket = async (parentId: string, childId: string) => {
   parentTicket?.childTickets.forEach((c) => {
     if (c === childId) {
       parentTicket.childTickets.splice(parentTicket.childTickets.indexOf(c));
-      return;
+      return
     }
-  });
-};
+  })
+}
+
 export const createTicket = async (ticket: Ticket, stageId: string) => {
   let stageIds = [];
   stageIds.push(stageId);
@@ -179,4 +180,4 @@ export const deleteTicket = async (ticketId: string) => {
     },
   });
   return deletedTicket;
-};
+}

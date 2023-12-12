@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { Tag } from "../models";
+import { PrismaClient } from '@prisma/client';
+import { Tag } from '../models';
 
 const prisma = new PrismaClient();
 
@@ -45,4 +45,4 @@ export const getAllTagFromProjectId = async (projectId: string) => {
       colour: tag.colour,
     };
   });
-}
+};
