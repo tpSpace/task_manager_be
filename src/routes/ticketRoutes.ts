@@ -18,17 +18,17 @@ router.post(
 )
 
 router.get(
-  "/get/project/:id",
+  "/get/project/:projectId",
   getAllTicketbyProjectIdHandler
 )
 
 router.get(
-  "/get/project/stage/:id",
+  "/get/project/stage/:stageId",
   getAllTicketbyStageIdHandler
 )
 
 router.put(
-  "/update/:id",
+  "/update/:ticketId",
   validate(ticketSchema),
   updatedTicketHandler
 )

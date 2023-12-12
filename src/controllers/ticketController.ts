@@ -30,7 +30,7 @@ export const createTicketHandler = async (req: Request, res: Response) => {
 
 export const getSingleTicketHandler = async (req: Request, res: Response) => {
     try {
-        const ticketId = req.params.id;
+        const ticketId = req.params.ticketId;
         const ticket = await findTicketbyId(ticketId)
 
         if(!ticket){
@@ -53,7 +53,7 @@ export const getSingleTicketHandler = async (req: Request, res: Response) => {
 
 export const getAllTicketbyProjectIdHandler = async (req: Request, res: Response) =>{
     try{
-        const projectId = req.params.id
+        const projectId = req.params.projectId
         const tickets = await findAllTicketbyProjectId(projectId)
 
         if(!tickets){
@@ -78,9 +78,9 @@ export const getAllTicketbyProjectIdHandler = async (req: Request, res: Response
 
 export const getAllTicketbyStageIdHandler = async (req: Request, res: Response) => {
     try{
-        const stageId = req.params.id
+        const stageId = req.params.stageId
         const tickets = await findTicketbyStageId(stageId)
-        if (tickets!){
+        if (!tickets){
             return res.status(404).json({
                 status: "not found",
                 error: "ticket not found",
@@ -102,7 +102,7 @@ export const getAllTicketbyStageIdHandler = async (req: Request, res: Response) 
 
 export const updatedTicketHandler = async (req: Request, res: Response) => {
     try{
-        const ticketId = req.params.id
+        const ticketId = req.params.ticketId
         const update: Ticket = req.body
 
         const existingTicket = findTicketbyId(ticketId)
@@ -130,7 +130,7 @@ export const updatedTicketHandler = async (req: Request, res: Response) => {
 
 export const deleteTicketHandler = async(req: Request, res: Response) =>{
     try{
-        const ticketId = req.params.id
+        const ticketId = req.params.ticketId
 
         const existingTicket = findTicketbyId(ticketId)
 
