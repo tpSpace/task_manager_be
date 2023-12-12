@@ -6,8 +6,8 @@ import {
   createProjectHandler,
   getAllProjectHandler,
   getSingleProjectHandler,
-  deleteProjectHandler,
-  updateProjectHandler,
+  updateTitleProjectHandler,
+  deleteProjectHandler
 } from "../controllers";
 
 
@@ -20,26 +20,28 @@ projectRouter.post(
   createProjectHandler
 );
 
-projectRouter.get("/get", validateAndAuthorizeToken, getAllProjectHandler);
-
-// Will be used when front end is ready with jwt implementation
 projectRouter.get(
-  "/get/:id",
+  "/get", 
+  validateAndAuthorizeToken, 
+  getAllProjectHandler
+);
+
+projectRouter.get(
+  "/get/:projectId",
   validateAndAuthorizeToken,
   getSingleProjectHandler
 )
 
 projectRouter.put(
-    '/update/:projectId',
-    validateAndAuthorizeToken,
-    updateProjectHandler
-
+  "/updateTitle/:projectId",
+  validateAndAuthorizeToken,
+  updateTitleProjectHandler
 )
 
 projectRouter.delete(
-    '/delete/:projectId',
-    validateAndAuthorizeToken,
-    deleteProjectHandler
+  "/delete/:projectId",
+  validateAndAuthorizeToken,
+  deleteProjectHandler
 )
 
 export default projectRouter;

@@ -5,8 +5,7 @@ import { loginUserSchema } from "../schemas";
 import {
   loginUserHandler,
   registerUserHandler,
-  // getAllUserHandler,
-  // getSingleUserHandler
+  getSingleUserHandler
 } from "../controllers";
 
 const authRouter = express.Router();
@@ -15,17 +14,11 @@ authRouter.post("/login", validate(loginUserSchema), loginUserHandler);
 
 authRouter.post("/register", validate(loginUserSchema), registerUserHandler);
 
-// authRouter.get(
-//   "/users",
-//   validateAndAuthorizeToken,
-//   getAllUserHandler
-// );
-
-// authRouter.get(
-//   "/user/:id",
-//   validateAndAuthorizeToken,
-//   getSingleUserHandler
-// );
+authRouter.get(
+  "/user/:id",
+  validateAndAuthorizeToken,
+  getSingleUserHandler
+);
 
 // Test authrourization end point, to be removed
 authRouter.get("/test", validateAndAuthorizeToken, (req, res) =>

@@ -45,19 +45,15 @@ export const findAllProjectOfUserWithId = async (inputUserId: string) => {
 }
 
 export const updateProject = async (projectId: string, project: Project) => {
-  await prisma.project.update({
+  const updatedProject = await prisma.project.update({
     where: {
       projectId: projectId,
     },
     data:{
-      adminId: project.adminId,
-      tagIds: project.tagIds,
-      stageIds: project.stageIds,
-      history: project.history,
       title: project.title,
-      userIds: project.userIds,
     },
   });
+  return updatedProject.title;
 }
 export const deleteProject = async (projectId: string) => {
   await prisma.project.delete({
@@ -66,4 +62,3 @@ export const deleteProject = async (projectId: string) => {
     },
   });
 };
-

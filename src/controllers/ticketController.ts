@@ -7,23 +7,25 @@ import {
 } from "../services/ticketService";
 import { returnUserIdFromToken } from "../middleware/jwt";
 
-export const createTicketHandler = async (req: Request, res: Response)=>{
-    try{
-        const ticket: Ticket = req.body
-        ticket.creatorId = returnUserIdFromToken(req)
-        const newTicketId = await createTicket(ticket)
+export const createTicketHandler = async (req: Request, res: Response) => {
+  try {
+    const ticket: Ticket = req.body;
+    const stageId = req.params.stageId;
+    ticket.creatorId = returnUserIdFromToken(req)
 
-        return res.status(200).json({
-            status: "success",
-            ticketId: newTicketId
-        })
-    }catch (error){
-        console.log("error creating ticket")
-        return res.status(500).json({
-            status: "server error",
-            error: "failed to create ticket"
-        })
-    }
+    const newTicketId = await createTicket(ticket, stageId)
+    return res.status(200).json({
+        status: "success",
+        ticketId: newTicketId
+    })
+  } catch (error) {
+    
+    console.log("error creating ticket: ", error);
+    return res.status(500).json({
+        status: "server error",
+        error: "failed to create ticket"
+    })
+  }
 }
 
 export const getSingleTicketHandler = async (req: Request, res: Response) => {
