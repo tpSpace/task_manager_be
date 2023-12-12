@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
-import { FastResponse } from "../controllers/abstraction";
 dotenv.config();
 
 const secretKey = process.env.SECRET_KEY;
@@ -24,7 +23,6 @@ export const validateAndAuthorizeToken = (
   next: NextFunction
 ) => {
   const authHeader = req.headers.authorization;
-  const fr = new FastResponse(res);
   if (authHeader && authHeader.startsWith("Bearer ")) {
     const token = authHeader.split(" ")[1];
 
@@ -33,13 +31,13 @@ export const validateAndAuthorizeToken = (
       if (decodedToken.iss === "tasKing") {
         next();
       } else {
-        fr.buildError(401, undefined, "unauthorized");
+        res.status(401).json({ status: "unauthorized" });
       }
     } catch (error) {
-      fr.buildError(401, undefined, "unauthorized");
+      res.status(401).json({ status: "unauthorized" });
     }
   } else {
-    fr.buildError(401, undefined, "unauthorized");
+    res.status(401).json({ status: "unauthorized" });
   }
 };
 
@@ -49,4 +47,4 @@ export const returnUserIdFromToken = (req: Request): string => {
   const decodedToken = jwt.verify(token, secretKey!) as { userId?: string };
   const userId = decodedToken.userId as string;
   return userId;
-};
+}

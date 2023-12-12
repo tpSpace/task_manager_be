@@ -8,25 +8,34 @@ import {
   deleteStage,
   findProjectById,
 } from "../services";
-import { FastResponse, HttpStatusCode, Action } from "./abstraction";
+import { StatusCode } from "./abstraction";
 
 export const createStageHandler = async (req: Request, res: Response) => {
-  const fr = new FastResponse(res, "Stage");
   try {
     const stage: Stage = req.body;
-    const projectId: string = req.params.id;
+    const projectId: string = req.params.projectId;
+
     const project = await findProjectById(projectId);
 
     if (!project) {
-      return fr.buildError(HttpStatusCode.NOTFOUND, Action.FIND);
+      return res.status(StatusCode.NOTFOUND).json({
+        status: "not found",
+        error: "project not found",
+      });
     }
 
     const newStageId = await createStage(stage, projectId);
+    return res.status(StatusCode.SUCCESS).json({
+      status: "success",
+      stageId: newStageId,
+    });
 
-    return fr.buildSuccess({ stageId: newStageId });
   } catch (error) {
     console.error("Error creating stage:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, Action.CREATE);
+    return res.status(StatusCode.SERVERERROR).json({
+      status: "server error",
+      error: "failed to create stage",
+    });
   }
 };
 
@@ -34,26 +43,34 @@ export const getAllStageFromProjectHandler = async (
   req: Request,
   res: Response
 ) => {
-  const fr = new FastResponse(res, "Stage");
   try {
-    const projectId = req.params.id;
+    const projectId = req.params.projectId;
     const project = await findProjectById(projectId);
 
     if (!project) {
-      return fr.buildError(HttpStatusCode.NOTFOUND, Action.FIND);
+      return res.status(StatusCode.NOTFOUND).json({
+        status: "not found",
+        error: "project not found",
+      });
     }
 
     const stages = await findAllStageFromProjectId(projectId);
 
-    return fr.buildSuccess({ stages });
+    return res.status(StatusCode.SUCCESS).json({
+      status: "success",
+      stages,
+    });
+
   } catch (error) {
     console.error("Error getting stages:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, Action.GET);
+    return res.status(StatusCode.SERVERERROR).json({
+      status: "server error",
+      error: "failed to get stage",
+    });
   }
 };
 
 export const updateStageHandler = async (req: Request, res: Response) => {
-  const fr = new FastResponse(res, "Stage");
   try {
     const stageId = req.params.stageId;
     const updatedStage: Stage = req.body;
@@ -61,33 +78,50 @@ export const updateStageHandler = async (req: Request, res: Response) => {
     const existingStage = await findStageById(stageId);
 
     if (!existingStage) {
-      return fr.buildError(HttpStatusCode.NOTFOUND);
-    }
+      return res.status(StatusCode.NOTFOUND).json({
+        status: "not found",
+        error: "stage not found",
+      });
+    };
 
     const updated = await updateStage(stageId, updatedStage);
 
-    return fr.buildSuccess({ updated });
+    return res.status(StatusCode.SUCCESS).json({
+      status: "success",
+      updated,
+    });
   } catch (error) {
     console.error("Error updating stage:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, Action.UPDATE);
+    return res.status(StatusCode.SERVERERROR).json({
+      status: "server error",
+      error: "failed to edit stage",
+    });
   }
 };
 
 export const deleteStageHandler = async (req: Request, res: Response) => {
-  const fr = new FastResponse(res, "Stage");
   try {
     const stageId = req.params.stageId;
+
     const existingStage = await findStageById(stageId);
 
     if (!existingStage) {
-      return fr.buildError(HttpStatusCode.NOTFOUND);
+      return res.status(StatusCode.NOTFOUND).json({
+        status: "not found",
+        error: "stage not found",
+      });
     }
 
     await deleteStage(stageId);
 
-    return fr.buildSuccess(stageId);
+    return res.status(StatusCode.SUCCESS).json({
+      status: "success"
+    });
   } catch (error) {
     console.error("Error deleting stage:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, Action.DELETE);
+    return res.status(StatusCode.SERVERERROR).json({
+      status: "server error",
+      error: "failed to delete stage",
+    });
   }
 };
