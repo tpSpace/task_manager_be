@@ -2,115 +2,89 @@ import { Request, Response } from "express";
 import { Project } from "../models/project";
 import {
   createProject,
-  findAllProjectOfUserWithId, findProjectById,
-    deleteProject, updateProject,
+  findAllProjectOfUserWithId,
+  findProjectById,
+  deleteProject,
+  updateProject,
 } from "../services/projectService";
 import { returnUserIdFromToken } from "../middleware/jwt";
+import { FastResponse, HttpStatusCode, Action } from "./abstraction";
 
 export const createProjectHandler = async (req: Request, res: Response) => {
+  const fr = new FastResponse(res, "Project");
   try {
     const project: Project = req.body;
     project.adminId = returnUserIdFromToken(req);
 
     const newProjectId = await createProject(project);
 
-    return res.status(200).json({
-      status: "success",
-      projectId: newProjectId,
-    });
+    return fr.buildSuccess({ projectId: newProjectId });
   } catch (error) {
     console.error("Error creating project:", error);
-    return res.status(500).json({
-      status: "server error",
-      error: "failed to create project",
-    });
+    return fr.buildError(HttpStatusCode.SERVERERROR, Action.CREATE);
   }
 };
 
 export const getAllProjectHandler = async (req: Request, res: Response) => {
+  const fr = new FastResponse(res, "Project");
   try {
     const userId: string = returnUserIdFromToken(req);
     const projects = await findAllProjectOfUserWithId(userId);
-
-    return res.status(200).json({
-      status: "success",
-      projects
-    });
-
+    return fr.buildSuccess({ projects });
   } catch (error) {
     console.error("Error getting projects:", error);
-    return res.status(500).json({
-      status: "server error",
-      error: "failed to get projects"
-    });
+    return fr.buildError(HttpStatusCode.SERVERERROR, Action.GET);
   }
 };
 
 export const getSingleProjectHandler = async (req: Request, res: Response) => {
+  const fr = new FastResponse(res, "Project");
   try {
     const userId: string = returnUserIdFromToken(req);
     const projectId = req.params.projectId;
     const project = await findProjectById(projectId);
 
     if (!project) {
-      return res.status(404).json({
-        status: "not found",
-        error: "project not found",
-      });
+      return fr.buildError(HttpStatusCode.NOTFOUND);
     }
 
     if (project.userIds.includes(userId)) {
-      return res.status(200).json({
-        status: "success",
-        project,
-      });
+      return fr.buildSuccess({ project });
     }
   } catch (error) {
     console.error("Error getting project:", error);
-    return res.status(500).json({
-      status: "server error",
-      error: "failed to get project",
-    });
+    return fr.buildError(HttpStatusCode.SERVERERROR, Action.GET);
   }
 };
 
-export const updateTitleProjectHandler = async (req: Request, res: Response) => {
+export const updateTitleProjectHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const fr = new FastResponse(res, "Project");
   try {
     const userId: string = returnUserIdFromToken(req);
     const projectId = req.params.projectId;
     const project = await findProjectById(projectId);
 
     if (!project) {
-      return res.status(404).json({
-        status: "not found",
-        error: "project not found",
-      });
+      return fr.buildError(HttpStatusCode.NOTFOUND, Action.FIND);
     }
 
     if (project.userIds.includes(userId)) {
       const updatedProject = await updateProject(projectId, req.body);
-      return res.status(200).json({
-          status: "success",
-          updatedProject,
-      });
+      return fr.buildSuccess({ updatedProject });
+    } else {
+      return fr.buildError(HttpStatusCode.UNAUTHORIZED, Action.UPDATE);
     }
-    else {
-      return res.status(500).json({
-        status: "server error",
-        error: "failed to get project",
-      });
-    }
-
   } catch (error) {
-      console.error("Error updating project:", error);
-      return res.status(500).json({
-      status: "server error",
-      error: "failed to update project",
-    });
+    console.error("Error updating project:", error);
+    return fr.buildError(HttpStatusCode.SERVERERROR, Action.UPDATE);
   }
-}
+};
 
 export const deleteProjectHandler = async (req: Request, res: Response) => {
+  const fr = new FastResponse(res, "Project");
   try {
     const userId: string = returnUserIdFromToken(req);
     const projectId = req.params.projectId;
@@ -118,29 +92,16 @@ export const deleteProjectHandler = async (req: Request, res: Response) => {
     const project = await findProjectById(projectId);
 
     if (!project) {
-      return res.status(404).json({
-        status: "not found",
-        error: "project not found",
-      });
+      return fr.buildError(HttpStatusCode.NOTFOUND, Action.FIND);
     }
 
-    if (project.adminId === userId) {
-      await deleteProject(projectId);
-      return res.status(200).json({
-          status: "success",
-      });
-    }
-    else if(project.adminId !== userId) {
-      return res.status(401).json({
-        status: "unauthorized",
-        error: "user is not authorized to delete project",
-      });
+    if (project.userIds.includes(userId)) {
+      return fr.buildSuccess({ project });
+    } else {
+      return fr.buildError(HttpStatusCode.UNAUTHORIZED, Action.DELETE);
     }
   } catch (error) {
-    console.error("Error deleting project:", error);
-    return res.status(500).json({
-      status: "server error",
-      error: "failed to delete project",
-    });
+    console.error("Error getting project:", error);
+    return fr.buildError(HttpStatusCode.SERVERERROR, Action.DELETE);
   }
-}
+};
