@@ -1,123 +1,156 @@
 import { Request, Response } from "express";
 import { Ticket } from "../models/ticket";
 import {
-  createTicket,
-  findAllTicketbyProjectId,
-  findTicketbyId,
-  findTicketbyStageId,
-  updateTicket,
-  deleteTicket,
+    createTicket, findAllTicketbyProjectId,
+    findTicketbyId, findTicketbyStageId,
+    updateTicket, deleteTicket
 } from "../services/ticketService";
 import { returnUserIdFromToken } from "../middleware/jwt";
-import { HttpStatusCode, Action, FastResponse } from "./abstraction";
 
 export const createTicketHandler = async (req: Request, res: Response) => {
-  const fr = new FastResponse(res, "Ticket");
   try {
     const ticket: Ticket = req.body;
     const stageId = req.params.stageId;
-    ticket.creatorId = returnUserIdFromToken(req);
-    const newTicketId = await createTicket(ticket, stageId);
+    ticket.creatorId = returnUserIdFromToken(req)
 
-    return fr.buildSuccess(newTicketId);
+    const newTicketId = await createTicket(ticket, stageId)
+    return res.status(200).json({
+        status: "success",
+        ticketId: newTicketId
+    })
   } catch (error) {
-    console.error("Error creating ticket:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, Action.CREATE);
+    
+    console.log("error creating ticket: ", error);
+    return res.status(500).json({
+        status: "server error",
+        error: "failed to create ticket"
+    })
   }
-};
+}
 
 export const getSingleTicketHandler = async (req: Request, res: Response) => {
-  const fr = new FastResponse(res, "Ticket");
-  try {
-    const ticketId = req.params.id;
-    const ticket = await findTicketbyId(ticketId);
+    try {
+        const ticketId = req.params.id;
+        const ticket = await findTicketbyId(ticketId)
 
-    if (!ticket) {
-      return fr.buildError(HttpStatusCode.NOTFOUND);
+        if(!ticket){
+            return res.status(404).json({
+                status: "not found",
+                error: "ticket not found",
+            });
+        }
+
+        return  res.status(200).json({
+            ticket
+        })
+    } catch (error) {
+        console.error("error getting ticket:", error);
+        return res.status(500).json({
+          error: "failed to get ticket",
+        });
     }
+}
 
-    return fr.buildSuccess({ ticket });
-  } catch (error) {
-    console.error("Error getting ticket:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, Action.GET);
-  }
+export const getAllTicketbyProjectIdHandler = async (req: Request, res: Response) =>{
+    try{
+        const projectId = req.params.id
+        const tickets = await findAllTicketbyProjectId(projectId)
+
+        if(!tickets){
+            return res.status(404).json({
+                status: "not found",
+                error: "ticket not found",
+            });
+        }
+        
+        return res.status(200).json({
+            status: "success",
+            tickets
+      });
+    } catch (error) {
+      console.error("error getting Tickets:", error);
+      return res.status(500).json({
+        status: "server error",
+        error: "failed to get tickets",
+      });
+    }
 };
 
-export const getAllTicketbyProjectIdHandler = async (
-  req: Request,
-  res: Response
-) => {
-  const fr = new FastResponse(res, "Ticket");
-  try {
-    const projectId = req.params.id;
-    const tickets = await findAllTicketbyProjectId(projectId);
+export const getAllTicketbyStageIdHandler = async (req: Request, res: Response) => {
+    try{
+        const stageId = req.params.id
+        const tickets = await findTicketbyStageId(stageId)
+        if (tickets!){
+            return res.status(404).json({
+                status: "not found",
+                error: "ticket not found",
+            });
+        }
 
-    if (!tickets) {
-      return fr.buildError(HttpStatusCode.NOTFOUND);
+        return res.status(200).json({
+            status: "success",
+            tickets
+      });
+    } catch (error) {
+      console.error("error getting tickets:", error);
+      return res.status(500).json({
+        status: "server error",
+        error: "failed to get ticket",
+      });
     }
-
-    return fr.buildSuccess({ tickets });
-  } catch (error) {
-    console.error("Error getting Tickets:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, Action.GET);
-  }
-};
-
-export const getAllTicketbyStageIdHandler = async (
-  req: Request,
-  res: Response
-) => {
-  const fr = new FastResponse(res, "Ticket");
-  try {
-    const stageId = req.params.id;
-    const tickets = await findTicketbyStageId(stageId);
-
-    if (!tickets) {
-      return fr.buildError(HttpStatusCode.NOTFOUND);
-    }
-
-    return fr.buildSuccess({ tickets });
-  } catch (error) {
-    console.error("Error getting tickets:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, Action.GET);
-  }
-};
+}
 
 export const updatedTicketHandler = async (req: Request, res: Response) => {
-  const fr = new FastResponse(res, "Ticket");
-  try {
-    const ticketId = req.params.id;
-    const update: Ticket = req.body;
+    try{
+        const ticketId = req.params.id
+        const update: Ticket = req.body
 
-    const existingTicket = await findTicketbyId(ticketId);
+        const existingTicket = findTicketbyId(ticketId)
 
-    if (!existingTicket) {
-      return fr.buildError(HttpStatusCode.NOTFOUND);
+        if (!existingTicket){
+            return res.status(404).json({
+                status: "not found",
+                error: "ticket not found",
+            });
+        }
+
+        const updatedTicket = await updateTicket(ticketId,update)
+        return res.status(200).json({
+            status: "success",
+            updatedTicket
+      });
+    } catch (error) {
+      console.error("error updating tickets:", error);
+      return res.status(500).json({
+        status: "server error",
+        error: "failed to update ticket",
+      });
     }
+}
 
-    const updatedTicket = await updateTicket(ticketId, update);
-    return fr.buildSuccess({ updatedTicket });
-  } catch (error) {
-    console.error("Error updating tickets:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, Action.UPDATE);
-  }
-};
+export const deleteTicketHandler = async(req: Request, res: Response) =>{
+    try{
+        const ticketId = req.params.id
 
-export const deleteTicketHandler = async (req: Request, res: Response) => {
-  const fr = new FastResponse(res, "Ticket");
-  try {
-    const ticketId = req.params.id;
+        const existingTicket = findTicketbyId(ticketId)
 
-    const existingTicket = await findTicketbyId(ticketId);
+        if (!existingTicket){
+            return res.status(404).json({
+                status: "not found",
+                error: "Ticket not found",
+            });
+        }
 
-    if (!existingTicket) {
-      return fr.buildError(HttpStatusCode.NOTFOUND);
+        const deletedTicket = await deleteTicket(ticketId)
+        return res.status(200).json({
+            status: "success",
+            ticketId
+      });
+    } catch (error) {
+      console.error("error deleting tickets:", error);
+      return res.status(500).json({
+        status: "server error",
+        error: "failed to delete ticket",
+      });
     }
-
-    const deletedTicket = await deleteTicket(ticketId);
-    return fr.buildSuccess({ ticketId });
-  } catch (error) {
-    console.error("Error deleting tickets:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, Action.DELETE);
-  }
-};
+}

@@ -5,43 +5,60 @@ import {
   getAllTagFromProjectId,
   findProjectById,
 } from "../services";
-import { FastResponse, HttpStatusCode, Action } from "./abstraction";
+import { StatusCode } from "./abstraction";
 
 export const createTagHandler = async (req: Request, res: Response) => {
-  const fr = new FastResponse(res, "Tag");
   try {
     const tag: Tag = req.body;
     const projectId: string = req.params.projectId;
     const project = await findProjectById(projectId);
 
     if (!project) {
-      return fr.buildError(HttpStatusCode.NOTFOUND);
+      return res.status(StatusCode.NOTFOUND).json({
+        status: "not found",
+        error: "project not found",
+      });
     }
 
     const newTagId = await createTag(tag, projectId);
+    
+    return res.status(StatusCode.SUCCESS).json({
+      status: "success",
+      tagId: newTagId,
+    });
 
-    return fr.buildSuccess({ tagId: newTagId });
   } catch (error) {
     console.error("Error creating tag:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, Action.CREATE);
+    return res.status(StatusCode.SERVERERROR).json({
+      status: "server error",
+      error: "failed to create tag",
+    });
   }
 };
 
 export const getTagFromProjectHandler = async (req: Request, res: Response) => {
-  const fr = new FastResponse(res, "Tag");
   try {
     const projectId = req.params.projectId;
     const project = await findProjectById(projectId);
 
     if (!project) {
-      return fr.buildError(HttpStatusCode.NOTFOUND, Action.FIND);
+      return res.status(StatusCode.NOTFOUND).json({
+        status: "not found",
+        error: "project not found",
+      });
     }
 
-    const tags = await getAllTagFromProjectId(projectId);
+    const tag = await getAllTagFromProjectId(projectId);
 
-    return fr.buildSuccess({ tags });
+    return res.status(StatusCode.SUCCESS).json({
+      status: "success",
+      tag,
+    });
   } catch (error) {
-    console.error("Error getting tags:", error);
-    return fr.buildError(HttpStatusCode.SERVERERROR, Action.READ);
+    console.error("Error getting tag:", error);
+    return res.status(StatusCode.SERVERERROR).json({
+      status: "server error",
+      error: "failed to get tag",
+    });
   }
 };

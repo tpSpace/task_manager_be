@@ -8,7 +8,7 @@
   "license": "gnu",
   "private": true,
   "scripts": {
-    "dev": "yarn run generate && clear && nodemon -r ts-node/register src/index.ts",
+    "dev": "nodemon -r ts-node/register src/index.ts",
     "start": "npm run generate && ts-node-dev --inspect --respawn --transpile-only --exit-child src/index.ts",
     "build": "generate tsc . -p",
     "generate": "npx prisma generate"
