@@ -101,9 +101,9 @@ export const updateTitleProjectHandler = async (
         updatedProject,
       });
     } else {
-      return res.status(500).json({
-        status: 'server error',
-        error: 'failed to get project',
+      return res.status(401).json({
+        status: 'unauthorized',
+        error: 'user is not part of project',
       });
     }
   } catch (error) {

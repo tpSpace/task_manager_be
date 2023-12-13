@@ -13,13 +13,22 @@ export const findTagById = async (tagId: string) => {
 };
 
 export const createTag = async (tag: Tag, projectId: string) => {
-  let projectIds = [];
-  projectIds.push(projectId);
   const newTag = await prisma.tag.create({
     data: {
       title: tag.title,
       priority: tag.priority,
       colour: tag.colour,
+    },
+  });
+
+  await prisma.project.update({
+    where: {
+      projectId: projectId,
+    },
+    data: {
+      tagIds: {
+        push: newTag.tagId,
+      },
     },
   });
   return newTag.tagId;

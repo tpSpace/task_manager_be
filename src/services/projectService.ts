@@ -50,12 +50,7 @@ export const findProjectByUserId = async (inputUserId: string) => {
     },
   });
 
-  return projects.map((project) => {
-    return {
-      projectId: project.projectId,
-      title: project.title,
-    };
-  });
+  return projects;
 };
 
 export const updateProjectTitle = async (projectId: string, project: Project) => {

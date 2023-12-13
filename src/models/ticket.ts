@@ -2,16 +2,17 @@ import { Stage } from '.';
 export interface Ticket {
   ticketId: string;
   title: string;
-  description?: string | null;
+  description: string;
   creatorId: string;
 
-  parentTicketId?: string | null;
+  parentTicketId: string;
   childTickets: string[];
 
   assignedUserIds: string[];
-  deadline?: Date | null;
+  deadline: Date;
 
   stageId: string;
 
   tagId: string;
+  commentIds: string[];
 }

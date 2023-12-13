@@ -49,14 +49,14 @@ model Stage {
 model Ticket {
   ticketId        String    @id @default(auto()) @map("_id") @db.ObjectId
   title           String
-  description     String?
+  description     String
   creatorId       String
   assignedUserIds String[]
 
-  parentTicketId  String?
+  parentTicketId  String
   childTickets    String[]
   
-  deadline        DateTime?
+  deadline        DateTime
 
   tagId String
   stageId String

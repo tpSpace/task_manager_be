@@ -4,8 +4,13 @@ import { Ticket } from '../models/ticket';
 const prisma = new PrismaClient();
 
 export const createTicket = async (ticket: Ticket, stageId: string) => {
-  let stageIds = [];
-  stageIds.push(stageId);
+  if (!ticket.parentTicketId) ticket.parentTicketId = '';
+  if (!ticket.childTickets) ticket.childTickets = [];
+  if (!ticket.assignedUserIds) ticket.assignedUserIds = [];
+  if (!ticket.deadline) ticket.deadline = new Date();
+  if (!ticket.tagId) ticket.tagId = '';
+  if (!ticket.description) ticket.description = '';
+  if (!ticket.commentIds) ticket.commentIds = [];
 
   const createdTicket = await prisma.ticket.create({
     data: {
@@ -15,8 +20,10 @@ export const createTicket = async (ticket: Ticket, stageId: string) => {
       assignedUserIds: ticket.assignedUserIds,
       deadline: ticket.deadline,
       parentTicketId: ticket.parentTicketId,
+      childTickets: ticket.childTickets,
       stageId: stageId,
       tagId: ticket.tagId,
+      commentIds: ticket.commentIds,
     },
   });
 

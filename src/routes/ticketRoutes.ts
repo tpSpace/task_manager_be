@@ -27,14 +27,13 @@ router.get(
 );
 
 router.get(
-  '/get/project/stage/:stageId', 
+  '/get/stage/:stageId', 
   validateAndAuthorizeToken,  
   getAllTicketbyStageIdHandler
 );
 
 router.put(
   '/update/:ticketId',
-  validate(ticketSchema),
   validateAndAuthorizeToken,
   updatedTicketHandler,
 );
