@@ -37,6 +37,13 @@ export const getAllProjectHandler = async (req: Request, res: Response) => {
     const userId: string = returnUserIdFromToken(req);
     const projects = await findProjectByUserId(userId);
 
+    if (!projects) {
+      return res.status(404).json({
+        status: 'not found',
+        error: 'projects not found',
+      });
+    }
+
     return res.status(200).json({
       status: 'success',
       projects,
