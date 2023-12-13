@@ -1,30 +1,56 @@
-import { PrismaClient } from "@prisma/client";
-import { Ticket } from "../models/ticket";
+import { PrismaClient } from '@prisma/client';
+import { Ticket } from '../models/ticket';
 
 const prisma = new PrismaClient();
 
 export const addChildTicket = async (parentId: string, childId: string) => {
-  const parentTicket = await prisma.ticket.findUnique({
+  return await prisma.ticket.update({
     where: {
       ticketId: parentId,
     },
+    data: {
+      childTickets: {
+        push: childId,
+      },
+    },
   });
-  return parentTicket?.childTickets.push(childId);
 };
 
 export const deleteChildTicket = async (parentId: string, childId: string) => {
-  const parentTicket = await prisma.ticket.findUnique({
+  const parentTicket = await prisma.ticket.findFirst({
+    select: {
+      childTickets: true,
+    },
     where: {
       ticketId: parentId,
     },
   });
-  parentTicket?.childTickets.forEach((c) => {
-    if (c === childId) {
-      parentTicket.childTickets.splice(parentTicket.childTickets.indexOf(c));
-      return
-    }
-  })
-}
+  parentTicket?.childTickets.splice(
+    parentTicket.childTickets.indexOf(childId),
+    1,
+  );
+  return await prisma.ticket.update({
+    where: {
+      ticketId: parentId,
+    },
+    data: {
+      childTickets: {
+        set: parentTicket?.childTickets,
+      },
+    },
+  });
+  // const parentTicket = await prisma.ticket.findUnique({
+  //   where: {
+  //     ticketId: parentId,
+  //   },
+  // });
+  // parentTicket?.childTickets.forEach((c) => {
+  //   if (c === childId) {
+  //     parentTicket.childTickets.splice(parentTicket.childTickets.indexOf(c));
+  //     return
+  //   }
+  // })
+};
 
 export const createTicket = async (ticket: Ticket, stageId: string) => {
   let stageIds = [];
@@ -38,7 +64,7 @@ export const createTicket = async (ticket: Ticket, stageId: string) => {
       assignedUserIds: ticket.assignedUserIds,
       deadline: ticket.deadline,
       parentTicketId: ticket.parentTicketId,
-      stageId: stageIds
+      stageId: stageIds,
     },
   });
 
@@ -64,7 +90,7 @@ export const findTicketbyId = async (ticketId: string) => {
       ticketId: ticketId,
     },
   });
-  return ticket
+  return ticket;
 };
 
 export const findTicketbyStageId = async (stageId: string) => {
@@ -75,8 +101,7 @@ export const findTicketbyStageId = async (stageId: string) => {
       },
     },
   });
-  if(!ticketArray)
-   return
+  if (!ticketArray) return;
 
   return ticketArray.map((ticket) => {
     return {
@@ -97,26 +122,26 @@ export const findAllTicketbyProjectId = async (inputProjectId: string) => {
       },
     },
   });
-  let ticketArray = []
+  let ticketArray = [];
   for (const stageId of stages) {
     // ticketArray.push(findTicketbyStageId(stageId))
     const tickets = await prisma.ticket.findMany({
-        select:{
-            ticketId: true
+      select: {
+        ticketId: true,
+      },
+      where: {
+        stageId: {
+          has: stageId.stageId,
         },
-        where:{
-            stageId: {
-                has: stageId.stageId,
-            }
-        }
-    })
-    for(const ticketId of tickets){
-        const ticket = await prisma.ticket.findFirst({
-            where:{
-                ticketId: ticketId.ticketId
-            }
-        })
-        ticketArray.push(ticket)
+      },
+    });
+    for (const ticketId of tickets) {
+      const ticket = await prisma.ticket.findFirst({
+        where: {
+          ticketId: ticketId.ticketId,
+        },
+      });
+      ticketArray.push(ticket);
     }
   }
 
@@ -125,10 +150,13 @@ export const findAllTicketbyProjectId = async (inputProjectId: string) => {
       ticketId: ticket?.ticketId,
       title: ticket?.title,
     };
-  })
+  });
 };
 
-export const updateTicket = async (inputTicketId: string, updateTicket: Ticket) => {
+export const updateTicket = async (
+  inputTicketId: string,
+  updateTicket: Ticket,
+) => {
   const oldTicket = await prisma.ticket.findUnique({
     where: {
       ticketId: inputTicketId,
@@ -159,7 +187,6 @@ export const updateTicket = async (inputTicketId: string, updateTicket: Ticket) 
       addChildTicket(updatedTicket.parentTicketId, inputTicketId);
     }
   }
-
   return updatedTicket;
 };
 
@@ -172,7 +199,33 @@ export const deleteTicket = async (ticketId: string) => {
     },
   });
   if (parentTicket) {
-    deleteChildTicket(parentTicket?.ticketId, ticketId);
+    deleteChildTicket(parentTicket.ticketId, ticketId);
+  }
+
+  const stage = await prisma.stage.findFirst({
+    select: {
+      ticketIds: true,
+    },
+    where: {
+      ticketIds: {
+        has: ticketId,
+      },
+    },
+  });
+  if (stage) {
+    stage.ticketIds.splice(stage.ticketIds.indexOf(ticketId), 1);
+    await prisma.stage.updateMany({
+      where: {
+        ticketIds: {
+          has: ticketId,
+        },
+      },
+      data: {
+        ticketIds: {
+          set: stage.ticketIds,
+        },
+      },
+    });
   }
   const deletedTicket = await prisma.ticket.delete({
     where: {
@@ -180,4 +233,4 @@ export const deleteTicket = async (ticketId: string) => {
     },
   });
   return deletedTicket;
-}
+};
