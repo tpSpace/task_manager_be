@@ -19,10 +19,7 @@ model User {
   avatar   String?
   password String
 
-  projectIds String[]  @db.ObjectId // prisma
-  projects   Project[] @relation(fields: [projectIds], references: [projectId]) // prisma
-
-  comments Comment[] // prisma
+  projectIds String[]
 }
 
 model Project {
@@ -31,13 +28,9 @@ model Project {
   title     String
   history   String[]
 
-  userIds String[] @db.ObjectId
-  users   User[]   @relation(fields: [userIds], references: [userId])
-
-  tagIds String[] @db.ObjectId
-  tags   Tag[]    @relation(fields: [tagIds], references: [tagId])
-
-  stages Stage[]
+  userIds String[] 
+  tagIds String[] 
+  stageIds String[]
 }
 
 model Ticket {
@@ -45,15 +38,15 @@ model Ticket {
   title           String
   description     String?
   creatorId       String
-  parentTicketId  String?   @map("parentTicket")
-  childTickets    String[]  @map("childTickets")
-  assignedUserIds String[]  @map("assignedTo")
+  assignedUserIds String[]
+
+  parentTicketId  String?
+  childTickets    String[]
+  
   deadline        DateTime?
 
-  stageId String[] @db.ObjectId
-  stage   Stage[]  @relation(fields: [stageId], references: [stageId])
-
-  comment Comment[] // prisma
+  commentIds  String[]
+  stageId String
 }
 
 model Tag {
@@ -61,29 +54,16 @@ model Tag {
   title    String
   priority Int
   colour   String?
-
-  projectIds String[]  @db.ObjectId // prisma
-  projects   Project[] @relation(fields: [projectIds], references: [projectId]) // prisma
 }
-
+ 
 model Stage {
   stageId String @id @default(auto()) @map("_id") @db.ObjectId
   title   String
-
-  ticketIds String[] @db.ObjectId
-  tickets   Ticket[] @relation(fields: [ticketIds], references: [ticketId])
-
-  projectId String  @db.ObjectId
-  project   Project @relation(fields: [projectId], references: [projectId])
+  ticketIds String[]
 }
 
 model Comment {
   commentId String @id @default(auto()) @map("_id") @db.ObjectId
   content   String
-
-  author   User   @relation(fields: [authorId], references: [userId])
-  authorId String @db.ObjectId
-
-  ticket   Ticket @relation(fields: [ticketId], references: [ticketId])
-  ticketId String @db.ObjectId
+  authorId  String
 }

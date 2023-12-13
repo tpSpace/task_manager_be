@@ -11,7 +11,6 @@ export const createTag = async (tag: Tag, projectId: string) => {
       title: tag.title,
       priority: tag.priority,
       colour: tag.colour,
-      projectIds: projectIds,
     },
   });
 

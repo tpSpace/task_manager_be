@@ -21,12 +21,27 @@ export const createProject = async (project: Project) => {
       title: project.title,
       adminId: project.adminId,
       userIds: userIds,
+      history: [],
+      tagIds: [],
+      stageIds: [],      
     },
   });
+
+  // Add project to user
+  await prisma.user.update({
+    where: {
+      userId: project.adminId,
+    },
+    data: {
+      projectIds: {
+        push: createdProject.projectId,
+      },
+    },
+  })
   return createdProject.projectId;
 };
 
-export const findAllProjectOfUserWithId = async (inputUserId: string) => {
+export const findProjectByUserId = async (inputUserId: string) => {
   const projects = await prisma.project.findMany({
     where: {
       userIds: {
@@ -43,7 +58,7 @@ export const findAllProjectOfUserWithId = async (inputUserId: string) => {
   });
 };
 
-export const updateProject = async (projectId: string, project: Project) => {
+export const updateProjectTitle = async (projectId: string, project: Project) => {
   await prisma.project.update({
     where: {
       projectId: projectId,
@@ -53,6 +68,7 @@ export const updateProject = async (projectId: string, project: Project) => {
     },
   });
 };
+
 export const updateProjectAdmin = async (
   projectId: string,
   adminId: string,
@@ -63,19 +79,6 @@ export const updateProjectAdmin = async (
     },
     data: {
       adminId: adminId,
-    },
-  });
-};
-
-export const addUserToProject = async (projectId: string, userId: string) => {
-  await prisma.project.update({
-    where: {
-      projectId: projectId,
-    },
-    data: {
-      userIds: {
-        push: userId,
-      },
     },
   });
 };
