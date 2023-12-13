@@ -3,7 +3,7 @@ import { Project } from "../models/project";
 import {
   createProject,
   findAllProjectOfUserWithId, findProjectById,
-    deleteProject, updateProject,
+    deleteProject, updateProject, addUserToProject
 } from "../services/projectService";
 import { returnUserIdFromToken } from "../middleware/jwt";
 
@@ -143,4 +143,86 @@ export const deleteProjectHandler = async (req: Request, res: Response) => {
       error: "failed to delete project",
     });
   }
+}
+
+export const addUserAsMemberHandler = async (req: Request, res: Response) => {
+    try {
+        const userId: string = returnUserIdFromToken(req);
+        const newUserId: string = req.body.userId;
+        const projectId = req.params.projectId;
+        const project = await findProjectById(projectId);
+
+        if (!project) {
+        return res.status(404).json({
+            status: "not found",
+            error: "project not found",
+        });
+        }
+        else if (project.userIds.includes(newUserId)) {
+        return res.status(409).json({
+            status: "error",
+            error: "user already in project",
+        });
+        }
+
+        if (project.adminId === userId) {
+        await addUserToProject(projectId, newUserId);
+        return res.status(200).json({
+            status: "success",
+        });
+        }
+        else{
+        return res.status(401).json({
+            status: "unauthorized",
+            error: "user is not authorized to add member to project",
+        });
+        }
+    } catch (error) {
+        console.error("Error adding member to project:", error);
+        return res.status(500).json({
+        status: "server error",
+        error: "failed to add member to project",
+        });
+    }
+}
+
+export const setAdmin = async (req: Request, res: Response) =>{
+    try{
+        const userId: string = returnUserIdFromToken(req);
+        const newAdminId: string = req.body.userId;
+        const projectId = req.params.projectId;
+        const project = await findProjectById(projectId);
+
+        if (!project) {
+            return res.status(404).json({
+                status: "not found",
+                error: "project not found",
+            });
+        }
+        else if(!project.userIds.includes(userId)) {
+            return res.status(401).json({
+                status: "unauthorized",
+                error: "user is not a member of this project",
+            });
+        }
+
+        if (userId === project.adminId) {
+            await updateProjectAdmin(projectId, newAdminId);
+            return res.status(200).json({
+                status: "success",
+            });
+        }
+        else{
+            return res.status(401).json({
+                status: "unauthorized",
+                error: "user is not authorized to set new admin",
+            });
+        }
+} catch (error) {
+        console.error("Error setting new admin:", error);
+        return res.status(500).json({
+        status: "server error",
+        error: "failed to set new admin",
+        });
+    }
 }

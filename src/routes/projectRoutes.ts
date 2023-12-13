@@ -7,7 +7,8 @@ import {
   getAllProjectHandler,
   getSingleProjectHandler,
   updateTitleProjectHandler,
-  deleteProjectHandler
+  deleteProjectHandler,
+    addUserAsMemberHandler,
 } from "../controllers";
 
 
@@ -42,6 +43,17 @@ projectRouter.delete(
   "/delete/:projectId",
   validateAndAuthorizeToken,
   deleteProjectHandler
+)
+
+projectRouter.post(
+    "/addMember/:projectId",
+    validateAndAuthorizeToken,
+    addUserAsMemberHandler
+)
+projectRouter.post(
+    "/setAdmin/:projectId",
+    validateAndAuthorizeToken,
+    setAdmin
 )
 
 export default projectRouter;

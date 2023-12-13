@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Project } from "../models";
 
-
 const prisma = new PrismaClient();
 
 export const findProjectById = async (projectId: string) => {
@@ -45,7 +44,7 @@ export const findAllProjectOfUserWithId = async (inputUserId: string) => {
 }
 
 export const updateProject = async (projectId: string, project: Project) => {
-  const updatedProject = await prisma.project.update({
+   await prisma.project.update({
     where: {
       projectId: projectId,
     },
@@ -53,8 +52,21 @@ export const updateProject = async (projectId: string, project: Project) => {
       title: project.title,
     },
   });
-  return updatedProject.title;
 }
+
+export const addUserToProject = async (projectId: string, userId: string) => {
+    await prisma.project.update({
+        where: {
+        projectId: projectId,
+        },
+        data: {
+        userIds: {
+            push: userId,
+        },
+        },
+    });
+}
+
 export const deleteProject = async (projectId: string) => {
   await prisma.project.delete({
     where: {
@@ -62,3 +74,5 @@ export const deleteProject = async (projectId: string) => {
     },
   });
 };
+
+
