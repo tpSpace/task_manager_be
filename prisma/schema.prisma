@@ -37,8 +37,7 @@ model Project {
   tagIds String[] @db.ObjectId
   tags   Tag[]    @relation(fields: [tagIds], references: [tagId])
 
-  stageIds String[] @db.ObjectId
-  stages   Stage[]  @relation(fields: [stageIds], references: [stageId])
+  stages Stage[]
 }
 
 model Ticket {
@@ -74,8 +73,8 @@ model Stage {
   ticketIds String[] @db.ObjectId
   tickets   Ticket[] @relation(fields: [ticketIds], references: [ticketId])
 
-  projectIds String[]  @db.ObjectId
-  projects   Project[] @relation(fields: [projectIds], references: [projectId])
+  projectId String  @db.ObjectId
+  project   Project @relation(fields: [projectId], references: [projectId])
 }
 
 model Comment {
