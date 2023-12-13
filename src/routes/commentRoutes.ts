@@ -1,4 +1,4 @@
-import { commentSchema } from '../schemas/commentSchema';
+import { commentSchema } from '../schemas';
 import { validate } from '../middleware/validate';
 import { validateAndAuthorizeToken } from '../middleware/jwt';
 import {
@@ -6,7 +6,7 @@ import {
   getAllCommentFromTicketHandler,
   updateCommentHandler,
   deleteCommentHandler,
-} from '../controllers';
+} from '../controllers/commentController';
 
 import express from 'express';
 
