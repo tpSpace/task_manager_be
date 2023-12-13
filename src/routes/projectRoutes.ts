@@ -1,60 +1,55 @@
-import express from "express";
-import { validate } from "../middleware/validate";
-import { projectSchema } from "../schemas";
-import { validateAndAuthorizeToken } from "../middleware/jwt";
+import express from 'express';
+import { validate } from '../middleware/validate';
+import { projectSchema } from '../schemas';
+import { validateAndAuthorizeToken } from '../middleware/jwt';
 import {
   createProjectHandler,
   getAllProjectHandler,
   getSingleProjectHandler,
   updateTitleProjectHandler,
   deleteProjectHandler,
-    addUserAsMemberHandler,
-    setAdminHandler
-} from "../controllers";
-
+  addUserAsMemberHandler,
+  setAdminHandler,
+} from '../controllers';
 
 const projectRouter = express.Router();
 
 projectRouter.post(
-  "/create",
+  '/create',
   validate(projectSchema),
   validateAndAuthorizeToken,
-  createProjectHandler
+  createProjectHandler,
 );
 
-projectRouter.get(
-  "/get", 
-  validateAndAuthorizeToken, 
-  getAllProjectHandler
-);
+projectRouter.get('/get', validateAndAuthorizeToken, getAllProjectHandler);
 
 projectRouter.get(
-  "/get/:projectId",
+  '/get/:projectId',
   validateAndAuthorizeToken,
-  getSingleProjectHandler
-)
+  getSingleProjectHandler,
+);
 
 projectRouter.put(
-  "/updateTitle/:projectId",
+  '/updateTitle/:projectId',
   validateAndAuthorizeToken,
-  updateTitleProjectHandler
-)
+  updateTitleProjectHandler,
+);
 
 projectRouter.delete(
-  "/delete/:projectId",
+  '/delete/:projectId',
   validateAndAuthorizeToken,
-  deleteProjectHandler
-)
+  deleteProjectHandler,
+);
 
 projectRouter.post(
-    "/addMember/:projectId",
-    validateAndAuthorizeToken,
-    addUserAsMemberHandler
-)
+  '/addMember/:projectId',
+  validateAndAuthorizeToken,
+  addUserAsMemberHandler,
+);
 projectRouter.post(
-    "/setAdmin/:projectId",
-    validateAndAuthorizeToken,
-    setAdminHandler
-)
+  '/setAdmin/:projectId',
+  validateAndAuthorizeToken,
+  setAdminHandler,
+);
 
 export default projectRouter;

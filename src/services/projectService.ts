@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { Project } from "../models";
+import { PrismaClient } from '@prisma/client';
+import { Project } from '../models';
 
 const prisma = new PrismaClient();
 
@@ -48,23 +48,36 @@ export const updateProject = async (projectId: string, project: Project) => {
     where: {
       projectId: projectId,
     },
-    data:{
+    data: {
       title: project.title,
+    },
+  });
+};
+export const updateProjectAdmin = async (
+  projectId: string,
+  adminId: string,
+) => {
+  await prisma.project.update({
+    where: {
+      projectId: projectId,
+    },
+    data: {
+      adminId: adminId,
     },
   });
 };
 
 export const addUserToProject = async (projectId: string, userId: string) => {
-    await prisma.project.update({
-        where: {
-        projectId: projectId,
-        },
-        data: {
-        userIds: {
-            push: userId,
-        },
-        },
-    });
+  await prisma.project.update({
+    where: {
+      projectId: projectId,
+    },
+    data: {
+      userIds: {
+        push: userId,
+      },
+    },
+  });
 };
 
 export const deleteProject = async (projectId: string) => {
@@ -74,5 +87,3 @@ export const deleteProject = async (projectId: string) => {
     },
   });
 };
-
-
