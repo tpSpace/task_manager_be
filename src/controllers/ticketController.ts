@@ -9,6 +9,8 @@ import {
   deleteTicket,
 } from '../services/ticketService';
 import { returnUserIdFromToken } from '../middleware/jwt';
+import { Stage } from '../models/stage';
+import { findStageById } from '../services/stageService';
 
 export const createTicketHandler = async (req: Request, res: Response) => {
   try {
@@ -16,11 +18,20 @@ export const createTicketHandler = async (req: Request, res: Response) => {
     const stageId = req.params.stageId;
     ticket.creatorId = returnUserIdFromToken(req);
 
-    const newTicketId = await createTicket(ticket, stageId);
+    const stage = await findStageById(stageId);
+
+    if (!stage) {
+      return res.status(404).json({
+        status: 'not found',
+        error: 'stage not found',
+      });
+    }
+
+    const newTicket = await createTicket(ticket, stageId);
     
     return res.status(200).json({
       status: 'success',
-      ticketId: newTicketId,
+      newTicket,
     });
   } catch (error) {
     console.log('error creating ticket: ', error);
