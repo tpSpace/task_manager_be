@@ -16,11 +16,11 @@ export const createTicketHandler = async (req: Request, res: Response) => {
     const stageId = req.params.stageId;
     ticket.creatorId = returnUserIdFromToken(req);
 
-    const newTicketId = await createTicket(ticket, stageId);
+    const newTicket = await createTicket(ticket, stageId);
     
     return res.status(200).json({
       status: 'success',
-      ticketId: newTicketId,
+      newTicket,
     });
   } catch (error) {
     console.log('error creating ticket: ', error);
