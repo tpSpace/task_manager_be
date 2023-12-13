@@ -8,6 +8,8 @@ import {
   getSingleProjectHandler,
   updateTitleProjectHandler,
   deleteProjectHandler,
+  addUserAsMemberHandler,
+  setAdminHandler,
 } from '../controllers';
 
 const projectRouter = express.Router();
@@ -37,6 +39,17 @@ projectRouter.delete(
   '/delete/:projectId',
   validateAndAuthorizeToken,
   deleteProjectHandler,
+);
+
+projectRouter.post(
+  '/addMember/:projectId',
+  validateAndAuthorizeToken,
+  addUserAsMemberHandler,
+);
+projectRouter.post(
+  '/setAdmin/:projectId',
+  validateAndAuthorizeToken,
+  setAdminHandler,
 );
 
 export default projectRouter;
