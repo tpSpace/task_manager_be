@@ -13,13 +13,11 @@ export const findStageById = async (stageId: string) => {
 };
 
 export const createStage = async (stage: Stage, projectId: string) => {
-  let projectIds = [];
-  projectIds.push(projectId);
   const newStage = await prisma.stage.create({
     data: {
       title: stage.title,
-      projectIds: projectIds,
-    },
+      ticketIds: [],
+    }
   });
 
   // Add stageId to project entity
@@ -37,19 +35,17 @@ export const createStage = async (stage: Stage, projectId: string) => {
 };
 
 export const findAllStageFromProjectId = async (projectId: string) => {
-  const stage = await prisma.stage.findMany({
+  const project = await prisma.project.findUnique({
     where: {
-      projectIds: {
-        has: projectId,
-      },
-    },
+      projectId: projectId,
+    }
   });
-  return stage.map((stage) => {
-    return {
-      stageId: stage.stageId,
-      title: stage.title,
-    };
-  });
+  let stages: Stage[] = [];
+  for (let stageId of project!.stageIds) {
+    stages.push(await findStageById(stageId) as Stage);
+  }
+
+  return stages;
 };
 
 export const updateStage = async (stageId: string, updatedStage: Stage) => {

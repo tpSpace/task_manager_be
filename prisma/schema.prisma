@@ -33,22 +33,6 @@ model Project {
   stageIds String[]
 }
 
-model Ticket {
-  ticketId        String    @id @default(auto()) @map("_id") @db.ObjectId
-  title           String
-  description     String?
-  creatorId       String
-  assignedUserIds String[]
-
-  parentTicketId  String?
-  childTickets    String[]
-  
-  deadline        DateTime?
-
-  commentIds  String[]
-  stageId String
-}
-
 model Tag {
   tagId    String  @id @default(auto()) @map("_id") @db.ObjectId
   title    String
@@ -61,6 +45,25 @@ model Stage {
   title   String
   ticketIds String[]
 }
+
+model Ticket {
+  ticketId        String    @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  description     String?
+  creatorId       String
+  assignedUserIds String[]
+
+  parentTicketId  String?
+  childTickets    String[]
+  
+  deadline        DateTime?
+
+  tagId String
+  commentIds  String[]
+  stageId String
+}
+
+
 
 model Comment {
   commentId String @id @default(auto()) @map("_id") @db.ObjectId

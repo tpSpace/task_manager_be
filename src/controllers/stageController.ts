@@ -25,6 +25,7 @@ export const createStageHandler = async (req: Request, res: Response) => {
     }
 
     const newStageId = await createStage(stage, projectId);
+
     return res.status(StatusCode.SUCCESS).json({
       status: 'success',
       stageId: newStageId,
