@@ -2,14 +2,15 @@ import { Request, Response } from 'express';
 import { Project } from '../models/project';
 import {
   createProject,
-  findAllProjectOfUserWithId,
+  findProjectByUserId,
   findProjectById,
   deleteProject,
-  updateProject,
-  addUserToProject,
+  updateProjectTitle,
   updateProjectAdmin,
 } from '../services/projectService';
+import { addUserToProject } from '../services/projectService';
 import { returnUserIdFromToken } from '../middleware/jwt';
+import { findUserById } from '../services';
 
 export const createProjectHandler = async (req: Request, res: Response) => {
   try {
@@ -34,7 +35,7 @@ export const createProjectHandler = async (req: Request, res: Response) => {
 export const getAllProjectHandler = async (req: Request, res: Response) => {
   try {
     const userId: string = returnUserIdFromToken(req);
-    const projects = await findAllProjectOfUserWithId(userId);
+    const projects = await findProjectByUserId(userId);
 
     return res.status(200).json({
       status: 'success',
@@ -94,15 +95,15 @@ export const updateTitleProjectHandler = async (
     }
 
     if (project.userIds.includes(userId)) {
-      const updatedProject = await updateProject(projectId, req.body);
+      const updatedProject = await updateProjectTitle(projectId, req.body);
       return res.status(200).json({
         status: 'success',
         updatedProject,
       });
     } else {
-      return res.status(500).json({
-        status: 'server error',
-        error: 'failed to get project',
+      return res.status(401).json({
+        status: 'unauthorized',
+        error: 'user is not part of project',
       });
     }
   } catch (error) {
@@ -148,19 +149,31 @@ export const deleteProjectHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const addUserAsMemberHandler = async (req: Request, res: Response) => {
+export const addMemberHandler = async (req: Request, res: Response) => {
   try {
     const userId: string = returnUserIdFromToken(req);
+
     const newUserId: string = req.body.userId;
+    const newMember = await findUserById(newUserId);
+
     const projectId = req.params.projectId;
     const project = await findProjectById(projectId);
+
+    if (!newMember) {
+      return res.status(404).json({
+        status: 'not found',
+        error: 'user not found',
+      });
+    } 
 
     if (!project) {
       return res.status(404).json({
         status: 'not found',
         error: 'project not found',
       });
-    } else if (project.userIds.includes(newUserId)) {
+    } 
+    
+    if (project.userIds.includes(newUserId)) {
       return res.status(409).json({
         status: 'error',
         error: 'user already in project',
@@ -190,7 +203,17 @@ export const addUserAsMemberHandler = async (req: Request, res: Response) => {
 export const setAdminHandler = async (req: Request, res: Response) => {
   try {
     const userId: string = returnUserIdFromToken(req);
+
     const newAdminId: string = req.body.userId;
+    const newAdmin = await findUserById(newAdminId);
+
+    if (!newAdmin) {
+      return res.status(404).json({
+        status: 'not found',
+        error: 'user not found',
+      });
+    }
+
     const projectId = req.params.projectId;
     const project = await findProjectById(projectId);
 
@@ -199,12 +222,16 @@ export const setAdminHandler = async (req: Request, res: Response) => {
         status: 'not found',
         error: 'project not found',
       });
-    } else if (!project.userIds.includes(userId)) {
+    } 
+    
+    if (!project.userIds.includes(userId)) {
       return res.status(401).json({
         status: 'unauthorized',
         error: 'user is not a member of this project',
       });
-    } else if (newAdminId === project.adminId) {
+    } 
+    
+    if (newAdminId === project.adminId) {
       return res.status(400).json({
         status: 'error',
         error: 'user is already admin of this project',

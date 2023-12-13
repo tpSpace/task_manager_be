@@ -21,12 +21,27 @@ export const createProject = async (project: Project) => {
       title: project.title,
       adminId: project.adminId,
       userIds: userIds,
+      history: [],
+      tagIds: [],
+      stageIds: [],      
     },
   });
+
+  // Add project to user
+  await prisma.user.update({
+    where: {
+      userId: project.adminId,
+    },
+    data: {
+      projectIds: {
+        push: createdProject.projectId,
+      },
+    },
+  })
   return createdProject.projectId;
 };
 
-export const findAllProjectOfUserWithId = async (inputUserId: string) => {
+export const findProjectByUserId = async (inputUserId: string) => {
   const projects = await prisma.project.findMany({
     where: {
       userIds: {
@@ -35,34 +50,16 @@ export const findAllProjectOfUserWithId = async (inputUserId: string) => {
     },
   });
 
-  return projects.map((project) => {
-    return {
-      projectId: project.projectId,
-      title: project.title,
-    };
-  });
+  return projects;
 };
 
-export const updateProject = async (projectId: string, project: Project) => {
+export const updateProjectTitle = async (projectId: string, project: Project) => {
   await prisma.project.update({
     where: {
       projectId: projectId,
     },
     data: {
       title: project.title,
-    },
-  });
-};
-export const updateProjectAdmin = async (
-  projectId: string,
-  adminId: string,
-) => {
-  await prisma.project.update({
-    where: {
-      projectId: projectId,
-    },
-    data: {
-      adminId: adminId,
     },
   });
 };
@@ -76,6 +73,31 @@ export const addUserToProject = async (projectId: string, userId: string) => {
       userIds: {
         push: userId,
       },
+    },
+  });
+
+  await prisma.user.update({
+    where: {
+      userId: userId,
+    },
+    data: {
+      projectIds: {
+        push: projectId,
+      },
+    },
+  });
+};
+
+export const updateProjectAdmin = async (
+  projectId: string,
+  adminId: string,
+) => {
+  await prisma.project.update({
+    where: {
+      projectId: projectId,
+    },
+    data: {
+      adminId: adminId,
     },
   });
 };

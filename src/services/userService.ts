@@ -19,6 +19,7 @@ export const createUser = async (user: User) => {
       email: user.email,
       password: user.password,
       avatar: user.avatar,
+      projectIds: [],
     },
   });
 };

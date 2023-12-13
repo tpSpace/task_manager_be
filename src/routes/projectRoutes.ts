@@ -8,7 +8,7 @@ import {
   getSingleProjectHandler,
   updateTitleProjectHandler,
   deleteProjectHandler,
-  addUserAsMemberHandler,
+  addMemberHandler,
   setAdminHandler,
 } from '../controllers';
 
@@ -21,6 +21,7 @@ projectRouter.post(
   createProjectHandler,
 );
 
+// Get all projects of a user
 projectRouter.get('/get', validateAndAuthorizeToken, getAllProjectHandler);
 
 projectRouter.get(
@@ -44,7 +45,7 @@ projectRouter.delete(
 projectRouter.post(
   '/addMember/:projectId',
   validateAndAuthorizeToken,
-  addUserAsMemberHandler,
+  addMemberHandler,
 );
 projectRouter.post(
   '/setAdmin/:projectId',

@@ -17,6 +17,7 @@ export const createTicketHandler = async (req: Request, res: Response) => {
     ticket.creatorId = returnUserIdFromToken(req);
 
     const newTicketId = await createTicket(ticket, stageId);
+    
     return res.status(200).json({
       status: 'success',
       ticketId: newTicketId,
@@ -43,11 +44,13 @@ export const getSingleTicketHandler = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({
+      status: 'success',
       ticket,
     });
   } catch (error) {
     console.error('error getting ticket:', error);
     return res.status(500).json({
+      status: 'server error',
       error: 'failed to get ticket',
     });
   }
