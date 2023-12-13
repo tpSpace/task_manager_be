@@ -8,6 +8,7 @@ import {
   updateProjectTitle,
   updateProjectAdmin,
 } from '../services/projectService';
+import { addUserToProject } from '../services/projectService';
 import { returnUserIdFromToken } from '../middleware/jwt';
 import { findUserById } from '../services';
 

@@ -69,6 +69,30 @@ export const updateProjectTitle = async (projectId: string, project: Project) =>
   });
 };
 
+export const addUserToProject = async (projectId: string, userId: string) => {
+  await prisma.project.update({
+    where: {
+      projectId: projectId,
+    },
+    data: {
+      userIds: {
+        push: userId,
+      },
+    },
+  });
+
+  await prisma.user.update({
+    where: {
+      userId: userId,
+    },
+    data: {
+      projectIds: {
+        push: projectId,
+      },
+    },
+  });
+};
+
 export const updateProjectAdmin = async (
   projectId: string,
   adminId: string,

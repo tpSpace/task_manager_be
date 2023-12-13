@@ -4,14 +4,14 @@ export interface Ticket {
   title: string;
   description?: string | null;
   creatorId: string;
+
   parentTicketId?: string | null;
   childTickets: string[];
 
   assignedUserIds: string[];
   deadline?: Date | null;
 
-  stageId: string[];
-  stage: Stage[];
+  stageId: string;
 
-  comment: Comment[];
+  tagId: string;
 }

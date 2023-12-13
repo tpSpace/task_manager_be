@@ -59,8 +59,8 @@ model Ticket {
   deadline        DateTime?
 
   tagId String
-  commentIds  String[]
   stageId String
+  commentIds  String[]
 }
 
 
