@@ -1,28 +1,24 @@
-import express from "express";
-import { validate } from "../middleware/validate";
-import { validateAndAuthorizeToken } from "../middleware/jwt";
-import { loginUserSchema } from "../schemas";
+import express from 'express';
+import { validate } from '../middleware/validate';
+import { validateAndAuthorizeToken } from '../middleware/jwt';
+import { loginUserSchema } from '../schemas';
 import {
   loginUserHandler,
   registerUserHandler,
-  getSingleUserHandler
-} from "../controllers";
+  getSingleUserHandler,
+} from '../controllers';
 
 const authRouter = express.Router();
 
-authRouter.post("/login", validate(loginUserSchema), loginUserHandler);
+authRouter.post('/login', validate(loginUserSchema), loginUserHandler);
 
-authRouter.post("/register", validate(loginUserSchema), registerUserHandler);
+authRouter.post('/register', validate(loginUserSchema), registerUserHandler);
 
-authRouter.get(
-  "/user/:id",
-  validateAndAuthorizeToken,
-  getSingleUserHandler
-);
+authRouter.get('/user/:id', validateAndAuthorizeToken, getSingleUserHandler);
 
 // Test authrourization end point, to be removed
-authRouter.get("/test", validateAndAuthorizeToken, (req, res) =>
-  res.send("Hello from secured endpoint!")
+authRouter.get('/test', validateAndAuthorizeToken, (req, res) =>
+  res.send('Hello from secured endpoint!'),
 );
 
 export default authRouter;

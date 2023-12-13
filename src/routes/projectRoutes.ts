@@ -9,6 +9,7 @@ import {
   updateTitleProjectHandler,
   deleteProjectHandler,
     addUserAsMemberHandler,
+    setAdminHandler
 } from "../controllers";
 
 
@@ -53,8 +54,7 @@ projectRouter.post(
 projectRouter.post(
     "/setAdmin/:projectId",
     validateAndAuthorizeToken,
-    setAdmin
+    setAdminHandler
 )
 
 export default projectRouter;
-

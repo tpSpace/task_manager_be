@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { Project } from "../models/project";
+import { Request, Response } from 'express';
+import { Project } from '../models/project';
 import {
   createProject,
   findAllProjectOfUserWithId, findProjectById,
@@ -15,14 +15,14 @@ export const createProjectHandler = async (req: Request, res: Response) => {
     const newProjectId = await createProject(project);
 
     return res.status(200).json({
-      status: "success",
+      status: 'success',
       projectId: newProjectId,
     });
   } catch (error) {
-    console.error("Error creating project:", error);
+    console.error('Error creating project:', error);
     return res.status(500).json({
-      status: "server error",
-      error: "failed to create project",
+      status: 'server error',
+      error: 'failed to create project',
     });
   }
 };
@@ -33,15 +33,14 @@ export const getAllProjectHandler = async (req: Request, res: Response) => {
     const projects = await findAllProjectOfUserWithId(userId);
 
     return res.status(200).json({
-      status: "success",
-      projects
+      status: 'success',
+      projects,
     });
-
   } catch (error) {
-    console.error("Error getting projects:", error);
+    console.error('Error getting projects:', error);
     return res.status(500).json({
-      status: "server error",
-      error: "failed to get projects"
+      status: 'server error',
+      error: 'failed to get projects',
     });
   }
 };
@@ -54,27 +53,30 @@ export const getSingleProjectHandler = async (req: Request, res: Response) => {
 
     if (!project) {
       return res.status(404).json({
-        status: "not found",
-        error: "project not found",
+        status: 'not found',
+        error: 'project not found',
       });
     }
 
     if (project.userIds.includes(userId)) {
       return res.status(200).json({
-        status: "success",
+        status: 'success',
         project,
       });
     }
   } catch (error) {
-    console.error("Error getting project:", error);
+    console.error('Error getting project:', error);
     return res.status(500).json({
-      status: "server error",
-      error: "failed to get project",
+      status: 'server error',
+      error: 'failed to get project',
     });
   }
 };
 
-export const updateTitleProjectHandler = async (req: Request, res: Response) => {
+export const updateTitleProjectHandler = async (
+  req: Request,
+  res: Response,
+) => {
   try {
     const userId: string = returnUserIdFromToken(req);
     const projectId = req.params.projectId;
@@ -82,33 +84,31 @@ export const updateTitleProjectHandler = async (req: Request, res: Response) => 
 
     if (!project) {
       return res.status(404).json({
-        status: "not found",
-        error: "project not found",
+        status: 'not found',
+        error: 'project not found',
       });
     }
 
     if (project.userIds.includes(userId)) {
       const updatedProject = await updateProject(projectId, req.body);
       return res.status(200).json({
-          status: "success",
-          updatedProject,
+        status: 'success',
+        updatedProject,
       });
-    }
-    else {
+    } else {
       return res.status(500).json({
-        status: "server error",
-        error: "failed to get project",
+        status: 'server error',
+        error: 'failed to get project',
       });
     }
-
   } catch (error) {
-      console.error("Error updating project:", error);
-      return res.status(500).json({
-      status: "server error",
-      error: "failed to update project",
+    console.error('Error updating project:', error);
+    return res.status(500).json({
+      status: 'server error',
+      error: 'failed to update project',
     });
   }
-}
+};
 
 export const deleteProjectHandler = async (req: Request, res: Response) => {
   try {
@@ -119,31 +119,30 @@ export const deleteProjectHandler = async (req: Request, res: Response) => {
 
     if (!project) {
       return res.status(404).json({
-        status: "not found",
-        error: "project not found",
+        status: 'not found',
+        error: 'project not found',
       });
     }
 
     if (project.adminId === userId) {
       await deleteProject(projectId);
       return res.status(200).json({
-          status: "success",
+        status: 'success',
       });
-    }
-    else if(project.adminId !== userId) {
+    } else if (project.adminId !== userId) {
       return res.status(401).json({
-        status: "unauthorized",
-        error: "user is not authorized to delete project",
+        status: 'unauthorized',
+        error: 'user is not authorized to delete project',
       });
     }
   } catch (error) {
-    console.error("Error deleting project:", error);
+    console.error('Error deleting project:', error);
     return res.status(500).json({
-      status: "server error",
-      error: "failed to delete project",
+      status: 'server error',
+      error: 'failed to delete project',
     });
   }
-}
+};
 
 export const addUserAsMemberHandler = async (req: Request, res: Response) => {
     try {
@@ -184,7 +183,7 @@ export const addUserAsMemberHandler = async (req: Request, res: Response) => {
         error: "failed to add member to project",
         });
     }
-}
+};
 
 export const setAdmin = async (req: Request, res: Response) =>{
     try{
@@ -225,4 +224,4 @@ export const setAdmin = async (req: Request, res: Response) =>{
         error: "failed to set new admin",
         });
     }
-}
+};
