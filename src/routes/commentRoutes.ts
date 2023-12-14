@@ -1,3 +1,4 @@
+import express from 'express';
 import { commentSchema } from '../schemas';
 import { validate } from '../middleware/validate';
 import { validateAndAuthorizeToken } from '../middleware/jwt';
@@ -6,9 +7,7 @@ import {
   getAllCommentFromTicketHandler,
   updateCommentHandler,
   deleteCommentHandler,
-} from '../controllers/commentController';
-
-import express from 'express';
+} from '../controllers';
 
 const commentRouter = express.Router();
 
