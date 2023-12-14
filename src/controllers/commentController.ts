@@ -12,24 +12,24 @@ import { returnUserIdFromToken } from '../middleware/jwt';
 
 export const createCommentHandler = async (req: Request, res: Response) => {
   try {
-    const ticketId: string = req.params.ticketId;
-    const userId: string = returnUserIdFromToken(req);
-    const ticket = await findTicketbyId(ticketId);
     const comment: Comment = req.body;
 
-    if (ticket) {
-      const newCommentId = await createComment(comment, userId, ticketId);
-      ticket.commentIds.push(newCommentId);
-      return res.status(200).json({
-        status: 'success',
-        commentId: newCommentId,
-      });
-    } else {
+    const userId: string = returnUserIdFromToken(req);
+    const ticketId: string = req.params.ticketId;
+
+    const ticket = await findTicketbyId(ticketId);
+    if (!ticket) {
       return res.status(404).json({
         status: 'not found',
         error: 'ticket not found',
       });
     }
+    const newCommentId = await createComment(comment, userId, ticketId);
+
+    return res.status(200).json({
+      status: 'success',
+      newCommentId,
+    });
   } catch (error) {
     console.error('Error creating comment:', error);
     return res.status(500).json({
@@ -45,7 +45,7 @@ export const getAllCommentFromTicketHandler = async (
 ) => {
   try {
     const ticketId: string = req.params.ticketId;
-    const comments = findAllCommentsFromTicketId(ticketId);
+    const comments = await findAllCommentsFromTicketId(ticketId);
 
     if (!comments) {
       return res.status(404).json({
@@ -73,6 +73,8 @@ export const updateCommentHandler = async (req: Request, res: Response) => {
     const content = req.body.content;
     const commentId = req.params.commentId;
     const comment = await findCommentById(commentId);
+
+    console.log(req.body);
 
     if (!comment) {
       return res.status(404).json({

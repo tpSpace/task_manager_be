@@ -10,31 +10,31 @@ import {
 
 import express from 'express';
 
-const stageRouter = express.Router();
+const commentRouter = express.Router();
 
-stageRouter.post(
+commentRouter.post(
   '/create/:ticketId',
-  validate(commentSchema),
+  // validate(commentSchema),
   validateAndAuthorizeToken,
   createCommentHandler,
 );
 
-stageRouter.get(
+commentRouter.get(
   '/getComment/:ticketId',
   validateAndAuthorizeToken,
   getAllCommentFromTicketHandler,
 );
 
-stageRouter.put(
+commentRouter.put(
   '/updateComment/:commentId',
   validateAndAuthorizeToken,
   updateCommentHandler,
 );
 
-stageRouter.delete(
+commentRouter.delete(
   '/delete/:commentId',
   validateAndAuthorizeToken,
   deleteCommentHandler,
 );
 
-export default stageRouter;
+export default commentRouter;
