@@ -67,32 +67,39 @@ export const getAllCommentFromTicketHandler = async (
   }
 };
 
-// export const updateCommentHandler = async (req: Request, res: Response) => {
-//   try {
-//     const ticketId = req.params.ticketId;
-//     const content = req.body.content;
-//     const commentId = await
-//     const comment = await updateComment(projectId, title);
-//
-//     if (!project) {
-//       return res.status(404).json({
-//         status: 'not found',
-//         error: 'project not found',
-//       });
-//     }
-//
-//     return res.status(200).json({
-//       status: 'success',
-//       project,
-//     });
-//   } catch (error) {
-//     console.error('Error updating project:', error);
-//     return res.status(500).json({
-//       status: 'server error',
-//       error: 'failed to update project',
-//     });
-//   }
-// };
+export const updateCommentHandler = async (req: Request, res: Response) => {
+  try {
+    const userId: string = returnUserIdFromToken(req);
+    const content = req.body.content;
+    const commentId = req.params.commentId;
+    const comment = await findCommentById(commentId);
+
+    if (!comment) {
+      return res.status(404).json({
+        status: 'not found',
+        error: 'project not found',
+      });
+    }
+    if (userId === comment.authorId) {
+      const updatedComment = await updateComment(commentId, content);
+      return res.status(200).json({
+        status: 'success',
+        updatedComment,
+      });
+    } else {
+      return res.status(401).json({
+        status: 'unauthorized',
+        error: 'you are not authorized to edit this comment',
+      });
+    }
+  } catch (error) {
+    console.error('Error updating project:', error);
+    return res.status(500).json({
+      status: 'server error',
+      error: 'failed to update project',
+    });
+  }
+};
 
 export const deleteCommentHandler = async (req: Request, res: Response) => {
   try {
