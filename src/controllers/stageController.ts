@@ -13,7 +13,7 @@ import { StatusCode } from './abstraction';
 export const createStageHandler = async (req: Request, res: Response) => {
   try {
     const stage: Stage = req.body;
-    const projectId: string = req.params.projectId;
+    const ticketId: string = req.params.ticketId;
 
     const project = await findProjectById(projectId);
 
