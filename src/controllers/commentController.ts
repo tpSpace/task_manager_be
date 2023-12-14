@@ -5,6 +5,7 @@ import {
   findAllCommentsFromTicketId,
   deleteComment,
   updateComment,
+  findCommentById,
 } from '../services';
 import { findTicketbyId } from '../services/ticketService';
 import { returnUserIdFromToken } from '../middleware/jwt';
@@ -95,25 +96,28 @@ export const getAllCommentFromTicketHandler = async (
 
 export const deleteCommentHandler = async (req: Request, res: Response) => {
   try {
-    const projectId = req.params.projectId;
-    const project = await deleteComment(Id);
+    const userId: string = returnUserIdFromToken(req);
+    const commentId = req.params.commentId;
+    const comment = await findCommentById(commentId);
 
-    if (!project) {
+    if (!comment) {
       return res.status(404).json({
         status: 'not found',
-        error: 'project not found',
+        error: 'comment not found',
       });
     }
-
-    return res.status(200).json({
-      status: 'success',
-      project,
-    });
+    if (userId === comment.authorId) {
+      await deleteComment(commentId);
+      return res.status(200).json({
+        status: 'success',
+        message: 'comment deleted',
+      });
+    }
   } catch (error) {
-    console.error('Error deleting project:', error);
+    console.error('Error deleting comment:', error);
     return res.status(500).json({
       status: 'server error',
-      error: 'failed to delete project',
+      error: 'failed to delete comment',
     });
   }
 };

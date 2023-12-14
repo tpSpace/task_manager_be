@@ -26,13 +26,13 @@ stageRouter.get(
 );
 
 stageRouter.put(
-  '/updateComment/:tickerId',
+  '/updateComment/:commentId',
   validateAndAuthorizeToken,
   updateCommentHandler,
 );
 
 stageRouter.delete(
-  '/delete/:ticketId',
+  '/delete/:commentId',
   validateAndAuthorizeToken,
   deleteCommentHandler,
 );

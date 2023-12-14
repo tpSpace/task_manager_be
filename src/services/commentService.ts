@@ -26,3 +26,20 @@ export const findAllCommentsFromTicketId = async (ticketId: string) => {
   });
   return comments;
 };
+
+export const findCommentById = async (commentId: string) => {
+  const comment = await prisma.comment.findUnique({
+    where: {
+      commentId: commentId,
+    },
+  });
+  return comment;
+};
+
+export const deleteComment = async (commentId: string) => {
+  await prisma.comment.delete({
+    where: {
+      commentId: commentId,
+    },
+  });
+};
