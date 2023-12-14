@@ -86,7 +86,7 @@ export const updateStageHandler = async (req: Request, res: Response) => {
     const updatedStage = await updateStage(stageId, updatedTitle);
 
     return res.status(StatusCode.SUCCESS).json({
-      status: 'success'
+      status: 'success',
     });
   } catch (error) {
     console.error('Error updating stage:', error);

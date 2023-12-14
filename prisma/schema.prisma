@@ -28,8 +28,8 @@ model Project {
   title     String
   history   String[]
 
-  userIds String[] 
-  tagIds String[] 
+  userIds  String[]
+  tagIds   String[]
   stageIds String[]
 }
 
@@ -39,34 +39,33 @@ model Tag {
   priority Int
   colour   String?
 }
- 
+
 model Stage {
-  stageId String @id @default(auto()) @map("_id") @db.ObjectId
-  title   String
+  stageId   String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
   ticketIds String[]
 }
 
 model Ticket {
-  ticketId        String    @id @default(auto()) @map("_id") @db.ObjectId
+  ticketId        String   @id @default(auto()) @map("_id") @db.ObjectId
   title           String
   description     String
   creatorId       String
   assignedUserIds String[]
 
-  parentTicketId  String
-  childTickets    String[]
-  
-  deadline        DateTime
+  parentTicketId String
+  childTickets   String[]
 
-  tagId String
-  stageId String
-  commentIds  String[]
+  deadline DateTime
+
+  tagId      String
+  stageId    String
+  commentIds String[]
 }
-
-
 
 model Comment {
   commentId String @id @default(auto()) @map("_id") @db.ObjectId
   content   String
   authorId  String
+  ticketId  String
 }
