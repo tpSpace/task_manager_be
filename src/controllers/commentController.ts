@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Comment } from '../models';
 import {
   createComment,
-  findAllCommentsFromTicket,
+  findAllCommentsFromTicketId,
   deleteComment,
   updateComment,
 } from '../services';
@@ -16,8 +16,8 @@ export const createCommentHandler = async (req: Request, res: Response) => {
     const ticket = await findTicketbyId(ticketId);
     const comment: Comment = req.body;
 
-    const newCommentId = await createComment(comment, ticketId, userId);
     if (ticket) {
+      const newCommentId = await createComment(comment, userId, ticketId);
       ticket.commentIds.push(newCommentId);
       return res.status(200).json({
         status: 'success',
@@ -44,7 +44,7 @@ export const getAllCommentFromTicketHandler = async (
 ) => {
   try {
     const ticketId: string = req.params.ticketId;
-    const comments = await findAllCommentsFromTicket(ticketId);
+    const comments = findAllCommentsFromTicketId(ticketId);
 
     if (!comments) {
       return res.status(404).json({
