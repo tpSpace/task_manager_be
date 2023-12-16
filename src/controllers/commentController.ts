@@ -1,19 +1,18 @@
 import { Request, Response } from 'express';
-import { Comment } from '../models';
+import { Comment } from '../models/comment';
 import {
   createComment,
   findAllCommentsFromTicketId,
   deleteComment,
   updateComment,
   findCommentById,
-} from '../services';
+} from '../services/commentService';
 import { findTicketbyId } from '../services/ticketService';
 import { returnUserIdFromToken } from '../middleware/jwt';
 
 export const createCommentHandler = async (req: Request, res: Response) => {
   try {
     const comment: Comment = req.body;
-    console.log(comment);
 
     const userId: string = returnUserIdFromToken(req);
     const ticketId: string = req.params.ticketId;
@@ -70,12 +69,11 @@ export const getAllCommentFromTicketHandler = async (
 
 export const updateCommentHandler = async (req: Request, res: Response) => {
   try {
+    const content = req.body.comment;
     const userId: string = returnUserIdFromToken(req);
-    const content = req.body.content;
+
     const commentId = req.params.commentId;
     const comment = await findCommentById(commentId);
-
-    console.log(req.body);
 
     if (!comment) {
       return res.status(404).json({
@@ -87,7 +85,6 @@ export const updateCommentHandler = async (req: Request, res: Response) => {
       const updatedComment = await updateComment(commentId, content);
       return res.status(200).json({
         status: 'success',
-        updatedComment,
       });
     } else {
       return res.status(401).json({

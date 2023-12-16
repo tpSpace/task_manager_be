@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Stage, Project } from '../models';
+import { Stage } from '../models/stage';
 
 const prisma = new PrismaClient();
 
@@ -17,7 +17,7 @@ export const createStage = async (stage: Stage, projectId: string) => {
     data: {
       title: stage.title,
       ticketIds: [],
-    }
+    },
   });
 
   // Add stageId to project entity
@@ -38,11 +38,11 @@ export const findAllStageFromProjectId = async (projectId: string) => {
   const project = await prisma.project.findUnique({
     where: {
       projectId: projectId,
-    }
+    },
   });
   let stages: Stage[] = [];
   for (let stageId of project!.stageIds) {
-    stages.push(await findStageById(stageId) as Stage);
+    stages.push((await findStageById(stageId)) as Stage);
   }
 
   return stages;

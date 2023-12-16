@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Comment } from '../models';
+import { Comment } from '../models/comment';
 
 const prisma = new PrismaClient();
 

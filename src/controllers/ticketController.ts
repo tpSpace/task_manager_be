@@ -28,7 +28,7 @@ export const createTicketHandler = async (req: Request, res: Response) => {
     }
 
     const newTicket = await createTicket(ticket, stageId);
-    
+
     return res.status(200).json({
       status: 'success',
       newTicket,

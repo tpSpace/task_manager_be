@@ -1,5 +1,4 @@
 import express from 'express';
-import { commentSchema } from '../schemas';
 import { validate } from '../middleware/validate';
 import { validateAndAuthorizeToken } from '../middleware/jwt';
 import {
@@ -7,13 +6,14 @@ import {
   getAllCommentFromTicketHandler,
   updateCommentHandler,
   deleteCommentHandler,
-} from '../controllers';
+} from '../controllers/commentController';
+import { commentSchema } from '../schemas/commentSchema';
 
 const commentRouter = express.Router();
 
 commentRouter.post(
   '/create/:ticketId',
-  // validate(commentSchema),
+  validate(commentSchema),
   validateAndAuthorizeToken,
   createCommentHandler,
 );

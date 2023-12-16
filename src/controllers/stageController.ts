@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
-import { Stage } from '../models';
+import { Stage } from '../models/stage';
 import {
   createStage,
   findAllStageFromProjectId,
   findStageById,
   updateStage,
   deleteStage,
-  findProjectById,
-} from '../services';
+} from '../services/stageService';
+import { findProjectById } from '../services/projectService';
 import { StatusCode } from './abstraction';
 
 export const createStageHandler = async (req: Request, res: Response) => {

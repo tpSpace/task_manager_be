@@ -5,8 +5,9 @@ import {
   findUserById,
 } from '../services/userService';
 import { Request, Response } from 'express';
-import { generateJwtToken } from '../middleware/jwt';
+import { generateJwtToken, returnUserIdFromToken } from '../middleware/jwt';
 import { User } from '../models/user';
+import { get } from 'http';
 const bcrypt = import('bcrypt-ts');
 
 export const loginUserHandler = async (req: Request, res: Response) => {
@@ -81,7 +82,7 @@ export const registerUserHandler = async (req: Request, res: Response) => {
 
 export const getSingleUserHandler = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = returnUserIdFromToken(req);
     const user = await findUserById(id);
     return res.status(200).json({
       status: 'success',
