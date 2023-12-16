@@ -13,7 +13,7 @@ const commentRouter = express.Router();
 
 commentRouter.post(
   '/create/:ticketId',
-  // validate(commentSchema),
+  validate(commentSchema),
   validateAndAuthorizeToken,
   createCommentHandler,
 );

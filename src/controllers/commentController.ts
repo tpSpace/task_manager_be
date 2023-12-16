@@ -12,8 +12,8 @@ import { returnUserIdFromToken } from '../middleware/jwt';
 
 export const createCommentHandler = async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
     const comment: Comment = req.body;
-    console.log(comment);
 
     const userId: string = returnUserIdFromToken(req);
     const ticketId: string = req.params.ticketId;

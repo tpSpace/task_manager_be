@@ -16,7 +16,7 @@ authRouter.post('/register', validate(loginUserSchema), registerUserHandler);
 
 authRouter.get('/user/:id', validateAndAuthorizeToken, getSingleUserHandler);
 
-// Test authrourization end point, to be removed
+// Test authorization end point, to be removed
 authRouter.get('/test', validateAndAuthorizeToken, (req, res) =>
   res.send('Hello from secured endpoint!'),
 );
