@@ -17,10 +17,11 @@ model User {
   email     String    @unique
   name      String
   password  String
-  avatar    String
+  avatar    String?
   projectId String[]
   Comment   Comment[]
   Project   Project[]
+  Ticket    Ticket[]
 }
 
 model Stage {
@@ -37,15 +38,20 @@ model Tag {
   priority Int
   color    String
 
-  Project   Project @relation(fields: [projectId], references: [id])
-  projectId String  @db.ObjectId
+  Project   Project  @relation(fields: [projectId], references: [id])
+  projectId String   @db.ObjectId
+  Ticket    Ticket[]
 }
 
 model Comment {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  content  String
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  content String
+
   author   User   @relation(fields: [authorId], references: [id])
   authorId String @db.ObjectId
+
+  ticket   Ticket @relation(fields: [ticketId], references: [id])
+  ticketId String @db.ObjectId
 }
 
 model Project {
@@ -57,4 +63,22 @@ model Project {
   adminId String  @db.ObjectId
   Stage   Stage[]
   Tag     Tag[]
+}
+
+model Ticket {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  title            String
+  description      String
+  
+  assignUserId     String[]  
+  parentTicketId   String
+  childrenTicketId String[]
+  dealine          DateTime
+  comment          Comment[]
+
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String @db.ObjectId
+
+  tag   Tag    @relation(fields: [tagId], references: [id])
+  tagId String @db.ObjectId
 }

@@ -6,8 +6,43 @@ const userData: Prisma.UserCreateInput[] = [
   {
     email: 'admin1@gmail.com',
     password: 'MyP@ssw0rd!',
-    name: 'Admin 1',
+    name: 'liem',
     avatar: 'https://i.pravatar.cc/150?img=1',
+  },
+  {
+    email: 'lmao@gmail.com',
+    password: 'MyP@ssw0rd!',
+    name: 'JAck',
+    avatar: 'https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg',
+  },
+  {
+    email: 'murmur@gmail.com',
+    password: 'MyP@ssw0rd!',
+    name: 'Murmur',
+    avatar: 'https://images.unsplash.com/photo-1608848461950-0fe51dfc41cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D',
+  }
+];
+
+const projectData: Prisma.ProjectCreateInput[] = [
+  {
+    title: 'Project 1',
+    description: 'This is a project 1',
+    userId: 1,
+  },
+  {
+    title: 'Project 2',
+    description: 'This is a project 2',
+    userId: 1,
+  },
+  {
+    title: 'Project 3',
+    description: 'This is a project 3',
+    userId: 2,
+  },
+  {
+    title: 'Project 4',
+    description: 'This is a project 4',
+    userId: 3,
   },
 ];
 
@@ -17,7 +52,7 @@ async function main() {
     const user = await prisma.user.create({
       data: u,
     });
-    console.log(`Created user with id: ${user.userId}`);
+    console.log(`Created user with id: ${user.id}`);
   }
   console.log(`Seeding finished.`);
 }
