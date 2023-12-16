@@ -82,7 +82,7 @@ export const registerUserHandler = async (req: Request, res: Response) => {
 
 export const getSingleUserHandler = async (req: Request, res: Response) => {
   try {
-    const id = returnUserIdFromToken(req);
+    const id = req.params.userId;
     const user = await findUserById(id);
     return res.status(200).json({
       status: 'success',
