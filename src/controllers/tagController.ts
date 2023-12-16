@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { Tag } from '../models';
+import { Tag } from '../models/tag';
 import {
   createTag,
   getAllTagFromProjectId,
-  findProjectById,
-} from '../services';
+} from '../services/tagService';
+import { findProjectById } from '../services/projectService';
 import { StatusCode } from './abstraction';
 
 export const createTagHandler = async (req: Request, res: Response) => {

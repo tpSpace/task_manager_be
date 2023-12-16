@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Stage, Project } from '../models';
+import { Stage } from '../models/stage';
 
 const prisma = new PrismaClient();
 

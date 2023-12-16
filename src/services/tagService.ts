@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Tag } from "../models";
+import { Tag } from "../models/tag";
 
 const prisma = new PrismaClient();
 

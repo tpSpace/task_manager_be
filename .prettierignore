@@ -13,4 +13,11 @@ coverage/
 # Ignore all files in the .vscode directory
 .vscode/
 
+# Ignore package.json file
+package.json
 
+# Ignore tsconfig.json file
+tsconfig.json
+
+# Ignore yarn.lock file
+yarn.lock

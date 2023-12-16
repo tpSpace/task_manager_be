@@ -1,4 +1,3 @@
-import { Stage } from '.';
 export interface Ticket {
   ticketId: string;
   title: string;
@@ -12,7 +11,6 @@ export interface Ticket {
   deadline: Date;
 
   stageId: string;
-
   tagId: string;
   commentIds: string[];
 }

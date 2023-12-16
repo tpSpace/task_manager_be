@@ -10,7 +10,7 @@ import {
 } from '../services/projectService';
 import { addUserToProject } from '../services/projectService';
 import { returnUserIdFromToken } from '../middleware/jwt';
-import { findUserById } from '../services';
+import { findUserById } from '../services/userService';
 
 export const createProjectHandler = async (req: Request, res: Response) => {
   try {

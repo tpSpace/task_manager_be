@@ -1,19 +1,18 @@
 import { Request, Response } from 'express';
-import { Comment } from '../models';
+import { Comment } from '../models/comment';
 import {
   createComment,
   findAllCommentsFromTicketId,
   deleteComment,
   updateComment,
   findCommentById,
-} from '../services';
+} from '../services/commentService';
 import { findTicketbyId } from '../services/ticketService';
 import { returnUserIdFromToken } from '../middleware/jwt';
 
 export const createCommentHandler = async (req: Request, res: Response) => {
   try {
     const comment: Comment = req.body;
-    console.log(comment);
 
     const userId: string = returnUserIdFromToken(req);
     const ticketId: string = req.params.ticketId;

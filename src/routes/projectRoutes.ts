@@ -1,6 +1,6 @@
 import express from 'express';
 import { validate } from '../middleware/validate';
-import { projectSchema } from '../schemas';
+import { projectSchema } from '../schemas/projectSchema';
 import { validateAndAuthorizeToken } from '../middleware/jwt';
 import {
   createProjectHandler,
@@ -10,7 +10,7 @@ import {
   deleteProjectHandler,
   addMemberHandler,
   setAdminHandler,
-} from '../controllers';
+} from '../controllers/projectController';
 
 const projectRouter = express.Router();
 

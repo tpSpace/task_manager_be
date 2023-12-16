@@ -1,4 +1,4 @@
-import { stageSchema } from '../schemas';
+import { stageSchema } from '../schemas/stageSchema';
 import { validate } from '../middleware/validate';
 import { validateAndAuthorizeToken } from '../middleware/jwt';
 import {
@@ -6,7 +6,7 @@ import {
   getAllStageFromProjectHandler,
   updateStageHandler,
   deleteStageHandler,
-} from '../controllers';
+} from '../controllers/stageController';
 
 import express from 'express';
 
