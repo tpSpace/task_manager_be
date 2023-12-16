@@ -23,29 +23,6 @@ const userData: Prisma.UserCreateInput[] = [
   }
 ];
 
-const projectData: Prisma.ProjectCreateInput[] = [
-  {
-    title: 'Project 1',
-    description: 'This is a project 1',
-    userId: 1,
-  },
-  {
-    title: 'Project 2',
-    description: 'This is a project 2',
-    userId: 1,
-  },
-  {
-    title: 'Project 3',
-    description: 'This is a project 3',
-    userId: 2,
-  },
-  {
-    title: 'Project 4',
-    description: 'This is a project 4',
-    userId: 3,
-  },
-];
-
 async function main() {
   console.log(`Start seeding ...`);
   for (const u of userData) {

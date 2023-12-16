@@ -30,6 +30,8 @@ model Stage {
 
   Project   Project @relation(fields: [projectId], references: [id])
   projectId String  @db.ObjectId
+
+  Ticket Ticket[]
 }
 
 model Tag {
@@ -58,7 +60,8 @@ model Project {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
   title   String
   history String[]
-
+  avatar  String?
+  
   admin   User    @relation(fields: [adminId], references: [id])
   adminId String  @db.ObjectId
   Stage   Stage[]
@@ -79,6 +82,9 @@ model Ticket {
   author   User   @relation(fields: [authorId], references: [id])
   authorId String @db.ObjectId
 
-  tag   Tag    @relation(fields: [tagId], references: [id])
-  tagId String @db.ObjectId
+  tag   Tag       @relation(fields: [tagId], references: [id])
+  tagId String    @db.ObjectId
+
+  stage   Stage   @relation(fields: [stageId], references: [id])
+  stageId String  @db.ObjectId
 }
