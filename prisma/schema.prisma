@@ -13,59 +13,48 @@ datasource db {
 }
 
 model User {
-  userId   String  @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  email    String  @unique
-  avatar   String?
-  password String
-
-  projectIds String[]
-}
-
-model Project {
-  projectId String   @id @default(auto()) @map("_id") @db.ObjectId
-  adminId   String
-  title     String
-  history   String[]
-
-  userIds  String[]
-  tagIds   String[]
-  stageIds String[]
-}
-
-model Tag {
-  tagId    String  @id @default(auto()) @map("_id") @db.ObjectId
-  title    String
-  priority Int
-  colour   String?
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  email     String    @unique
+  name      String
+  password  String
+  avatar    String
+  projectId String[]
+  Comment   Comment[]
+  Project   Project[]
 }
 
 model Stage {
-  stageId   String   @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  ticketIds String[]
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+
+  Project   Project @relation(fields: [projectId], references: [id])
+  projectId String  @db.ObjectId
 }
 
-model Ticket {
-  ticketId        String   @id @default(auto()) @map("_id") @db.ObjectId
-  title           String
-  description     String
-  creatorId       String
-  assignedUserIds String[]
+model Tag {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  title    String
+  priority Int
+  color    String
 
-  parentTicketId String
-  childTickets   String[]
-
-  deadline DateTime
-
-  tagId      String
-  stageId    String
-  commentIds String[]
+  Project   Project @relation(fields: [projectId], references: [id])
+  projectId String  @db.ObjectId
 }
 
 model Comment {
-  commentId String @id @default(auto()) @map("_id") @db.ObjectId
-  content   String
-  authorId  String
-  ticketId  String
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  content  String
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String @db.ObjectId
+}
+
+model Project {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  title   String
+  history String[]
+
+  admin   User    @relation(fields: [adminId], references: [id])
+  adminId String  @db.ObjectId
+  Stage   Stage[]
+  Tag     Tag[]
 }
