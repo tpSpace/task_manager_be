@@ -24,7 +24,12 @@ tagRouter.get(
   getTagFromProjectHandler,
 );
 
-tagRouter.put('/update/:tagId', validateAndAuthorizeToken, updateTagHandler);
+tagRouter.put(
+  '/update/:tagId',
+  validate(TagSchema),
+  validateAndAuthorizeToken, 
+  updateTagHandler
+);
 
 tagRouter.delete('/delete/:tagId', validateAndAuthorizeToken, deleteTagHandler);
 
