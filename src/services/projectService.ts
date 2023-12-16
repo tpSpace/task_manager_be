@@ -112,3 +112,14 @@ export const deleteProject = async (projectId: string) => {
     },
   });
 };
+
+export const findProjectByTagId = async (tagId: string) => {
+  const project = await prisma.project.findFirst({
+    where: {
+      tagIds: {
+        has: tagId,
+      },
+    },
+  });
+  return project;
+};

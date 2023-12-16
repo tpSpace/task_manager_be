@@ -7,7 +7,10 @@ import {
   updateTag,
   deleteTag,
 } from '../services/tagService';
-import { findProjectById } from '../services/projectService';
+import {
+  findProjectById,
+  findProjectByTagId,
+} from '../services/projectService';
 import { StatusCode } from './abstraction';
 import { returnUserIdFromToken } from '../middleware/jwt';
 
@@ -69,10 +72,9 @@ export const getTagFromProjectHandler = async (req: Request, res: Response) => {
 export const updateTagHandler = async (req: Request, res: Response) => {
   try {
     const userId = returnUserIdFromToken(req);
-    const projectId = req.params.projectId;
     const tagId = req.params.tagId;
-    const project = await findProjectById(projectId);
     const tag = await findTagById(tagId);
+    const project = await findProjectByTagId(tagId);
 
     if (!project) {
       return res.status(StatusCode.NOTFOUND).json({
@@ -108,10 +110,9 @@ export const updateTagHandler = async (req: Request, res: Response) => {
 export const deleteTagHandler = async (req: Request, res: Response) => {
   try {
     const userId = returnUserIdFromToken(req);
-    const projectId = req.params.projectId;
     const tagId = req.params.tagId;
-    const project = await findProjectById(projectId);
     const tag = await findTagById(tagId);
+    const project = await findProjectByTagId(tagId);
 
     if (!project) {
       return res.status(StatusCode.NOTFOUND).json({
