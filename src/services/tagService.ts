@@ -47,3 +47,24 @@ export const getAllTagFromProjectId = async (projectId: string) => {
 
   return tags;
 };
+
+export const updateTag = async (tagId: string, tag: Tag) => {
+  await prisma.tag.update({
+    where: {
+      tagId: tagId,
+    },
+    data: {
+      title: tag.title,
+      priority: tag.priority,
+      colour: tag.colour,
+    },
+  });
+};
+
+export const deleteTag = async (tagId: string) => {
+  await prisma.tag.delete({
+    where: {
+      tagId: tagId,
+    },
+  });
+};

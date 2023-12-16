@@ -2,6 +2,8 @@ import express from 'express';
 import {
   createTagHandler,
   getTagFromProjectHandler,
+  updateTagHandler,
+  deleteTagHandler,
 } from '../controllers/tagController';
 import { validateAndAuthorizeToken } from '../middleware/jwt';
 import { validate } from '../middleware/validate';
@@ -21,5 +23,14 @@ tagRouter.get(
   validateAndAuthorizeToken,
   getTagFromProjectHandler,
 );
+
+tagRouter.put(
+  '/update/:tagId',
+  validate(TagSchema),
+  validateAndAuthorizeToken, 
+  updateTagHandler
+);
+
+tagRouter.delete('/delete/:tagId', validateAndAuthorizeToken, deleteTagHandler);
 
 export default tagRouter;
