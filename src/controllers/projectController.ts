@@ -36,7 +36,7 @@ export const getAllProjectHandler = async (req: Request, res: Response) => {
   try {
     const userId: string = returnUserIdFromToken(req);
     const projects = await findProjectByUserId(userId);
-    
+
     if (projects.length === 0) {
       return res.status(404).json({
         status: 'not found',
@@ -171,15 +171,15 @@ export const addMemberHandler = async (req: Request, res: Response) => {
         status: 'not found',
         error: 'user not found',
       });
-    } 
+    }
 
     if (!project) {
       return res.status(404).json({
         status: 'not found',
         error: 'project not found',
       });
-    } 
-    
+    }
+
     if (project.userIds.includes(newUserId)) {
       return res.status(409).json({
         status: 'error',
@@ -229,15 +229,15 @@ export const setAdminHandler = async (req: Request, res: Response) => {
         status: 'not found',
         error: 'project not found',
       });
-    } 
-    
+    }
+
     if (!project.userIds.includes(userId)) {
       return res.status(401).json({
         status: 'unauthorized',
         error: 'user is not a member of this project',
       });
-    } 
-    
+    }
+
     if (newAdminId === project.adminId) {
       return res.status(400).json({
         status: 'error',

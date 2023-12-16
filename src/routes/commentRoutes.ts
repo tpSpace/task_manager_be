@@ -7,12 +7,13 @@ import {
   updateCommentHandler,
   deleteCommentHandler,
 } from '../controllers/commentController';
+import { commentSchema } from '../schemas/commentSchema';
 
 const commentRouter = express.Router();
 
 commentRouter.post(
   '/create/:ticketId',
-  // validate(commentSchema),
+  validate(commentSchema),
   validateAndAuthorizeToken,
   createCommentHandler,
 );

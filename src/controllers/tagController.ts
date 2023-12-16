@@ -1,9 +1,6 @@
 import { Request, Response } from 'express';
 import { Tag } from '../models/tag';
-import {
-  createTag,
-  getAllTagFromProjectId,
-} from '../services/tagService';
+import { createTag, getAllTagFromProjectId } from '../services/tagService';
 import { findProjectById } from '../services/projectService';
 import { StatusCode } from './abstraction';
 

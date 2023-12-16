@@ -3,7 +3,7 @@ import { Ticket } from '../models/ticket';
 import { nullable } from 'zod';
 
 const prisma = new PrismaClient();
- 
+
 export const createTicket = async (ticket: Ticket, stageId: string) => {
   if (!ticket.parentTicketId) ticket.parentTicketId = '';
   if (!ticket.childTickets) ticket.childTickets = [];
@@ -43,16 +43,16 @@ export const createTicket = async (ticket: Ticket, stageId: string) => {
   if (ticket.parentTicketId)
     addChildTicket(ticket.parentTicketId, createdTicket.ticketId);
 
-  if (ticket.childTickets){
-    for(const childTicketId of ticket.childTickets){
+  if (ticket.childTickets) {
+    for (const childTicketId of ticket.childTickets) {
       const childTicket = await prisma.ticket.findFirst({
         where: {
-          ticketId: childTicketId
-        }
-      })
-      if(childTicket)
-        await deleteChildTicket(childTicket.parentTicketId,childTicketId)
-      addParentTicket(createdTicket.ticketId, childTicketId)
+          ticketId: childTicketId,
+        },
+      });
+      if (childTicket)
+        await deleteChildTicket(childTicket.parentTicketId, childTicketId);
+      addParentTicket(createdTicket.ticketId, childTicketId);
     }
   }
 
@@ -127,18 +127,16 @@ export const updateTicket = async (
     },
   });
 
-  
-  if(updatedTicket.childTickets !== oldTicket?.childTickets){
-      deleteParentTicketId(inputTicketId)
-      for(const childTicketId of updatedTicket.childTickets)
-        addParentTicket(updatedTicket.ticketId,childTicketId)
+  if (updatedTicket.childTickets !== oldTicket?.childTickets) {
+    deleteParentTicketId(inputTicketId);
+    for (const childTicketId of updatedTicket.childTickets)
+      addParentTicket(updatedTicket.ticketId, childTicketId);
   }
 
   if (updatedTicket.parentTicketId !== oldTicket?.parentTicketId) {
-    if (!oldTicket?.parentTicketId){
-      addChildTicket(updatedTicket.parentTicketId, inputTicketId); 
-    }
-    else if (oldTicket?.parentTicketId) {
+    if (!oldTicket?.parentTicketId) {
+      addChildTicket(updatedTicket.parentTicketId, inputTicketId);
+    } else if (oldTicket?.parentTicketId) {
       deleteChildTicket(oldTicket.parentTicketId, inputTicketId);
       addChildTicket(updatedTicket.parentTicketId, inputTicketId);
     }
@@ -157,8 +155,8 @@ export const deleteTicket = async (ticketId: string) => {
     deleteChildTicket(deletedTicket.parentTicketId, ticketId);
   }
 
-  if(deletedTicket.childTickets){
-    deleteParentTicketId(ticketId)
+  if (deletedTicket.childTickets) {
+    deleteParentTicketId(ticketId);
   }
   const stage = await prisma.stage.findFirst({
     select: {
@@ -209,18 +207,18 @@ export const addParentTicket = async (parentId: string, childId: string) => {
       ticketId: childId,
     },
     data: {
-      parentTicketId: parentId
+      parentTicketId: parentId,
     },
   });
 };
 
-//to remove childTicketId when a child ticket is deleted 
+//to remove childTicketId when a child ticket is deleted
 export const deleteChildTicket = async (parentId: string, childId: string) => {
   const parentTicket = await prisma.ticket.findFirst({
     select: {
       childTickets: true,
     },
-    where: { 
+    where: {
       ticketId: parentId,
     },
   });
@@ -243,11 +241,11 @@ export const deleteChildTicket = async (parentId: string, childId: string) => {
 //to remove parentTicketId of children ticket when a ticket is deleted
 export const deleteParentTicketId = async (parentId: string) => {
   return await prisma.ticket.updateMany({
-    where:{
-      parentTicketId: parentId
+    where: {
+      parentTicketId: parentId,
     },
-    data:{
-      parentTicketId: ""
-    }
-  })
-}
+    data: {
+      parentTicketId: '',
+    },
+  });
+};

@@ -22,14 +22,14 @@ router.post(
 
 router.get(
   '/get/project/:projectId',
-  validateAndAuthorizeToken,  
-  getAllTicketbyProjectIdHandler
+  validateAndAuthorizeToken,
+  getAllTicketbyProjectIdHandler,
 );
 
 router.get(
-  '/get/stage/:stageId', 
-  validateAndAuthorizeToken,  
-  getAllTicketbyStageIdHandler
+  '/get/stage/:stageId',
+  validateAndAuthorizeToken,
+  getAllTicketbyStageIdHandler,
 );
 
 router.put(

@@ -69,12 +69,11 @@ export const getAllCommentFromTicketHandler = async (
 
 export const updateCommentHandler = async (req: Request, res: Response) => {
   try {
+    const content = req.body.comment;
     const userId: string = returnUserIdFromToken(req);
-    const content = req.body.content;
+
     const commentId = req.params.commentId;
     const comment = await findCommentById(commentId);
-
-    console.log(req.body);
 
     if (!comment) {
       return res.status(404).json({
@@ -86,7 +85,6 @@ export const updateCommentHandler = async (req: Request, res: Response) => {
       const updatedComment = await updateComment(commentId, content);
       return res.status(200).json({
         status: 'success',
-        updatedComment,
       });
     } else {
       return res.status(401).json({

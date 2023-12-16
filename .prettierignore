@@ -21,3 +21,5 @@ tsconfig.json
 
 # Ignore yarn.lock file
 yarn.lock
+# Ignore .prettierrc file
+.prettierrc

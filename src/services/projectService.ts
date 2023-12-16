@@ -23,7 +23,7 @@ export const createProject = async (project: Project) => {
       userIds: userIds,
       history: [],
       tagIds: [],
-      stageIds: [],      
+      stageIds: [],
     },
   });
 
@@ -37,7 +37,7 @@ export const createProject = async (project: Project) => {
         push: createdProject.projectId,
       },
     },
-  })
+  });
   return createdProject.projectId;
 };
 
@@ -53,7 +53,10 @@ export const findProjectByUserId = async (inputUserId: string) => {
   return projects;
 };
 
-export const updateProjectTitle = async (projectId: string, project: Project) => {
+export const updateProjectTitle = async (
+  projectId: string,
+  project: Project,
+) => {
   await prisma.project.update({
     where: {
       projectId: projectId,
