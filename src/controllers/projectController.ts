@@ -160,7 +160,7 @@ export const addMemberHandler = async (req: Request, res: Response) => {
   try {
     const userId: string = returnUserIdFromToken(req);
 
-    const newUserId: string = req.body.userId;
+    const newUserId: string = req.params.userId;
     const newMember = await findUserById(newUserId);
 
     const projectId = req.params.projectId;
