@@ -19,7 +19,7 @@ tagRouter.post(
 );
 
 tagRouter.get(
-  '/get/:projectId',
+  '/get/project/:projectId',
   validateAndAuthorizeToken,
   getTagFromProjectHandler,
 );

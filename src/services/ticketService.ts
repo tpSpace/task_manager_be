@@ -56,7 +56,7 @@ export const createTicket = async (ticket: Ticket, stageId: string) => {
     }
   }
 
-  return createdTicket;
+  return createdTicket.ticketId;
 };
 
 export const findTicketbyId = async (ticketId: string) => {
