@@ -43,7 +43,7 @@ projectRouter.delete(
 );
 
 projectRouter.post(
-  '/addMember/:projectId',
+  '/addMember/:projectId/:userId',
   validateAndAuthorizeToken,
   addMemberHandler,
 );
