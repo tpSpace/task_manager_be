@@ -27,11 +27,11 @@ export const createTicketHandler = async (req: Request, res: Response) => {
       });
     }
 
-    const newTicket = await createTicket(ticket, stageId);
+    const ticketId = await createTicket(ticket, stageId);
 
     return res.status(200).json({
       status: 'success',
-      newTicket,
+      ticketId,
     });
   } catch (error) {
     console.log('error creating ticket: ', error);

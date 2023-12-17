@@ -54,11 +54,11 @@ export const getTagFromProjectHandler = async (req: Request, res: Response) => {
       });
     }
 
-    const tag = await getAllTagFromProjectId(projectId);
+    const tags = await getAllTagFromProjectId(projectId);
 
     return res.status(StatusCode.SUCCESS).json({
       status: 'success',
-      tag,
+      tags,
     });
   } catch (error) {
     console.error('Error getting tag:', error);

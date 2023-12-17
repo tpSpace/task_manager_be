@@ -2,7 +2,6 @@ import request from 'supertest';
 import { expect } from 'chai';
 import app from '../../../src/index';
 
-//TO DO
 describe('Register and Login a new user', () => {
   it('should register a new user', async function() {
     this.timeout(10000);
