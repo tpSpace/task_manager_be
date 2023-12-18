@@ -3,8 +3,11 @@ name: Integration Test
 on:
   pull_request:
     branches:
-      - main # Change this to your main branch name if it's different
-
+      - main
+  push:
+    branches:
+      - main
+  
 jobs:
   integration-test:
     runs-on: ubuntu-latest
