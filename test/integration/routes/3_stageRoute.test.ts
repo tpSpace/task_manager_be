@@ -3,18 +3,16 @@ import { expect } from 'chai';
 import app from '../../../src/index';
 
 describe('Create and View all Stages', function () {
-  this.timeout(5000); 
+  this.timeout(5000);
 
   let token: string;
   let projectId: string;
 
   before(async function () {
-    const response = await request(app)
-      .post('/auth/login')
-      .send({
-        email: 'testuser@gmail.com',
-        password: 'Testp@ssword1!',
-      });
+    const response = await request(app).post('/auth/login').send({
+      email: 'testuser@gmail.com',
+      password: 'Testp@ssword1!',
+    });
 
     token = response.body.token;
 
@@ -28,7 +26,7 @@ describe('Create and View all Stages', function () {
     projectId = projectResponse.body.projectId;
   });
 
-  it('should create a new Stage', async function() {
+  it('should create a new Stage', async function () {
     const response = await request(app)
       .post(`/stages/create/${projectId}`)
       .set('Authorization', `Bearer ${token}`)
@@ -38,10 +36,10 @@ describe('Create and View all Stages', function () {
 
     expect(response.status).to.equal(200);
     expect(response.body).to.have.property('status', 'success');
-    expect(response.body).to.have.property('stageId'); 
+    expect(response.body).to.have.property('stageId');
   });
 
-  it('should get all stages from a project', async function() {
+  it('should get all stages from a project', async function () {
     const response = await request(app)
       .get(`/stages/get/project/${projectId}`)
       .set('Authorization', `Bearer ${token}`);

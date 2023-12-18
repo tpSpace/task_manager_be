@@ -2,7 +2,7 @@ import request from 'supertest';
 import { expect } from 'chai';
 import { PrismaClient } from '@prisma/client';
 
-import app from '../../src/index'; 
+import app from '../../src/index';
 import dotenv from 'dotenv';
 const prisma = new PrismaClient();
 
@@ -30,7 +30,9 @@ describe('Config', () => {
 
   it('All .env files are set up correctly', () => {
     const requiredEnvVariables = ['DATABASE_URL', 'PORT', 'SECRET_KEY'];
-    const missingEnvVariables = requiredEnvVariables.filter((envVariable) => !process.env[envVariable]);
+    const missingEnvVariables = requiredEnvVariables.filter(
+      (envVariable) => !process.env[envVariable],
+    );
 
     expect(missingEnvVariables).to.deep.equal([]); // If the array is empty, all required env variables are set up correctly
   });
