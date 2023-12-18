@@ -63,6 +63,7 @@ export const getSingleProjectHandler = async (req: Request, res: Response) => {
     const projectId = req.params.projectId;
     const project = await findProjectById(projectId);
 
+    
     if (!project) {
       return res.status(404).json({
         status: 'not found',
@@ -70,12 +71,11 @@ export const getSingleProjectHandler = async (req: Request, res: Response) => {
       });
     }
 
-    if (project.userIds.includes(userId)) {
-      return res.status(200).json({
-        status: 'success',
-        project,
-      });
-    }
+    return res.status(200).json({
+      status: 'success',
+      project,
+    });
+    
   } catch (error) {
     console.error('Error getting project:', error);
     return res.status(500).json({
