@@ -6,6 +6,7 @@ describe('Create and View a Project', function () {
   this.timeout(10000);
 
   let token: string;
+  let projectId: string;
 
   before(async function () {
     const response = await request(app).post('/auth/login').send({
@@ -28,6 +29,8 @@ describe('Create and View a Project', function () {
     expect(response.status).to.equal(200);
     expect(response.body).to.have.property('status', 'success');
     expect(response.body).to.have.property('projectId');
+
+    projectId = response.body.projectId;
   });
 
   it('should view all of the user projects', async function () {
@@ -38,5 +41,15 @@ describe('Create and View a Project', function () {
     expect(response.status).to.equal(200);
     expect(response.body).to.have.property('status', 'success');
     expect(response.body).to.have.property('projects');
+  });
+
+  it('should view a single project', async function () {
+    const response = await request(app)
+      .get(`/projects/get/${projectId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).to.equal(200);
+    expect(response.body).to.have.property('status', 'success');
+    expect(response.body).to.have.property('project');
   });
 });
