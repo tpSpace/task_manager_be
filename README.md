@@ -25,6 +25,7 @@ yarn prettier --write "src/**/*.ts"
 ```bash
 docker build -t tasking .
 ```
+hello 
 
 ### Build Container
 
