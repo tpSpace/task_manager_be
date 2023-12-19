@@ -27,6 +27,13 @@ router.get(
 );
 
 router.get(
+  '/get/ticket/:ticketId',
+  validateAndAuthorizeToken,
+  getSingleTicketHandler,
+);
+
+
+router.get(
   '/get/stage/:stageId',
   validateAndAuthorizeToken,
   getAllTicketbyStageIdHandler,
