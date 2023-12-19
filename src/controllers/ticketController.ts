@@ -137,7 +137,7 @@ export const getAllRelationshipsHandler = async (req: Request, res: Response) =>
     const ticketRelationship = await findRelationships(ticketId);
 
     if (!ticketRelationship){
-      return res.status(404).json({
+      return res.status(405).json({
         status: 'not found',
         error: 'relationship not found',
       });
