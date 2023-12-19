@@ -32,6 +32,40 @@ export const createProjectHandler = async (req: Request, res: Response) => {
   }
 };
 
+export const joinProjectHandler = async (req: Request, res: Response) => {
+  try {
+    const userId: string = returnUserIdFromToken(req);
+    const projectId = req.params.projectId;
+    const project = await findProjectById(projectId);
+
+    if (!project) {
+      return res.status(404).json({
+        status: 'not found',
+        error: 'project not found',
+      });
+    }
+
+    if (project.userIds.includes(userId)) {
+      return res.status(409).json({
+        status: 'error',
+        error: 'user already in project',
+      });
+    }
+
+    await addUserToProject(projectId, userId);
+
+    return res.status(200).json({
+      status: 'success',
+    });
+  } catch (error) {
+    console.error('Error joining project:', error);
+    return res.status(500).json({
+      status: 'server error',
+      error: 'failed to join project',
+    });
+  }
+};
+
 export const getAllProjectHandler = async (req: Request, res: Response) => {
   try {
     const userId: string = returnUserIdFromToken(req);
