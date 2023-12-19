@@ -20,11 +20,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 14
+          
+      - name: Install Yarn
+        run: npm install -g yarn
 
       - name: Install Dependencies
-        run: |
-          yarn install
+        run: yarn install
 
       - name: Run Integration Test
-        run: |
-          yarn run integration-test
+        run: yarn run integration-test
