@@ -151,7 +151,7 @@ export const getAllRelationshipsHandler = async (req: Request, res: Response) =>
     console.error('error getting tickets:', error);
     return res.status(500).json({
       status: 'server error',
-      error: 'failed to get ticket',
+      error: 'failed to get ticket relationships',
     });
   }
 };
