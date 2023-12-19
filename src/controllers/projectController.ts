@@ -71,6 +71,13 @@ export const getSingleProjectHandler = async (req: Request, res: Response) => {
       });
     }
 
+    if (!project.userIds.includes(userId)){
+      return res.status(403).json({
+        status: 'forriben',
+        error: 'user is not part of project',
+      });
+    }
+
     return res.status(200).json({
       status: 'success',
       project,
