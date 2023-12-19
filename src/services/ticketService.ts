@@ -68,6 +68,36 @@ export const findTicketbyId = async (ticketId: string) => {
   return ticket;
 };
 
+export const findRelationships = async (ticketId: string) => {
+  const ticket = await prisma.ticket.findFirst({
+    where: {
+      ticketId: ticketId,
+    },
+  });
+  if (!ticket) return;
+
+  const parentTicket = await prisma.ticket.findFirst({
+    where: {
+      ticketId: ticket.parentTicketId,
+    },
+  });
+
+  const childTickets: Ticket[] = [];
+  for (const childTicketId of ticket.childTickets) {
+    const childTicket = await prisma.ticket.findFirst({
+      where: {
+        ticketId: childTicketId,
+      },
+    });
+    if (childTicket) childTickets.push(childTicket);
+  }
+
+  return {
+    parentTicket,
+    childTickets,
+  };
+};
+
 export const findAllTicketbyProjectId = async (inputProjectId: string) => {
   const project = await prisma.project.findUnique({
     where: {

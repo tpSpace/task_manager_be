@@ -7,9 +7,9 @@ import {
   findTicketbyStageId,
   updateTicket,
   deleteTicket,
+  findRelationships,
 } from '../services/ticketService';
 import { returnUserIdFromToken } from '../middleware/jwt';
-import { Stage } from '../models/stage';
 import { findStageById } from '../services/stageService';
 
 export const createTicketHandler = async (req: Request, res: Response) => {
@@ -112,6 +112,40 @@ export const getAllTicketbyStageIdHandler = async (
     return res.status(200).json({
       status: 'success',
       tickets,
+    });
+  } catch (error) {
+    console.error('error getting tickets:', error);
+    return res.status(500).json({
+      status: 'server error',
+      error: 'failed to get ticket',
+    });
+  }
+};
+
+export const getAllRelationshipsHandler = async (req: Request, res: Response) => {
+  try {
+    const ticketId = req.params.ticketId;
+    const ticket = await findTicketbyId(ticketId);
+
+    if (!ticket) {
+      return res.status(404).json({
+        status: 'not found',
+        error: 'ticket not found',
+      });
+    }
+
+    const ticketRelationship = await findRelationships(ticketId);
+
+    if (!ticketRelationship){
+      return res.status(404).json({
+        status: 'not found',
+        error: 'relationship not found',
+      });
+    }
+
+    return res.status(200).json({
+      status: 'success',
+      ticketRelationship,
     });
   } catch (error) {
     console.error('error getting tickets:', error);
