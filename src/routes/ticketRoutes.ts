@@ -33,7 +33,6 @@ router.get(
   getSingleTicketHandler,
 );
 
-
 router.get(
   '/get/stage/:stageId',
   validateAndAuthorizeToken,

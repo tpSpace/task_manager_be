@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { Ticket } from '../models/ticket';
-import { nullable } from 'zod';
+import { findStageById } from './stageService';
+import { findTagById } from './tagService';
+import { findAllCommentsByTicketId } from './commentService';
 
 const prisma = new PrismaClient();
 
@@ -76,17 +78,12 @@ export const findRelationships = async (ticketId: string) => {
   });
   if (!ticket) return;
 
-  let parentTicket
-  if(ticket.parentTicketId === ""){
-    parentTicket = undefined
-  }
-  else {
-    parentTicket = await prisma.ticket.findFirst({
-        where: {
-          ticketId: ticket.parentTicketId,
-        },
-      });
-  }
+  const parentTicket = await prisma.ticket.findFirst({
+    where: {
+      ticketId: ticket.parentTicketId,
+    },
+  });
+
   const childTickets: Ticket[] = [];
   for (const childTicketId of ticket.childTickets) {
     const childTicket = await prisma.ticket.findFirst({
@@ -96,10 +93,6 @@ export const findRelationships = async (ticketId: string) => {
     });
     if (childTicket) childTickets.push(childTicket);
   }
-
-  if (parentTicket === undefined 
-    && childTickets.length === 0)
-  return
 
   return {
     parentTicket,
@@ -287,4 +280,30 @@ export const deleteParentTicketId = async (parentId: string) => {
       parentTicketId: '',
     },
   });
+};
+
+export const findAllAttributesOfTicket = async (ticketId: string) => {
+  const ticket = await findTicketbyId(ticketId);
+  let stage = null;
+  let tag = null;
+  let comments: any = [];
+
+  if (ticket!.stageId){
+    stage = await findStageById(ticket!.stageId);
+  }
+
+  if (ticket!.tagId){
+    tag = await findTagById(ticket!.tagId);
+  }
+
+  if (ticket!.commentIds){
+    comments = await findAllCommentsByTicketId(ticketId);
+  }
+
+  return {
+    ...ticket,
+    stage,
+    tag,
+    comments,
+  };
 };
