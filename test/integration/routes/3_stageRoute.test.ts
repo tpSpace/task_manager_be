@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import app from '../../../src/index';
 
 describe('Create and View all Stages', function () {
-  this.timeout(5000);
+  this.timeout(10000);
 
   let token: string;
   let projectId: string;

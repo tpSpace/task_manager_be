@@ -2,7 +2,7 @@ import request from 'supertest';
 import { expect } from 'chai';
 import app from '../../../src/index';
 
-describe('Create and View all Stages', function () {
+describe('Create and View all Tags', function () {
   this.timeout(10000);
 
   let token: string;
