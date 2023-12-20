@@ -7,6 +7,7 @@ import {
   deleteProject,
   updateProjectTitle,
   updateProjectAdmin,
+  removeUserFromProject,
 } from '../services/projectService';
 import { addUserToProject } from '../services/projectService';
 import { returnUserIdFromToken } from '../middleware/jwt';
@@ -62,6 +63,47 @@ export const joinProjectHandler = async (req: Request, res: Response) => {
     return res.status(500).json({
       status: 'server error',
       error: 'failed to join project',
+    });
+  }
+};
+
+export const leaveProjectHandler = async (req: Request, res: Response) => {
+  try {
+    const userId: string = returnUserIdFromToken(req);
+    const projectId = req.params.projectId;
+    const project = await findProjectById(projectId);
+
+    if (!project) {
+      return res.status(404).json({
+        status: 'not found',
+        error: 'project not found',
+      });
+    }
+
+    if (!project.userIds.includes(userId)) {
+      return res.status(409).json({
+        status: 'error',
+        error: 'user is not in project',
+      });
+    }
+
+    if(project.adminId === userId){
+      return res.status(408).json({
+        status: 'error',
+        error: 'user is admin of project',
+      });
+    }
+
+    await removeUserFromProject(projectId, userId);
+
+    return res.status(200).json({
+      status: 'success',
+    });
+  } catch (error) {
+    console.error('Error leaving project:', error);
+    return res.status(500).json({
+      status: 'server error',
+      error: 'failed to leave project',
     });
   }
 };
