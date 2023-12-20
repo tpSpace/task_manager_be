@@ -109,10 +109,17 @@ export const getAllTicketbyStageIdHandler = async (
         error: 'ticket not found',
       });
     }
+    
+    let fullTickets = [];
+
+    for (const ticket of tickets){
+      const fullTicket = await findAllAttributesOfTicket(ticket.ticketId);
+      fullTickets.push(fullTicket);
+    }
 
     return res.status(200).json({
       status: 'success',
-      tickets,
+      tickets: fullTickets,
     });
   } catch (error) {
     console.error('error getting tickets:', error);
