@@ -2,11 +2,11 @@ import request from 'supertest';
 import { expect } from 'chai';
 import app from '../../../src/index';
 
-describe('Create and View all Tags', function () {
+describe('Join a Project and then leave a Project', function () {
   this.timeout(10000);
 
   let token: string;
-  let projectId: string;
+  let testProjectId: string = "657d29db41f938a6bd381538";
 
   before(async function () {
     const response = await request(app).post('/auth/login').send({
@@ -15,39 +15,23 @@ describe('Create and View all Tags', function () {
     });
 
     token = response.body.token;
-
-    const projectResponse = await request(app)
-      .post('/projects/create')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        title: 'test project',
-      });
-
-    projectId = projectResponse.body.projectId;
   });
 
-  it('should create a new Tag', async function () {
+  it('should join a new project', async function () {
     const response = await request(app)
-      .post(`/tags/create/${projectId}`)
+      .post(`/projects/join/${testProjectId}`)
       .set('Authorization', `Bearer ${token}`)
-      .send({
-        title: 'test tag',
-        priority: 1,
-        colour: '#000000',
-      });
 
     expect(response.status).to.equal(200);
     expect(response.body).to.have.property('status', 'success');
-    expect(response.body).to.have.property('tagId');
   });
 
-  it('should get all stages from a project', async function () {
+  it('should leave the project', async function () {
     const response = await request(app)
-      .get(`/tags/get/project/${projectId}`)
+      .post(`/projects/leave/${testProjectId}`)
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).to.equal(200);
     expect(response.body).to.have.property('status', 'success');
-    expect(response.body).to.have.property('tags');
   });
 });

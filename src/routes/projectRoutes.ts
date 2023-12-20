@@ -11,8 +11,8 @@ import {
   addMemberHandler,
   setAdminHandler,
   joinProjectHandler,
+  leaveProjectHandler,
 } from '../controllers/projectController';
-import { join } from 'path';
 
 const projectRouter = express.Router();
 
@@ -27,8 +27,14 @@ projectRouter.post(
   '/join/:projectId',
   validateAndAuthorizeToken,
   joinProjectHandler,
-);
-
+  );
+  
+  projectRouter.post(
+    '/leave/:projectId',
+    validateAndAuthorizeToken,
+    leaveProjectHandler
+  );
+  
 // Get all projects of a user
 projectRouter.get('/get', validateAndAuthorizeToken, getAllProjectHandler);
 
