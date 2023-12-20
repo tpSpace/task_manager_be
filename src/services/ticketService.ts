@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { Ticket } from '../models/ticket';
-import { nullable } from 'zod';
+import { findStageById } from './stageService';
+import { findTagById } from './tagService';
+import { findAllCommentsByTicketId } from './commentService';
 
 const prisma = new PrismaClient();
 
@@ -287,4 +289,30 @@ export const deleteParentTicketId = async (parentId: string) => {
       parentTicketId: '',
     },
   });
+};
+
+export const findAllAttributesOfTicket = async (ticketId: string) => {
+  const ticket = await findTicketbyId(ticketId);
+  let stage = null;
+  let tag = null;
+  let comments: any = [];
+
+  if (ticket!.stageId){
+    stage = await findStageById(ticket!.stageId);
+  }
+
+  if (ticket!.tagId){
+    tag = await findTagById(ticket!.tagId);
+  }
+
+  if (ticket!.commentIds){
+    comments = await findAllCommentsByTicketId(ticketId);
+  }
+
+  return {
+    ...ticket,
+    stage,
+    tag,
+    comments,
+  };
 };

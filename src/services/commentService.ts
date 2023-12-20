@@ -18,7 +18,7 @@ export const createComment = async (
   return createdComment.commentId;
 };
 
-export const findAllCommentsFromTicketId = async (ticketId: string) => {
+export const findAllCommentsByTicketId = async (ticketId: string) => {
   const comments = await prisma.comment.findMany({
     where: {
       ticketId: ticketId,

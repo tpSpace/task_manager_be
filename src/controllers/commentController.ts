@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Comment } from '../models/comment';
 import {
   createComment,
-  findAllCommentsFromTicketId,
+  findAllCommentsByTicketId,
   deleteComment,
   updateComment,
   findCommentById,
@@ -45,7 +45,7 @@ export const getAllCommentFromTicketHandler = async (
 ) => {
   try {
     const ticketId: string = req.params.ticketId;
-    const comments = await findAllCommentsFromTicketId(ticketId);
+    const comments = await findAllCommentsByTicketId(ticketId);
 
     if (!comments) {
       return res.status(404).json({

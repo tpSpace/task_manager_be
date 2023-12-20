@@ -8,6 +8,7 @@ import {
   updateTicket,
   deleteTicket,
   findRelationships,
+  findAllAttributesOfTicket,
 } from '../services/ticketService';
 import { returnUserIdFromToken } from '../middleware/jwt';
 import { findStageById } from '../services/stageService';
@@ -45,7 +46,7 @@ export const createTicketHandler = async (req: Request, res: Response) => {
 export const getSingleTicketHandler = async (req: Request, res: Response) => {
   try {
     const ticketId = req.params.ticketId;
-    const ticket = await findTicketbyId(ticketId);
+    const ticket = await findAllAttributesOfTicket(ticketId);
 
     if (!ticket) {
       return res.status(404).json({
