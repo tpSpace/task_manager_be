@@ -91,6 +91,46 @@ export const addUserToProject = async (projectId: string, userId: string) => {
   });
 };
 
+export const removeUserFromProject = async (projectId: string, userId: string) => {
+  const project = await findProjectById(projectId);
+  let newUserIds = [];
+  newUserIds = project!.userIds.filter(
+    (id) => id !== userId
+  );
+
+  await prisma.project.update({
+    where: {
+      projectId: projectId,
+    },
+    data: {
+      userIds: {
+        set: newUserIds,
+      },
+    },
+  });
+
+  const user = await prisma.user.findUnique({
+    where: {
+      userId: userId,
+    },
+  });
+
+  let newProjectIds = [];
+  newProjectIds = user!.projectIds.filter(
+    (id) => id !== projectId
+  );
+  
+  await prisma.user.update({
+    where: {
+      userId: userId,
+    },
+    data: {
+      projectIds: {
+        set: newProjectIds,
+      },
+    },
+  });
+};
 export const updateProjectAdmin = async (
   projectId: string,
   adminId: string,
