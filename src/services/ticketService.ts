@@ -76,12 +76,17 @@ export const findRelationships = async (ticketId: string) => {
   });
   if (!ticket) return;
 
-  const parentTicket = await prisma.ticket.findFirst({
-    where: {
-      ticketId: ticket.parentTicketId,
-    },
-  });
-
+  let parentTicket
+  if(ticket.parentTicketId === ""){
+    parentTicket = undefined
+  }
+  else {
+    parentTicket = await prisma.ticket.findFirst({
+        where: {
+          ticketId: ticket.parentTicketId,
+        },
+      });
+  }
   const childTickets: Ticket[] = [];
   for (const childTicketId of ticket.childTickets) {
     const childTicket = await prisma.ticket.findFirst({
@@ -91,6 +96,10 @@ export const findRelationships = async (ticketId: string) => {
     });
     if (childTicket) childTickets.push(childTicket);
   }
+
+  if (parentTicket === undefined 
+    && childTickets.length === 0)
+  return
 
   return {
     parentTicket,
