@@ -53,6 +53,29 @@ export const findProjectByUserId = async (inputUserId: string) => {
   return projects;
 };
 
+export const findProjectByTagId = async (tagId: string) => {
+  const project = await prisma.project.findFirst({
+    where: {
+      tagIds: {
+        has: tagId,
+      },
+    },
+  });
+  return project;
+};
+
+export const findProjectByStageId = async (stageId: string) => {
+  const project = await prisma.project.findFirst({
+    where: {
+      stageIds: {
+        has: stageId,
+      },
+    },
+  });
+  return project;
+};
+
+
 export const updateProjectTitle = async (
   projectId: string,
   project: Project,
@@ -153,13 +176,4 @@ export const deleteProject = async (projectId: string) => {
   });
 };
 
-export const findProjectByTagId = async (tagId: string) => {
-  const project = await prisma.project.findFirst({
-    where: {
-      tagIds: {
-        has: tagId,
-      },
-    },
-  });
-  return project;
-};
+

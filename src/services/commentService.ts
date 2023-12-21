@@ -46,6 +46,15 @@ export const updateComment = async (commentId: string, content: string) => {
   });
   return updatedComment;
 };
+
+export const deleteAllCommentsByTicketId = async (ticketId: string) => {
+  await prisma.comment.deleteMany({
+    where: {
+      ticketId: ticketId,
+    },
+  });
+};
+
 export const deleteComment = async (commentId: string) => {
   await prisma.comment.delete({
     where: {

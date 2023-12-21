@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Stage } from '../models/stage';
+import { findProjectByStageId } from './projectService';
+import { deleteAllCommentsByTicketId } from './commentService';
 
 const prisma = new PrismaClient();
 
@@ -61,10 +63,37 @@ export const updateStage = async (stageId: string, updatedStage: Stage) => {
 };
 
 export const deleteStage = async (stageId: string) => {
-  const deletedStage = await prisma.stage.delete({
+  // Remove stageId from project entity
+  const project = await findProjectByStageId(stageId);
+
+  let newStageIds = project!.stageIds.filter(
+    (id:string) => id !== stageId
+  );
+
+  await prisma.project.update({
+    where: {
+      projectId: project!.projectId,
+    },
+    data: {
+      stageIds: newStageIds,
+    },
+  });
+
+  const deleteStage = await findStageById(stageId);
+
+  // Delete all tickets in stage
+  for (const ticket of deleteStage!.ticketIds) {
+    await prisma.ticket.delete({
+      where: {
+        ticketId: ticket,
+      },
+    });
+    await deleteAllCommentsByTicketId(ticket);
+  };
+
+  await prisma.stage.delete({
     where: {
       stageId: stageId,
     },
   });
-  return deletedStage;
 };

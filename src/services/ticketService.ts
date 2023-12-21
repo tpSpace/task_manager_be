@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { Ticket } from '../models/ticket';
 import { findStageById } from './stageService';
 import { findTagById } from './tagService';
-import { findAllCommentsByTicketId } from './commentService';
+import { findAllCommentsByTicketId, deleteAllCommentsByTicketId } from './commentService';
 
 const prisma = new PrismaClient();
 
@@ -215,6 +215,9 @@ export const deleteTicket = async (ticketId: string) => {
       },
     });
   }
+
+  //Remove all of the comments within that ticket
+  await deleteAllCommentsByTicketId(ticketId);
   return deletedTicket;
 };
 
