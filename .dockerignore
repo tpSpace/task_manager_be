@@ -1,0 +1,21 @@
+# Ignore all files and directories starting with a dot
+.*
+
+# Ignore node_modules directory
+node_modules/
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+
+# Ignore build artifacts
+build/
+
+# Ignore development files
+*.dev
+
+# Ignore configuration files
+*.config
+

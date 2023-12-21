@@ -95,7 +95,7 @@ export const removeUserFromProject = async (projectId: string, userId: string) =
   const project = await findProjectById(projectId);
   let newUserIds = [];
   newUserIds = project!.userIds.filter(
-    (id) => id !== userId
+    (id: string) => id !== userId
   );
 
   await prisma.project.update({
@@ -117,7 +117,7 @@ export const removeUserFromProject = async (projectId: string, userId: string) =
 
   let newProjectIds = [];
   newProjectIds = user!.projectIds.filter(
-    (id) => id !== projectId
+    (id: string) => id !== projectId
   );
   
   await prisma.user.update({
