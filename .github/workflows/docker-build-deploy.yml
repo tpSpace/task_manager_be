@@ -20,7 +20,7 @@ jobs:
         run: docker tag tasking:latest quangpham09112003/tasking:latest
 
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u your-docker-username --password-stdin
+        run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u quangpham09112003 --password-stdin
 
       - name: Push Docker Image to Docker Hub
         run: docker push quangpham09112003/tasking:latest
