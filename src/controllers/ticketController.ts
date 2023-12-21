@@ -206,8 +206,7 @@ export const deleteTicketHandler = async (req: Request, res: Response) => {
 
     const deletedTicket = await deleteTicket(ticketId);
     return res.status(200).json({
-      status: 'success',
-      ticketId,
+      status: 'success'
     });
   } catch (error) {
     console.error('error deleting tickets:', error);
