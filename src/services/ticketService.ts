@@ -286,6 +286,7 @@ export const findAllAttributesOfTicket = async (ticketId: string) => {
   const ticket = await findTicketbyId(ticketId);
   let stage = null;
   let tag = null;
+  let creator = null;
   let comments: any = [];
 
   if (ticket!.stageId){
@@ -300,10 +301,30 @@ export const findAllAttributesOfTicket = async (ticketId: string) => {
     comments = await findAllCommentsByTicketId(ticketId);
   }
 
+  if (ticket!.creatorId){
+    creator = await prisma.user.findUnique({
+      where: {
+        userId: ticket!.creatorId,
+      },
+    });
+  }
+
   return {
     ...ticket,
-    stage,
-    tag,
+    stage: {
+      stageId: stage?.stageId,
+      title: stage?.title,
+    },
+    tag:{
+      tagId: tag?.tagId,
+      title: tag?.title,
+      priority: tag?.priority,
+      colour: tag?.colour,
+    },
+    creator: {
+      name: creator?.name,
+      email: creator?.email,
+    },
     comments,
   };
 };
