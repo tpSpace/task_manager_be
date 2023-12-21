@@ -24,3 +24,9 @@ jobs:
 
       - name: Push Docker Image to Docker Hub
         run: docker push quangpham09112003/tasking:latest
+
+      - name: Deploy to Render
+        env: 
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: 
+          curl $RENDER_DEPLOY_HOOK
