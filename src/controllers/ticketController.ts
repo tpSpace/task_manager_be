@@ -103,7 +103,8 @@ export const getAllTicketbyStageIdHandler = async (
   try {
     const stageId = req.params.stageId;
     const tickets = await findTicketbyStageId(stageId);
-    if (!tickets) {
+    
+    if (tickets.length === 0) {
       return res.status(404).json({
         status: 'not found',
         error: 'ticket not found',

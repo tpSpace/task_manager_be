@@ -2,13 +2,14 @@ import request from 'supertest';
 import { expect } from 'chai';
 import app from '../../../src/index';
 
-describe('Create and View all Ticket', function () {
+describe('Assign all attributes to Ticket', function () {
   this.timeout(20000);
 
   let token: string;
   let projectId: string;
   let stageId: string;
   let ticketId: string;
+  let tagId: string;
 
   before(async function () {
     const response = await request(app).post('/auth/login').send({
@@ -35,6 +36,24 @@ describe('Create and View all Ticket', function () {
       });
 
     stageId = stageResponse.body.stageId;
+
+    const tagResponse = await request(app)
+      .post(`/tags/create/${projectId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        title: 'test tag',
+        priority: 1,
+        colour: '#000000',
+      });
+    
+    tagId = tagResponse.body.tagId;
+
+    const commentReponse = await request(app)
+      .post(`/comments/create/${ticketId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        comment: 'test comment',
+      });
   });
 
   it('should create a new Ticket', async function () {
@@ -45,6 +64,7 @@ describe('Create and View all Ticket', function () {
         title: 'test ticket',
         description: 'testing',
         deadline: '2022-03-15T13:45:30Z',
+        tagId: tagId,
       });
 
     expect(response.status).to.equal(200);

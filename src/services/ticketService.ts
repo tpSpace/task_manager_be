@@ -1,7 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import { Ticket } from '../models/ticket';
 import { findStageById } from './stageService';
 import { findTagById } from './tagService';
+import { findUserById } from './userService';
 import { findAllCommentsByTicketId, deleteAllCommentsByTicketId } from './commentService';
 
 const prisma = new PrismaClient();
@@ -287,10 +288,12 @@ export const deleteParentTicketId = async (parentId: string) => {
 
 export const findAllAttributesOfTicket = async (ticketId: string) => {
   const ticket = await findTicketbyId(ticketId);
+  
   let stage = null;
   let tag = null;
   let creator = null;
   let comments: any = [];
+  let assignedUsers: any = [];
 
   if (ticket!.stageId){
     stage = await findStageById(ticket!.stageId);
@@ -312,8 +315,21 @@ export const findAllAttributesOfTicket = async (ticketId: string) => {
     });
   }
 
+  if (ticket!.assignedUserIds.length > 0){
+    for (const assignedUserId of ticket!.assignedUserIds){
+      const user = await findUserById(assignedUserId);
+      assignedUsers.push(user);
+    } 
+  }
+
   return {
-    ...ticket,
+    ticketId: ticket?.ticketId,
+    title: ticket?.title,
+    description: ticket?.description,
+    parentTicketId: ticket?.parentTicketId,
+    childTickets: ticket?.childTickets,
+    deadline: ticket?.deadline,
+
     stage: {
       stageId: stage?.stageId,
       title: stage?.title,
@@ -325,9 +341,12 @@ export const findAllAttributesOfTicket = async (ticketId: string) => {
       colour: tag?.colour,
     },
     creator: {
+      creatorId: creator?.userId,
       name: creator?.name,
       email: creator?.email,
     },
+    assignedUsers,
     comments,
   };
 };
+ 
