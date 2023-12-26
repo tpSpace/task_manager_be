@@ -6,6 +6,7 @@ import {
   getAllStageFromProjectHandler,
   updateStageHandler,
   deleteStageHandler,
+  getStageByStageId,
 } from '../controllers/stageController';
 
 import express from 'express';
@@ -17,6 +18,12 @@ stageRouter.post(
   validate(stageSchema),
   validateAndAuthorizeToken,
   createStageHandler,
+);
+
+stageRouter.get(
+  '/get/stage/:stageId',
+  validateAndAuthorizeToken,
+  getStageByStageId,
 );
 
 stageRouter.get(
