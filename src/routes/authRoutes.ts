@@ -4,20 +4,23 @@ import { validateAndAuthorizeToken } from '../middleware/jwt';
 import { loginUserSchema } from '../schemas/userSchema';
 import {
   loginUserHandler,
+  loginUserHandlerMongoose,
   registerUserHandler,
+  registerUserHandlerMongoose,
   getSingleUserHandler,
+  getSingleUserHandlerMongoose
 } from '../controllers/authController';
 
 const authRouter = express.Router();
 
-authRouter.post('/login', validate(loginUserSchema), loginUserHandler);
+authRouter.post('/login', validate(loginUserSchema), loginUserHandlerMongoose);
 
-authRouter.post('/register', validate(loginUserSchema), registerUserHandler);
+authRouter.post('/register', validate(loginUserSchema), registerUserHandlerMongoose);
 
 authRouter.get(
   '/user/:userId',
   validateAndAuthorizeToken,
-  getSingleUserHandler,
+  getSingleUserHandlerMongoose,
 );
 
 // Test authrourization end point, to be removed

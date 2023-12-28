@@ -1,4 +1,5 @@
-import { Schema, Document, model } from 'mongoose';
+import { Schema, Document, model, Types } from 'mongoose';
+import { ProjectDocument } from './projectModel'; // import the ProjectDocument interface
 
 export interface UserDocument extends Document {
   userId: string;
@@ -6,14 +7,39 @@ export interface UserDocument extends Document {
   email: string;
   password: string;
   avatar?: string;
+  projects: Types.Array<ProjectDocument['_id']>; // Add this line
 }
 
 const userSchema = new Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  avatar: { type: String },
-});
+  userId: { 
+    type: Schema.Types.ObjectId, 
+    unique: true,
+    default: new Types.ObjectId() 
+  },
+  name: { 
+    type: String, 
+    required: true 
+  },
+  email: { 
+    type: String, 
+    required: true, 
+    unique: true 
+  },
+  password: { 
+    type: String, 
+    required: true 
+  },
+  avatar: { 
+    type: String 
+  },
+  projects: [{ 
+    type: Schema.Types.ObjectId, 
+    ref: 'Project' 
+  }], 
+}, 
+  { 
+    collection: 'User' 
+  });
 
 const User = model<UserDocument>('User', userSchema);
 
