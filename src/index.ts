@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import mongoose from './middleware/database';
 import authRouter from './routes/authRoutes';
 import projectRouter from './routes/projectRoutes';
 import tagRouter from './routes/tagRoutes';
@@ -11,6 +12,8 @@ const app = express();
 const port: any = process.env.PORT || 3001;
 
 app.use(express.json());
+
+app.locals.mongoose = mongoose;
 
 app.use(cors());
 

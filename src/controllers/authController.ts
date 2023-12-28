@@ -4,10 +4,11 @@ import {
   findAllUser,
   findUserById,
 } from '../services/userService';
+import { findUserByEmailMongoose, createUserMongoose } from '../services/userServiceMongoose';
+import { UserDocument } from '../models/userModel';
 import { Request, Response } from 'express';
 import { generateJwtToken, returnUserIdFromToken } from '../middleware/jwt';
 import { User } from '../models/user';
-import { get } from 'http';
 const bcrypt = import('bcrypt-ts');
 
 export const loginUserHandler = async (req: Request, res: Response) => {
@@ -50,8 +51,9 @@ export const loginUserHandler = async (req: Request, res: Response) => {
 
 export const registerUserHandler = async (req: Request, res: Response) => {
   try {
-    const user: User = req.body;
-    const existingUser = await findUserByEmail(user.email);
+    const user: UserDocument = req.body;
+    const existingUser = await findUserByEmailMongoose(user.email);
+    console.log(existingUser);
 
     if (existingUser) {
       return res.status(409).json({
@@ -60,16 +62,16 @@ export const registerUserHandler = async (req: Request, res: Response) => {
       });
     }
 
-    const hashedPassword = await (await bcrypt).hashSync(user.password, 10); // 10 is the number of salt rounds
-    user.password = hashedPassword;
+    // const hashedPassword = await (await bcrypt).hashSync(user.password, 10); // 10 is the number of salt rounds
+    // user.password = hashedPassword;
 
-    await createUser(user);
-    const newUser = await findUserByEmail(user.email);
-    const token = generateJwtToken(newUser!.userId);
+    await createUserMongoose(user);
+    // const newUser = await findUserByEmail(user.email);
+    // const token = generateJwtToken(newUser!.userId);
 
     return res.status(200).json({
       status: 'success',
-      token: token,
+      // token: token,
     });
   } catch (error) {
     console.error('Error getting user:', error);

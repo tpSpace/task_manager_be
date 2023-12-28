@@ -45,7 +45,7 @@ describe('Assign all attributes to Ticket', function () {
         priority: 1,
         colour: '#000000',
       });
-    
+
     tagId = tagResponse.body.tagId;
 
     const commentReponse = await request(app)

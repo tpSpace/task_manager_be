@@ -26,7 +26,6 @@ jobs:
         run: docker push quangpham09112003/tasking:latest
 
       - name: Deploy to Render
-        env: 
+        env:
           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
-        run: 
-          curl $RENDER_DEPLOY_HOOK
+        run: curl $RENDER_DEPLOY_HOOK

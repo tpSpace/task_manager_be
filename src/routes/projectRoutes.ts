@@ -27,14 +27,14 @@ projectRouter.post(
   '/join/:projectId',
   validateAndAuthorizeToken,
   joinProjectHandler,
-  );
-  
-  projectRouter.post(
-    '/leave/:projectId',
-    validateAndAuthorizeToken,
-    leaveProjectHandler
-  );
-  
+);
+
+projectRouter.post(
+  '/leave/:projectId',
+  validateAndAuthorizeToken,
+  leaveProjectHandler,
+);
+
 // Get all projects of a user
 projectRouter.get('/get', validateAndAuthorizeToken, getAllProjectHandler);
 

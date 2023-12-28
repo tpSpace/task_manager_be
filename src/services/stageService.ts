@@ -66,9 +66,7 @@ export const deleteStage = async (stageId: string) => {
   // Remove stageId from project entity
   const project = await findProjectByStageId(stageId);
 
-  let newStageIds = project!.stageIds.filter(
-    (id:string) => id !== stageId
-  );
+  let newStageIds = project!.stageIds.filter((id: string) => id !== stageId);
 
   await prisma.project.update({
     where: {
@@ -89,7 +87,7 @@ export const deleteStage = async (stageId: string) => {
       },
     });
     await deleteAllCommentsByTicketId(ticket);
-  };
+  }
 
   await prisma.stage.delete({
     where: {

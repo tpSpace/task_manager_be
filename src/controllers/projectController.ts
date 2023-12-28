@@ -87,7 +87,7 @@ export const leaveProjectHandler = async (req: Request, res: Response) => {
       });
     }
 
-    if(project.adminId === userId){
+    if (project.adminId === userId) {
       return res.status(408).json({
         status: 'error',
         error: 'user is admin of project',
@@ -139,7 +139,6 @@ export const getSingleProjectHandler = async (req: Request, res: Response) => {
     const projectId = req.params.projectId;
     const project = await findProjectById(projectId);
 
-    
     if (!project) {
       return res.status(404).json({
         status: 'not found',
@@ -147,7 +146,7 @@ export const getSingleProjectHandler = async (req: Request, res: Response) => {
       });
     }
 
-    if (!project.userIds.includes(userId)){
+    if (!project.userIds.includes(userId)) {
       return res.status(403).json({
         status: 'forriben',
         error: 'user is not part of project',
@@ -158,7 +157,6 @@ export const getSingleProjectHandler = async (req: Request, res: Response) => {
       status: 'success',
       project,
     });
-    
   } catch (error) {
     console.error('Error getting project:', error);
     return res.status(500).json({

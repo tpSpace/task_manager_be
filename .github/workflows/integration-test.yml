@@ -32,11 +32,10 @@ jobs:
           echo "DATABASE_URL=${DATABASE_URL}" >> $GITHUB_ENV
           echo "PORT=${PORT}" >> $GITHUB_ENV
           echo "SECRET_KEY=${SECRET_KEY}" >> $GITHUB_ENV
-          
+
       - name: Run Integration Test
         run: yarn run integration-test
         timeout-minutes: 30
-
 
       - name: Run Integration Test
         run: |

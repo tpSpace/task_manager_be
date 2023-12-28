@@ -75,7 +75,6 @@ export const findProjectByStageId = async (stageId: string) => {
   return project;
 };
 
-
 export const updateProjectTitle = async (
   projectId: string,
   project: Project,
@@ -114,12 +113,13 @@ export const addUserToProject = async (projectId: string, userId: string) => {
   });
 };
 
-export const removeUserFromProject = async (projectId: string, userId: string) => {
+export const removeUserFromProject = async (
+  projectId: string,
+  userId: string,
+) => {
   const project = await findProjectById(projectId);
   let newUserIds = [];
-  newUserIds = project!.userIds.filter(
-    (id: string) => id !== userId
-  );
+  newUserIds = project!.userIds.filter((id: string) => id !== userId);
 
   await prisma.project.update({
     where: {
@@ -139,10 +139,8 @@ export const removeUserFromProject = async (projectId: string, userId: string) =
   });
 
   let newProjectIds = [];
-  newProjectIds = user!.projectIds.filter(
-    (id: string) => id !== projectId
-  );
-  
+  newProjectIds = user!.projectIds.filter((id: string) => id !== projectId);
+
   await prisma.user.update({
     where: {
       userId: userId,
@@ -175,5 +173,3 @@ export const deleteProject = async (projectId: string) => {
     },
   });
 };
-
-

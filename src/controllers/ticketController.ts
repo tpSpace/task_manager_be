@@ -103,17 +103,17 @@ export const getAllTicketbyStageIdHandler = async (
   try {
     const stageId = req.params.stageId;
     const tickets = await findTicketbyStageId(stageId);
-    
+
     if (tickets.length === 0) {
       return res.status(404).json({
         status: 'not found',
         error: 'ticket not found',
       });
     }
-    
+
     let fullTickets = [];
 
-    for (const ticket of tickets){
+    for (const ticket of tickets) {
       const fullTicket = await findAllAttributesOfTicket(ticket.ticketId);
       fullTickets.push(fullTicket);
     }
@@ -131,7 +131,10 @@ export const getAllTicketbyStageIdHandler = async (
   }
 };
 
-export const getAllRelationshipsHandler = async (req: Request, res: Response) => {
+export const getAllRelationshipsHandler = async (
+  req: Request,
+  res: Response,
+) => {
   try {
     const ticketId = req.params.ticketId;
     const ticket = await findTicketbyId(ticketId);
@@ -145,7 +148,7 @@ export const getAllRelationshipsHandler = async (req: Request, res: Response) =>
 
     const ticketRelationship = await findRelationships(ticketId);
 
-    if (!ticketRelationship){
+    if (!ticketRelationship) {
       return res.status(405).json({
         status: 'not found',
         error: 'relationship not found',
@@ -207,7 +210,7 @@ export const deleteTicketHandler = async (req: Request, res: Response) => {
 
     const deletedTicket = await deleteTicket(ticketId);
     return res.status(200).json({
-      status: 'success'
+      status: 'success',
     });
   } catch (error) {
     console.error('error deleting tickets:', error);

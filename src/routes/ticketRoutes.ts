@@ -43,7 +43,7 @@ router.get(
   '/get/relationship/:ticketId',
   validateAndAuthorizeToken,
   getAllRelationshipsHandler,
-)
+);
 
 router.put(
   '/update/:ticketId',

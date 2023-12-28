@@ -3,7 +3,10 @@ import { Ticket } from '../models/ticket';
 import { findStageById } from './stageService';
 import { findTagById } from './tagService';
 import { findUserById } from './userService';
-import { findAllCommentsByTicketId, deleteAllCommentsByTicketId } from './commentService';
+import {
+  findAllCommentsByTicketId,
+  deleteAllCommentsByTicketId,
+} from './commentService';
 
 const prisma = new PrismaClient();
 
@@ -288,26 +291,26 @@ export const deleteParentTicketId = async (parentId: string) => {
 
 export const findAllAttributesOfTicket = async (ticketId: string) => {
   const ticket = await findTicketbyId(ticketId);
-  
+
   let stage = null;
   let tag = null;
   let creator = null;
   let comments: any = [];
   let assignedUsers: any = [];
 
-  if (ticket!.stageId){
+  if (ticket!.stageId) {
     stage = await findStageById(ticket!.stageId);
   }
 
-  if (ticket!.tagId){
+  if (ticket!.tagId) {
     tag = await findTagById(ticket!.tagId);
   }
 
-  if (ticket!.commentIds){
+  if (ticket!.commentIds) {
     comments = await findAllCommentsByTicketId(ticketId);
   }
 
-  if (ticket!.creatorId){
+  if (ticket!.creatorId) {
     creator = await prisma.user.findUnique({
       where: {
         userId: ticket!.creatorId,
@@ -315,11 +318,11 @@ export const findAllAttributesOfTicket = async (ticketId: string) => {
     });
   }
 
-  if (ticket!.assignedUserIds.length > 0){
-    for (const assignedUserId of ticket!.assignedUserIds){
+  if (ticket!.assignedUserIds.length > 0) {
+    for (const assignedUserId of ticket!.assignedUserIds) {
       const user = await findUserById(assignedUserId);
       assignedUsers.push(user);
-    } 
+    }
   }
 
   return {
@@ -334,7 +337,7 @@ export const findAllAttributesOfTicket = async (ticketId: string) => {
       stageId: stage?.stageId,
       title: stage?.title,
     },
-    tag:{
+    tag: {
       tagId: tag?.tagId,
       title: tag?.title,
       priority: tag?.priority,
@@ -349,4 +352,3 @@ export const findAllAttributesOfTicket = async (ticketId: string) => {
     comments,
   };
 };
- 
