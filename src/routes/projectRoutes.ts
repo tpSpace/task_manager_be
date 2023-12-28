@@ -12,6 +12,7 @@ import {
   setAdminHandler,
   joinProjectHandler,
   leaveProjectHandler,
+  createProjectHandlerMongoose
 } from '../controllers/projectController';
 
 const projectRouter = express.Router();
@@ -20,7 +21,7 @@ projectRouter.post(
   '/create',
   validate(projectSchema),
   validateAndAuthorizeToken,
-  createProjectHandler,
+  createProjectHandlerMongoose,
 );
 
 projectRouter.post(

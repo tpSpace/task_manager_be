@@ -1,17 +1,30 @@
-import { Schema, Document, model } from 'mongoose';
+import { Schema, Document, model, Types } from 'mongoose';
 
 export interface ProjectDocument extends Document {
   projectId: string;
-  name: string;
+  title: string;
+  adminId: string;
+  memberIds: string[];
   // other fields...
 }
 
 const projectSchema = new Schema({
-  name: { 
+  projectId: { 
+    type: Schema.Types.ObjectId, 
+    unique: true,
+    default: new Types.ObjectId() 
+  },
+  title: { 
     type: String, 
     required: true 
   },
-  // other fields...
+  adminId:{
+    type: String,
+    required: true
+  },
+  memberIds: [{
+    type: String
+  }]
 }, 
   { 
     collection: 'Project' 

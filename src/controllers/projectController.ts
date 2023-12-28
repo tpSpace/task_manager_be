@@ -9,6 +9,8 @@ import {
   updateProjectAdmin,
   removeUserFromProject,
 } from '../services/projectService';
+import { ProjectDocument } from '../models/projectModel';
+import { createProjectMongoose } from '../services/projectServiceMongoose';
 import { addUserToProject } from '../services/projectService';
 import { returnUserIdFromToken } from '../middleware/jwt';
 import { findUserById } from '../services/userService';
@@ -342,6 +344,27 @@ export const setAdminHandler = async (req: Request, res: Response) => {
     return res.status(500).json({
       status: 'server error',
       error: 'failed to set new admin',
+    });
+  }
+};
+
+export const createProjectHandlerMongoose = async (req: Request, res: Response) => {
+  try {
+    const project: ProjectDocument = req.body;
+    project.adminId = returnUserIdFromToken(req);
+    project.memberIds = [project.adminId];
+
+    const newProject = await createProjectMongoose(project);
+
+    return res.status(200).json({
+      status: 'success',
+      projectId: newProject.projectId,
+    });
+  } catch (error) {
+    console.error('Error creating project:', error);
+    return res.status(500).json({
+      status: 'server error',
+      error: 'failed to create project',
     });
   }
 };
