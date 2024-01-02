@@ -18,6 +18,7 @@ describe('Assign all attributes to Ticket', function () {
     });
 
     token = response.body.token;
+    console.log('Test token: ', token);
 
     const projectResponse = await request(app)
       .post('/projects/create')
@@ -27,6 +28,7 @@ describe('Assign all attributes to Ticket', function () {
       });
 
     projectId = projectResponse.body.projectId;
+    console.log('Test project: ', projectId);
 
     const stageResponse = await request(app)
       .post(`/stages/create/${projectId}`)
@@ -36,24 +38,7 @@ describe('Assign all attributes to Ticket', function () {
       });
 
     stageId = stageResponse.body.stageId;
-
-    const tagResponse = await request(app)
-      .post(`/tags/create/${projectId}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        title: 'test tag',
-        priority: 1,
-        colour: '#000000',
-      });
-    
-    tagId = tagResponse.body.tagId;
-
-    const commentReponse = await request(app)
-      .post(`/comments/create/${ticketId}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        comment: 'test comment',
-      });
+    console.log('Test stage: ', stageId);
   });
 
   it('should create a new Ticket', async function () {
@@ -72,6 +57,7 @@ describe('Assign all attributes to Ticket', function () {
     expect(response.body).to.have.property('ticketId');
 
     ticketId = response.body.ticketId;
+    console.log('Test ticket: ', ticketId);
   });
 
   it('should get all tickets from a project', async function () {
@@ -102,5 +88,19 @@ describe('Assign all attributes to Ticket', function () {
     expect(response.status).to.equal(200);
     expect(response.body).to.have.property('status', 'success');
     expect(response.body).to.have.property('ticket');
+  });
+
+  it('should delete the ticket', async function () {
+    const ticketResponse = await request(app)
+      .delete(`/tickets/delete/${ticketId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(ticketResponse.status).to.equal(200);
+
+    const stageResponse = await request(app)
+      .get(`/stages/get/stage/${stageId}`)
+      .set('Authorization', `Bearer ${token}`);
+    
+    expect(stageResponse.body.stage.ticketIds).to.not.include(ticketId);
   });
 });
