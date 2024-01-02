@@ -10,64 +10,10 @@ import {
   removeUserFromProject,
 } from '../services/projectService';
 import { ProjectDocument } from '../models/projectModel';
-import { createProjectMongoose } from '../services/projectServiceMongoose';
+import { createProjectMongoose, findProjectByIdMongoose } from '../services/projectServiceMongoose';
 import { addUserToProject } from '../services/projectService';
 import { returnUserIdFromToken } from '../middleware/jwt';
 import { findUserById } from '../services/userService';
-
-export const createProjectHandler = async (req: Request, res: Response) => {
-  try {
-    const project: Project = req.body;
-    project.adminId = returnUserIdFromToken(req);
-
-    const newProjectId = await createProject(project);
-
-    return res.status(200).json({
-      status: 'success',
-      projectId: newProjectId,
-    });
-  } catch (error) {
-    console.error('Error creating project:', error);
-    return res.status(500).json({
-      status: 'server error',
-      error: 'failed to create project',
-    });
-  }
-};
-
-export const joinProjectHandler = async (req: Request, res: Response) => {
-  try {
-    const userId: string = returnUserIdFromToken(req);
-    const projectId = req.params.projectId;
-    const project = await findProjectById(projectId);
-
-    if (!project) {
-      return res.status(404).json({
-        status: 'not found',
-        error: 'project not found',
-      });
-    }
-
-    if (project.userIds.includes(userId)) {
-      return res.status(409).json({
-        status: 'error',
-        error: 'user already in project',
-      });
-    }
-
-    await addUserToProject(projectId, userId);
-
-    return res.status(200).json({
-      status: 'success',
-    });
-  } catch (error) {
-    console.error('Error joining project:', error);
-    return res.status(500).json({
-      status: 'server error',
-      error: 'failed to join project',
-    });
-  }
-};
 
 export const leaveProjectHandler = async (req: Request, res: Response) => {
   try {
@@ -348,11 +294,11 @@ export const setAdminHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const createProjectHandlerMongoose = async (req: Request, res: Response) => {
+export const createProjectHandler = async (req: Request, res: Response) => {
   try {
     const project: ProjectDocument = req.body;
     project.adminId = returnUserIdFromToken(req);
-    project.memberIds = [project.adminId];
+    project.userIds = [project.adminId];
 
     const newProject = await createProjectMongoose(project);
 
@@ -365,6 +311,40 @@ export const createProjectHandlerMongoose = async (req: Request, res: Response) 
     return res.status(500).json({
       status: 'server error',
       error: 'failed to create project',
+    });
+  }
+};
+
+export const joinProjectHandler = async (req: Request, res: Response) => {
+  try {
+    const userId: string = returnUserIdFromToken(req);
+    const projectId = req.params.projectId;
+    const project = await findProjectByIdMongoose(projectId);
+
+    if (!project) {
+      return res.status(404).json({
+        status: 'not found',
+        error: 'project not found',
+      });
+    }
+
+    if (project.userIds.includes(userId)) {
+      return res.status(409).json({
+        status: 'error',
+        error: 'user already in project',
+      });
+    }
+
+    await addUserToProject(projectId, userId);
+
+    return res.status(200).json({
+      status: 'success',
+    });
+  } catch (error) {
+    console.error('Error joining project:', error);
+    return res.status(500).json({
+      status: 'server error',
+      error: 'failed to join project',
     });
   }
 };

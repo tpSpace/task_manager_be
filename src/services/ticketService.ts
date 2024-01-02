@@ -204,6 +204,7 @@ export const deleteTicket = async (ticketId: string) => {
       },
     },
   });
+  
   if (stage) {
     stage.ticketIds.splice(stage.ticketIds.indexOf(ticketId), 1);
     await prisma.stage.updateMany({

@@ -4,8 +4,7 @@ export interface ProjectDocument extends Document {
   projectId: string;
   title: string;
   adminId: string;
-  memberIds: string[];
-  // other fields...
+  userIds: string[];
 }
 
 const projectSchema = new Schema({
@@ -22,7 +21,7 @@ const projectSchema = new Schema({
     type: String,
     required: true
   },
-  memberIds: [{
+  userIds: [{
     type: String
   }]
 }, 
