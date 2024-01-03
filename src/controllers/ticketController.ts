@@ -47,7 +47,7 @@ export const getSingleTicketHandler = async (req: Request, res: Response) => {
   try {
     const ticketId = req.params.ticketId;
     const ticket = await findAllAttributesOfTicket(ticketId);
-
+    
     if (!ticket) {
       return res.status(404).json({
         status: 'not found',
