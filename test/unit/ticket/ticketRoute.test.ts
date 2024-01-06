@@ -2,7 +2,7 @@ import request from 'supertest';
 import { expect } from 'chai';
 import app from '../../../src/index';
 
-describe('Assign all attributes to Ticket', function () {
+describe('CRUD Functionalities of Ticket', function () {
   this.timeout(20000);
 
   let token: string;
@@ -39,6 +39,18 @@ describe('Assign all attributes to Ticket', function () {
 
     stageId = stageResponse.body.stageId;
     console.log('Test stage: ', stageId);
+
+    const tagResponse = await request(app)
+      .post(`/tags/create/${projectId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        title: 'test tag',
+        priority: 1,
+        colour: '#000000',
+      });
+
+    tagId = tagResponse.body.tagId;
+    console.log('Test tag: ', tagId);
   });
 
   it('should create a new Ticket', async function () {
@@ -88,6 +100,52 @@ describe('Assign all attributes to Ticket', function () {
     expect(response.status).to.equal(200);
     expect(response.body).to.have.property('status', 'success');
     expect(response.body).to.have.property('ticket');
+  });
+
+  it('should update the ticket tag', async function (){
+    const ticketResponse = await request(app)
+      .put(`/tickets/update/${ticketId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        tagId: tagId,
+      });
+
+    console.log('ticketResponse: ', ticketResponse.body)
+    expect(ticketResponse.status).to.equal(200);
+    expect(ticketResponse.body.updatedTicket.tagId).to.equal(tagId);
+  });
+
+  it('should update the ticket stage', async function (){
+    const newStageResponse = await request(app)
+      .post(`/stages/create/${projectId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        title: 'new test stage',
+      });
+
+    const newStageId = newStageResponse.body.stageId;
+
+    const ticketResponse = await request(app)
+      .put(`/tickets/update/${ticketId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        stageId: newStageId,
+      });
+
+    expect(ticketResponse.status).to.equal(200);
+    expect(ticketResponse.body.updatedTicket.stageId).to.equal(newStageId);
+
+    const checkStageResponse = await request(app)
+      .get(`/stages/get/stage/${newStageId}`)
+      .set('Authorization', `Bearer ${token}`);
+    
+    expect(checkStageResponse.body.stage.ticketIds).to.include(ticketId);
+
+    const oldStageResponse = await request(app)
+      .get(`/stages/get/stage/${stageId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(oldStageResponse.body.stage.ticketIds).to.not.include(ticketId);
   });
 
   it('should delete the ticket', async function () {

@@ -157,8 +157,49 @@ export const updateTicket = async (
       assignedUserIds: updateTicket.assignedUserIds,
       deadline: updateTicket.deadline,
       parentTicketId: updateTicket.parentTicketId,
+      childTickets: updateTicket.childTickets,
+      tagId: updateTicket.tagId,
+      stageId: updateTicket.stageId,
     },
   });
+
+  if (updatedTicket.stageId !== oldTicket?.stageId) {
+    const oldStage = await prisma.stage.findFirst({
+      select: {
+        ticketIds: true,
+      },
+      where: {
+        ticketIds: {
+          has: inputTicketId,
+        },
+      },
+    });
+    if (oldStage) {
+      oldStage.ticketIds.splice(oldStage.ticketIds.indexOf(inputTicketId), 1);
+      await prisma.stage.updateMany({
+        where: {
+          ticketIds: {
+            has: inputTicketId,
+          },
+        },
+        data: {
+          ticketIds: {
+            set: oldStage.ticketIds,
+          },
+        },
+      });
+    }
+    await prisma.stage.update({
+      where: {
+        stageId: updatedTicket.stageId,
+      },
+      data: {
+        ticketIds: {
+          push: inputTicketId,
+        },
+      },
+    });
+  };
 
   if (updatedTicket.childTickets !== oldTicket?.childTickets) {
     deleteParentTicketId(inputTicketId);
