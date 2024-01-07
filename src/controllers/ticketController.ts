@@ -168,7 +168,7 @@ export const getAllRelationshipsHandler = async (req: Request, res: Response) =>
 export const updatedTicketHandler = async (req: Request, res: Response) => {
   try {
     const ticketId = req.params.ticketId;
-    const update: Ticket = req.body;
+    const ticket = req.body;
     const existingTicket = findTicketbyId(ticketId);
 
     if (!existingTicket) {
@@ -177,8 +177,16 @@ export const updatedTicketHandler = async (req: Request, res: Response) => {
         error: 'ticket not found',
       });
     }
+    const newTagId = ticket.tag.tagId;
+    const newStageId = ticket.stage.stageId;
 
-    const updatedTicket = await updateTicket(ticketId, update);
+    const updatedTicket = await updateTicket(
+      ticketId, 
+      ticket,
+      newTagId,
+      newStageId
+    );
+
     return res.status(200).json({
       status: 'success',
       updatedTicket,
