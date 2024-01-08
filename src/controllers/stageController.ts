@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
-import { Stage } from '../models';
+import { Stage } from '../models/stage';
 import {
   createStage,
   findAllStageFromProjectId,
   findStageById,
   updateStage,
   deleteStage,
-  findProjectById,
-} from '../services';
+} from '../services/stageService';
+import { findProjectById } from '../services/projectService';
 import { StatusCode } from './abstraction';
 
 export const createStageHandler = async (req: Request, res: Response) => {
@@ -38,6 +38,31 @@ export const createStageHandler = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getStageByStageId = async (req: Request, res: Response) => {
+  try{
+    const stageId = req.params.stageId
+    const stage = await findStageById(stageId)
+
+    if(!stage) {
+      return res.status(StatusCode.NOTFOUND).json({
+        status: 'not found',
+        error: 'stage not found',
+      });
+    }
+
+    return res.status(StatusCode.SUCCESS).json({
+      status: 'success',
+      stage,
+    });
+  } catch (error) {
+    console.error('Error getting stages:', error);
+    return res.status(StatusCode.SERVERERROR).json({
+      status: 'server error',
+      error: 'failed to get stage',
+    });
+  }
+}
 
 export const getAllStageFromProjectHandler = async (
   req: Request,

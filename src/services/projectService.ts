@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Project } from '../models';
+import { Project } from '../models/project';
 
 const prisma = new PrismaClient();
 
@@ -23,7 +23,7 @@ export const createProject = async (project: Project) => {
       userIds: userIds,
       history: [],
       tagIds: [],
-      stageIds: [],      
+      stageIds: [],
     },
   });
 
@@ -37,7 +37,7 @@ export const createProject = async (project: Project) => {
         push: createdProject.projectId,
       },
     },
-  })
+  });
   return createdProject.projectId;
 };
 
@@ -53,7 +53,33 @@ export const findProjectByUserId = async (inputUserId: string) => {
   return projects;
 };
 
-export const updateProjectTitle = async (projectId: string, project: Project) => {
+export const findProjectByTagId = async (tagId: string) => {
+  const project = await prisma.project.findFirst({
+    where: {
+      tagIds: {
+        has: tagId,
+      },
+    },
+  });
+  return project;
+};
+
+export const findProjectByStageId = async (stageId: string) => {
+  const project = await prisma.project.findFirst({
+    where: {
+      stageIds: {
+        has: stageId,
+      },
+    },
+  });
+  return project;
+};
+
+
+export const updateProjectTitle = async (
+  projectId: string,
+  project: Project,
+) => {
   await prisma.project.update({
     where: {
       projectId: projectId,
@@ -88,6 +114,46 @@ export const addUserToProject = async (projectId: string, userId: string) => {
   });
 };
 
+export const removeUserFromProject = async (projectId: string, userId: string) => {
+  const project = await findProjectById(projectId);
+  let newUserIds = [];
+  newUserIds = project!.userIds.filter(
+    (id: string) => id !== userId
+  );
+
+  await prisma.project.update({
+    where: {
+      projectId: projectId,
+    },
+    data: {
+      userIds: {
+        set: newUserIds,
+      },
+    },
+  });
+
+  const user = await prisma.user.findUnique({
+    where: {
+      userId: userId,
+    },
+  });
+
+  let newProjectIds = [];
+  newProjectIds = user!.projectIds.filter(
+    (id: string) => id !== projectId
+  );
+  
+  await prisma.user.update({
+    where: {
+      userId: userId,
+    },
+    data: {
+      projectIds: {
+        set: newProjectIds,
+      },
+    },
+  });
+};
 export const updateProjectAdmin = async (
   projectId: string,
   adminId: string,
@@ -109,3 +175,5 @@ export const deleteProject = async (projectId: string) => {
     },
   });
 };
+
+

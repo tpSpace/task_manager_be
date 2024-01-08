@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import { Stage, Project } from '../models';
+import { Stage } from '../models/stage';
+import { findProjectByStageId } from './projectService';
+import { deleteAllCommentsByTicketId } from './commentService';
 
 const prisma = new PrismaClient();
 
@@ -17,7 +19,7 @@ export const createStage = async (stage: Stage, projectId: string) => {
     data: {
       title: stage.title,
       ticketIds: [],
-    }
+    },
   });
 
   // Add stageId to project entity
@@ -38,11 +40,11 @@ export const findAllStageFromProjectId = async (projectId: string) => {
   const project = await prisma.project.findUnique({
     where: {
       projectId: projectId,
-    }
+    },
   });
   let stages: Stage[] = [];
   for (let stageId of project!.stageIds) {
-    stages.push(await findStageById(stageId) as Stage);
+    stages.push((await findStageById(stageId)) as Stage);
   }
 
   return stages;
@@ -61,10 +63,37 @@ export const updateStage = async (stageId: string, updatedStage: Stage) => {
 };
 
 export const deleteStage = async (stageId: string) => {
-  const deletedStage = await prisma.stage.delete({
+  // Remove stageId from project entity
+  const project = await findProjectByStageId(stageId);
+
+  let newStageIds = project!.stageIds.filter(
+    (id:string) => id !== stageId
+  );
+
+  await prisma.project.update({
+    where: {
+      projectId: project!.projectId,
+    },
+    data: {
+      stageIds: newStageIds,
+    },
+  });
+
+  const deleteStage = await findStageById(stageId);
+
+  // Delete all tickets in stage
+  for (const ticket of deleteStage!.ticketIds) {
+    await prisma.ticket.delete({
+      where: {
+        ticketId: ticket,
+      },
+    });
+    await deleteAllCommentsByTicketId(ticket);
+  };
+
+  await prisma.stage.delete({
     where: {
       stageId: stageId,
     },
   });
-  return deletedStage;
 };

@@ -1,4 +1,3 @@
-import { Project, Comment } from '.';
 export interface User {
   userId: string;
   name: string;
@@ -7,7 +6,5 @@ export interface User {
   password: string;
 
   projectIds: string[];
-  projects: Project[];
-
   comments: Comment[];
 }

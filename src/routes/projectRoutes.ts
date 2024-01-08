@@ -1,6 +1,6 @@
 import express from 'express';
 import { validate } from '../middleware/validate';
-import { projectSchema } from '../schemas';
+import { projectSchema } from '../schemas/projectSchema';
 import { validateAndAuthorizeToken } from '../middleware/jwt';
 import {
   createProjectHandler,
@@ -10,7 +10,9 @@ import {
   deleteProjectHandler,
   addMemberHandler,
   setAdminHandler,
-} from '../controllers';
+  joinProjectHandler,
+  leaveProjectHandler,
+} from '../controllers/projectController';
 
 const projectRouter = express.Router();
 
@@ -21,6 +23,18 @@ projectRouter.post(
   createProjectHandler,
 );
 
+projectRouter.post(
+  '/join/:projectId',
+  validateAndAuthorizeToken,
+  joinProjectHandler,
+  );
+  
+  projectRouter.post(
+    '/leave/:projectId',
+    validateAndAuthorizeToken,
+    leaveProjectHandler
+  );
+  
 // Get all projects of a user
 projectRouter.get('/get', validateAndAuthorizeToken, getAllProjectHandler);
 
@@ -43,7 +57,7 @@ projectRouter.delete(
 );
 
 projectRouter.post(
-  '/addMember/:projectId',
+  '/addMember/:projectId/:userId',
   validateAndAuthorizeToken,
   addMemberHandler,
 );

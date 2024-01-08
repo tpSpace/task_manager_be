@@ -7,9 +7,11 @@ import {
   findTicketbyStageId,
   updateTicket,
   deleteTicket,
+  findRelationships,
+  findAllAttributesOfTicket,
+  MoveTicket,
 } from '../services/ticketService';
 import { returnUserIdFromToken } from '../middleware/jwt';
-import { Stage } from '../models/stage';
 import { findStageById } from '../services/stageService';
 
 export const createTicketHandler = async (req: Request, res: Response) => {
@@ -27,11 +29,11 @@ export const createTicketHandler = async (req: Request, res: Response) => {
       });
     }
 
-    const newTicket = await createTicket(ticket, stageId);
-    
+    const ticketId = await createTicket(ticket, stageId);
+
     return res.status(200).json({
       status: 'success',
-      newTicket,
+      ticketId,
     });
   } catch (error) {
     console.log('error creating ticket: ', error);
@@ -45,8 +47,8 @@ export const createTicketHandler = async (req: Request, res: Response) => {
 export const getSingleTicketHandler = async (req: Request, res: Response) => {
   try {
     const ticketId = req.params.ticketId;
-    const ticket = await findTicketbyId(ticketId);
-
+    const ticket = await findAllAttributesOfTicket(ticketId);
+    
     if (!ticket) {
       return res.status(404).json({
         status: 'not found',
@@ -102,16 +104,24 @@ export const getAllTicketbyStageIdHandler = async (
   try {
     const stageId = req.params.stageId;
     const tickets = await findTicketbyStageId(stageId);
-    if (!tickets) {
+    
+    if (tickets.length === 0) {
       return res.status(404).json({
         status: 'not found',
         error: 'ticket not found',
       });
     }
+    
+    let fullTickets = [];
+
+    for (const ticket of tickets){
+      const fullTicket = await findAllAttributesOfTicket(ticket.ticketId);
+      fullTickets.push(fullTicket);
+    }
 
     return res.status(200).json({
       status: 'success',
-      tickets,
+      tickets: fullTickets,
     });
   } catch (error) {
     console.error('error getting tickets:', error);
@@ -122,10 +132,44 @@ export const getAllTicketbyStageIdHandler = async (
   }
 };
 
+export const getAllRelationshipsHandler = async (req: Request, res: Response) => {
+  try {
+    const ticketId = req.params.ticketId;
+    const ticket = await findTicketbyId(ticketId);
+
+    if (!ticket) {
+      return res.status(404).json({
+        status: 'not found',
+        error: 'ticket not found',
+      });
+    }
+
+    const ticketRelationship = await findRelationships(ticketId);
+
+    if (!ticketRelationship){
+      return res.status(405).json({
+        status: 'not found',
+        error: 'relationship not found',
+      });
+    }
+
+    return res.status(200).json({
+      status: 'success',
+      ticketRelationship,
+    });
+  } catch (error) {
+    console.error('error getting tickets:', error);
+    return res.status(500).json({
+      status: 'server error',
+      error: 'failed to get ticket relationships',
+    });
+  }
+};
+
 export const updatedTicketHandler = async (req: Request, res: Response) => {
   try {
     const ticketId = req.params.ticketId;
-    const update: Ticket = req.body;
+    const ticket = req.body;
     const existingTicket = findTicketbyId(ticketId);
 
     if (!existingTicket) {
@@ -134,8 +178,16 @@ export const updatedTicketHandler = async (req: Request, res: Response) => {
         error: 'ticket not found',
       });
     }
+    const newTagId = ticket.tag.tagId;
+    const newStageId = ticket.stage.stageId;
 
-    const updatedTicket = await updateTicket(ticketId, update);
+    const updatedTicket = await updateTicket(
+      ticketId, 
+      ticket,
+      newTagId,
+      newStageId
+    );
+
     return res.status(200).json({
       status: 'success',
       updatedTicket,
@@ -164,8 +216,7 @@ export const deleteTicketHandler = async (req: Request, res: Response) => {
 
     const deletedTicket = await deleteTicket(ticketId);
     return res.status(200).json({
-      status: 'success',
-      ticketId,
+      status: 'success'
     });
   } catch (error) {
     console.error('error deleting tickets:', error);
@@ -175,3 +226,32 @@ export const deleteTicketHandler = async (req: Request, res: Response) => {
     });
   }
 };
+
+export function moveTicketHandler(req: Request, res: Response) {
+  try {
+    const ticketId = req.body.ticketId;
+    const stageId = req.body.stageId;
+
+    const existingTicket = findTicketbyId(ticketId);
+
+    if (!existingTicket) {
+      return res.status(404).json({
+        status: 'not found',
+        error: 'Ticket not found',
+      });
+    }
+
+    const updatedTicket = MoveTicket(ticketId, stageId);
+
+    return res.status(200).json({
+      status: 'success',
+      updatedTicket,
+    });
+  } catch (error) {
+    console.error('error updating tickets:', error);
+    return res.status(500).json({
+      status: 'server error',
+      error: 'failed to update ticket',
+    });
+  }
+}

@@ -13,6 +13,7 @@ const port: any = process.env.PORT || 3001;
 app.use(express.json());
 
 app.use(cors());
+
 app.use('/auth', authRouter);
 app.use('/projects', projectRouter);
 app.use('/tags', tagRouter);
@@ -27,3 +28,5 @@ app.get('/', (req: Request, res: Response) => {
 app.listen(port, '0.0.0.0', () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
+
+export default app;

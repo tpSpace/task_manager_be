@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Comment } from '../models';
+import { Comment } from '../models/comment';
 
 const prisma = new PrismaClient();
 
@@ -18,7 +18,7 @@ export const createComment = async (
   return createdComment.commentId;
 };
 
-export const findAllCommentsFromTicketId = async (ticketId: string) => {
+export const findAllCommentsByTicketId = async (ticketId: string) => {
   const comments = await prisma.comment.findMany({
     where: {
       ticketId: ticketId,
@@ -46,6 +46,15 @@ export const updateComment = async (commentId: string, content: string) => {
   });
   return updatedComment;
 };
+
+export const deleteAllCommentsByTicketId = async (ticketId: string) => {
+  await prisma.comment.deleteMany({
+    where: {
+      ticketId: ticketId,
+    },
+  });
+};
+
 export const deleteComment = async (commentId: string) => {
   await prisma.comment.delete({
     where: {

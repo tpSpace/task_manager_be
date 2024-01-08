@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { Tag } from "../models";
+import { PrismaClient } from '@prisma/client';
+import { Tag } from '../models/tag';
 
 const prisma = new PrismaClient();
 
@@ -42,9 +42,29 @@ export const getAllTagFromProjectId = async (projectId: string) => {
   });
   let tags: Tag[] = [];
   for (let tagId of project!.tagIds) {
-    tags.push(await findTagById(tagId) as Tag);
+    tags.push((await findTagById(tagId)) as Tag);
   }
 
   return tags;
 };
 
+export const updateTag = async (tagId: string, tag: Tag) => {
+  await prisma.tag.update({
+    where: {
+      tagId: tagId,
+    },
+    data: {
+      title: tag.title,
+      priority: tag.priority,
+      colour: tag.colour,
+    },
+  });
+};
+
+export const deleteTag = async (tagId: string) => {
+  await prisma.tag.delete({
+    where: {
+      tagId: tagId,
+    },
+  });
+};

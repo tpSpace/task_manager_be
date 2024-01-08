@@ -1,4 +1,4 @@
-import { stageSchema } from '../schemas';
+import { stageSchema } from '../schemas/stageSchema';
 import { validate } from '../middleware/validate';
 import { validateAndAuthorizeToken } from '../middleware/jwt';
 import {
@@ -6,7 +6,8 @@ import {
   getAllStageFromProjectHandler,
   updateStageHandler,
   deleteStageHandler,
-} from '../controllers';
+  getStageByStageId,
+} from '../controllers/stageController';
 
 import express from 'express';
 
@@ -20,7 +21,13 @@ stageRouter.post(
 );
 
 stageRouter.get(
-  '/getProject/:projectId',
+  '/get/stage/:stageId',
+  validateAndAuthorizeToken,
+  getStageByStageId,
+);
+
+stageRouter.get(
+  '/get/project/:projectId',
   validateAndAuthorizeToken,
   getAllStageFromProjectHandler,
 );

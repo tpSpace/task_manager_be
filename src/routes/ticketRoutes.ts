@@ -9,6 +9,8 @@ import {
   getSingleTicketHandler,
   updatedTicketHandler,
   deleteTicketHandler,
+  getAllRelationshipsHandler,
+  moveTicketHandler,
 } from '../controllers/ticketController';
 
 const router = express.Router();
@@ -22,15 +24,27 @@ router.post(
 
 router.get(
   '/get/project/:projectId',
-  validateAndAuthorizeToken,  
-  getAllTicketbyProjectIdHandler
+  validateAndAuthorizeToken,
+  getAllTicketbyProjectIdHandler,
 );
 
 router.get(
-  '/get/stage/:stageId', 
-  validateAndAuthorizeToken,  
-  getAllTicketbyStageIdHandler
+  '/get/ticket/:ticketId',
+  validateAndAuthorizeToken,
+  getSingleTicketHandler,
 );
+
+router.get(
+  '/get/stage/:stageId',
+  validateAndAuthorizeToken,
+  getAllTicketbyStageIdHandler,
+);
+
+router.get(
+  '/get/relationship/:ticketId',
+  validateAndAuthorizeToken,
+  getAllRelationshipsHandler,
+)
 
 router.put(
   '/update/:ticketId',
@@ -44,4 +58,9 @@ router.delete(
   deleteTicketHandler,
 );
 
+router.put(
+  '/moveTicket/:ticketId',
+  validateAndAuthorizeToken,
+  moveTicketHandler,
+);
 export default router;

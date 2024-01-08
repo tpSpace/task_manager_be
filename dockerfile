@@ -13,9 +13,6 @@ RUN yarn install
 # Copy the source code to the working directory
 COPY . .
 
-# Build TypeScript code
-RUN yarn tsc -p .
-
 # Generate Prisma schema
 RUN npx prisma generate
 

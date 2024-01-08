@@ -1,0 +1,32 @@
+name: Docker Build and Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build Docker Image
+        run: docker build -t tasking:latest .
+
+      - name: Tag Docker Image
+        run: docker tag tasking:latest quangpham09112003/tasking:latest
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u quangpham09112003 --password-stdin
+
+      - name: Push Docker Image to Docker Hub
+        run: docker push quangpham09112003/tasking:latest
+
+      - name: Deploy to Render
+        env: 
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: 
+          curl $RENDER_DEPLOY_HOOK
