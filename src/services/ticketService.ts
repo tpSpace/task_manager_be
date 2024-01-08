@@ -396,3 +396,44 @@ export const findAllAttributesOfTicket = async (ticketId: string) => {
   };
 };
  
+export async function MoveTicket(ticketId: string, stageId: string) {
+  const stage = await prisma.stage.findUnique({
+    where: {
+      stageId: stageId,
+    },
+  });
+  const ticket = await prisma.ticket.findUnique({
+    where: {
+      ticketId: ticketId,
+    },
+  });
+  try {
+  if (stage?.ticketIds !== undefined && ticket?.stageId !== undefined) {
+    if (stage && stage.ticketIds) {
+      stage.ticketIds = stage.ticketIds.filter((id) => id !== ticketId);
+    }
+    prisma.ticket.update({
+      where: {
+        ticketId: ticketId,
+      },
+      data: {
+        stageId: stageId,
+      },
+    });
+
+    await prisma.stage.update({
+      where: {
+        stageId: stageId,
+      },
+      data: {
+        ticketIds: {
+          set: stage.ticketIds,
+        },
+      },
+    });
+  }
+  } catch (error) {
+    console.error('error moving tickets:', error);
+    return error;
+  }
+}
