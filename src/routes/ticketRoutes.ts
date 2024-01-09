@@ -10,6 +10,7 @@ import {
   updatedTicketHandler,
   deleteTicketHandler,
   getAllRelationshipsHandler,
+  updatedTicketStageHandler,
   moveTicketHandler,
 } from '../controllers/ticketController';
 
@@ -57,6 +58,12 @@ router.delete(
   validateAndAuthorizeToken,
   deleteTicketHandler,
 );
+
+router.put(
+  '/update/stage/:ticketId',
+  validateAndAuthorizeToken,
+  updatedTicketStageHandler,
+)
 
 router.put(
   '/moveTicket/:ticketId',
