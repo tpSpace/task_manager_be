@@ -10,6 +10,7 @@ import {
   updatedTicketHandler,
   deleteTicketHandler,
   getAllRelationshipsHandler,
+  updatedTicketStageHandler
 } from '../controllers/ticketController';
 
 const router = express.Router();
@@ -56,5 +57,11 @@ router.delete(
   validateAndAuthorizeToken,
   deleteTicketHandler,
 );
+
+router.put(
+  '/update/stage/:ticketId',
+  validateAndAuthorizeToken,
+  updatedTicketStageHandler,
+)
 
 export default router;
