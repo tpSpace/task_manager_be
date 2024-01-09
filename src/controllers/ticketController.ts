@@ -203,7 +203,7 @@ export const updatedTicketHandler = async (req: Request, res: Response) => {
 export const updatedTicketStageHandler = async (req: Request, res: Response) => {
   try {
     const ticketId = req.params.ticketId;
-    const stageId = req.body;
+    const stageId = req.body.stageId;
     const existingTicket = findTicketbyId(ticketId);
 
     if (!existingTicket) {

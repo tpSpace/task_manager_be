@@ -168,6 +168,14 @@ export const updateTicketStage = async (
       },
     });
   }
+  await prisma.ticket.update({    
+    where:{
+      ticketId: inputTicketId,
+    },
+    data:{
+    stageId: newStageId
+    }
+})
   await prisma.stage.update({
     where: {
       stageId: newStageId,
