@@ -9,7 +9,7 @@ import {
   deleteTicket,
   findRelationships,
   findAllAttributesOfTicket,
-  MoveTicket,
+  updateTicketStage
 } from '../services/ticketService';
 import { returnUserIdFromToken } from '../middleware/jwt';
 import { findStageById } from '../services/stageService';
@@ -200,6 +200,35 @@ export const updatedTicketHandler = async (req: Request, res: Response) => {
     });
   }
 };
+export const updatedTicketStageHandler = async (req: Request, res: Response) => {
+  try {
+    const ticketId = req.params.ticketId;
+    const stageId = req.body.stageId;
+    const existingTicket = findTicketbyId(ticketId);
+
+    if (!existingTicket) {
+      return res.status(404).json({
+        status: 'not found',
+        error: 'ticket not found',
+      });
+    }
+    const updatedTicket = await updateTicketStage(
+      ticketId, 
+      stageId
+    );
+
+    return res.status(200).json({
+      status: 'success',
+      updatedTicket,
+    });
+  } catch (error) {
+    console.error('error updating tickets:', error);
+    return res.status(500).json({
+      status: 'server error',
+      error: 'failed to update ticket',
+    });
+  }
+};
 
 export const deleteTicketHandler = async (req: Request, res: Response) => {
   try {
@@ -227,31 +256,31 @@ export const deleteTicketHandler = async (req: Request, res: Response) => {
   }
 };
 
-export function moveTicketHandler(req: Request, res: Response) {
-  try {
-    const ticketId = req.body.ticketId;
-    const stageId = req.body.stageId;
+// export function moveTicketHandler(req: Request, res: Response) {
+//   try {
+//     const ticketId = req.body.ticketId;
+//     const stageId = req.body.stageId;
 
-    const existingTicket = findTicketbyId(ticketId);
+//     const existingTicket = findTicketbyId(ticketId);
 
-    if (!existingTicket) {
-      return res.status(404).json({
-        status: 'not found',
-        error: 'Ticket not found',
-      });
-    }
+//     if (!existingTicket) {
+//       return res.status(404).json({
+//         status: 'not found',
+//         error: 'Ticket not found',
+//       });
+//     }
 
-    const updatedTicket = MoveTicket(ticketId, stageId);
+//     // const updatedTicket = MoveTicket(ticketId, stageId);
 
-    return res.status(200).json({
-      status: 'success',
-      updatedTicket,
-    });
-  } catch (error) {
-    console.error('error updating tickets:', error);
-    return res.status(500).json({
-      status: 'server error',
-      error: 'failed to update ticket',
-    });
-  }
-}
+//     return res.status(200).json({
+//       status: 'success',
+//       updatedTicket,
+//     });
+//   } catch (error) {
+//     console.error('error updating tickets:', error);
+//     return res.status(500).json({
+//       status: 'server error',
+//       error: 'failed to update ticket',
+//     });
+//   }
+// }
